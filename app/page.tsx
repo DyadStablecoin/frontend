@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import DnftBox from "@/components/dnft-box";
+import TabsComponent from "@/components/reusable/TabsComponent";
+import NoteCard from "@/components/NoteCard/NoteCard";
 
 export default function Home() {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
@@ -13,7 +15,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex-1 max-w-screen-md p-4 w-full hide-on-mobile">
+      {/* <div className="flex-1 max-w-screen-md p-4 w-full hide-on-mobile">
         <h3 className="text-md font-medium leading-loose pt-3">
           Immutable Base. Infinite Possibility.
         </h3>
@@ -31,6 +33,9 @@ export default function Home() {
       <div className="show-on-mobile text-md font-medium leading-loose pt-3 p-4">
         The DYAD app is not yet available on mobile. Please use a desktop
         browser.
+      </div> */}
+      <div className=" my-5">
+        <NoteCard />
       </div>
     </>
   );

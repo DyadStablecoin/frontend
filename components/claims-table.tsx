@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { formatEther } from "viem";
 
-import { MintedNft_OrderBy, OrderDirection, useAllDnftMintsQuery } from "@/gql";
+// import { MintedNft_OrderBy, OrderDirection, useAllDnftMintsQuery } from "@/gql";
 import {
   Table,
   TableBody,
@@ -23,19 +23,19 @@ const perPage = 15;
 export default function ClaimsTable({ className }: Props) {
   const [page, setPage] = useState(0);
 
-  const [sortBy, setSortBy] = useState<MintedNft_OrderBy>(
-    MintedNft_OrderBy.DNftId
-  );
-  const [sortDir, setSortDir] = useState<OrderDirection>(OrderDirection.Desc);
+  // const [sortBy, setSortBy] = useState<MintedNft_OrderBy>(
+  //   MintedNft_OrderBy.DNftId
+  // );
+  // const [sortDir, setSortDir] = useState<OrderDirection>(OrderDirection.Desc);
 
-  const [{ data }] = useAllDnftMintsQuery({
-    variables: {
-      numResults: perPage,
-      skip: page * perPage,
-      orderBy: sortBy,
-      orderDirection: sortDir,
-    },
-  });
+  // const [{ data }] = useAllDnftMintsQuery({
+  //   variables: {
+  //     numResults: perPage,
+  //     skip: page * perPage,
+  //     orderBy: sortBy,
+  //     orderDirection: sortDir,
+  //   },
+  // });
 
   return (
     <div className={className}>
@@ -48,7 +48,7 @@ export default function ClaimsTable({ className }: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.mintedNfts.map((mint) => (
+          {/* {data?.mintedNfts.map((mint) => (
             <TableRow key={mint.DNft_id}>
               <TableCell className="font-medium">
                 {shortAddr(mint.to)}
@@ -56,7 +56,7 @@ export default function ClaimsTable({ className }: Props) {
               <TableCell>#{mint.DNft_id}</TableCell>
               <TableCell>{formatEther(mint.price)} ETH</TableCell>
             </TableRow>
-          ))}
+          ))} */}
         </TableBody>
       </Table>
       <div className="w-full max-w-none flex justify-center align-center mt-4 gap-8">
@@ -72,14 +72,14 @@ export default function ClaimsTable({ className }: Props) {
         </div>
         <p className="text-md text-center">{page + 1}</p>
         <div className="w-8 text-center">
-          {data?.mintedNfts.length === perPage && (
+          {/* {data?.mintedNfts.length === perPage && (
             <p
               className="text-md text-muted-foreground hover:text-foreground cursor-pointer justify-self-end"
               onClick={() => setPage(page + 1)}
             >
               next
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
