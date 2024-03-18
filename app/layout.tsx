@@ -19,6 +19,8 @@ import WalletButton from "@/components/ui/wallet-button";
 import { ModalProvider } from "@/contexts/modal";
 import { Footer } from "@/components/ui/footer";
 import { MainNav } from "@/components/ui/main-nav";
+import { NextUIProvider } from "@nextui-org/react";
+import MobileNotSupported from "@/components/ui/MobileNotSupported";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,25 +50,28 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <WagmiConfig config={wagmiConfig}>
-            <UrqlProvider value={client}>
-              <main className="flex flex-col min-h-screen items-center">
-                <ModalProvider>
-                  <div className="flex max-w-screen-md w-full h-16 justify-start box-border">
-                    <MainNav className="mx-4 flex-1 max-w-screen-md" />
-                    <div className="ml-auto flex items-center space-x-4 mr-4">
-                      <WalletButton />
+        <NextUIProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <WagmiConfig config={wagmiConfig}>
+              <UrqlProvider value={client}>
+                <main className="flex flex-col min-h-screen items-center desktop-view">
+                  <ModalProvider>
+                    <div className="flex max-w-screen-md w-[745px] h-16 justify-start box-border">
+                      <MainNav className="mx-4 flex-1 max-w-screen-md" />
+                      <div className="ml-auto flex items-center space-x-4 mr-4">
+                        <WalletButton className=" w-[138px]" />
+                      </div>
                     </div>
-                  </div>
-                  <Separator />
-                  {children}
-                  <Footer />
-                </ModalProvider>
-              </main>
-            </UrqlProvider>
-          </WagmiConfig>
-        </ThemeProvider>
+                    {/* <Separator /> */}
+                    {children}
+                    <Footer />
+                  </ModalProvider>
+                </main>
+                <MobileNotSupported />
+              </UrqlProvider>
+            </WagmiConfig>
+          </ThemeProvider>
+        </NextUIProvider>
       </body>
     </html>
   );
