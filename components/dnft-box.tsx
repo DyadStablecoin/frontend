@@ -125,6 +125,7 @@ export default function DnftBox() {
     minCollateralizationRatio,
     id2asset,
   } = initialContractReads ?? {};
+  console.log("AAAAAA");
 
   // Get addresses of all dnfts owned by user
   const { data: dnfts } = useContractReads({

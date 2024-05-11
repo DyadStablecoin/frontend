@@ -10,11 +10,13 @@ import { useState } from "react";
 import { ClaimModalContent } from "@/components/claim-modal-content";
 import { useQuery } from "@tanstack/react-query";
 import { alchemySdk } from "@/lib/alchemy";
-import { useAccount } from "wagmi";
+import { useAccount, useContractRead } from "wagmi";
 import { dNftAddress } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import { SnapshotClaim } from "@/components/NoteCard/Children/SnapshotClaim";
 import dynamic from "next/dynamic";
+import DnftAbi from "@/abis/dnft.json";
+import useIDsByOwner from "@/hooks/useIDsByOwner";
 
 const TabsComponent = dynamic(
   () => import("@/components/reusable/TabsComponent"),
@@ -33,6 +35,17 @@ export default function Home() {
         })
         .then((res) => res.ownedNfts.map((nft) => nft.tokenId)),
   });
+
+  const { data: balance } = useContractRead({
+    address: dNftAddress[defaultChain.id],
+    functionName: "balanceOf",
+    abi: DnftAbi,
+    args: [address],
+  });
+  console.log("balance", balance);
+
+  const { tokens } = useIDsByOwner(address, balance);
+  console.log("balance", tokens);
 
   const keroseneCardsData = [
     {
@@ -61,8 +74,13 @@ export default function Home() {
         </div> */}
       </div>
       <div className="flex flex-col gap-4">
-        {notes &&
-          notes.map((tokenId) => <NoteCard key={tokenId} tokenId={tokenId} />)}
+        {tokens &&
+          tokens.map((token) => (
+            <NoteCard
+              key={parseInt(token.result)}
+              tokenId={parseInt(token.result)}
+            />
+          ))}
       </div>
     </>
   );
@@ -105,7 +123,7 @@ export default function Home() {
 
   return (
     <div className="flex-1 max-w-screen-md w-[745px] p-4 mt-4">
-      <TabsComponent tabsData={tabsData} urlUpdate/>
+      <TabsComponent tabsData={tabsData} urlUpdate />
     </div>
   );
 }
