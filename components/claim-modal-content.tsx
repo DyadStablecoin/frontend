@@ -19,6 +19,7 @@ export function ClaimModalContent() {
   const { data: startingPrice } = useReadDNftStartPrice({
     chainId: defaultChain.id,
   });
+  console.log("READING", startingPrice);
   const { data: publicMints } = useReadDNftPublicMints({
     chainId: defaultChain.id,
   });
