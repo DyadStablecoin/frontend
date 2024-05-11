@@ -27,13 +27,13 @@ export default function useIDsByOwner(owner, balance) {
     },
   });
   // console.log("BBBB", bbb);
-  // console.log("XXXX", owner, parseInt(balance));
+  console.log("XXXX", owner, parseInt(balance));
 
   useEffect(() => {
     console.log("BBBBB");
     let _calls = [];
     // for (let i = 0; i < parseInt(balance); i++) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < balance; i++) {
       console.log("OOOO", i);
       _calls.push({
         address: dNftAddress[defaultChain.id],

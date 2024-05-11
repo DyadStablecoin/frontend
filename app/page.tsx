@@ -42,7 +42,6 @@ export default function Home() {
     abi: DnftAbi,
     args: [address],
   });
-  console.log("balance", balance);
 
   const { tokens } = useIDsByOwner(address, balance);
   console.log("balance", tokens);
