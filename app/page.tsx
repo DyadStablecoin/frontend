@@ -3,6 +3,7 @@
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import NoteCard from "@/components/NoteCard/NoteCard";
+import { EarnKeroseneContent } from "@/components/earn-kerosene";
 
 import SortbyComponent from "@/components/reusable/SortbyComponent";
 import { SORT_BY_OPTIONS } from "@/mockData/tabsMockData";
@@ -15,7 +16,7 @@ import { dNftAddress } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import { SnapshotClaim } from "@/components/NoteCard/Children/SnapshotClaim";
 import dynamic from "next/dynamic";
-import DnftAbi from "@/abis/dnft.json";
+import DnftAbi from "@/abis/DNft.json";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 
 const TabsComponent = dynamic(
@@ -111,7 +112,7 @@ export default function Home() {
     {
       label: "Earn Kerosene",
       tabKey: "earn-kerosene",
-      content: keroseneData,
+      content: <EarnKeroseneContent />,
     },
     {
       label: "Check Eligibility",

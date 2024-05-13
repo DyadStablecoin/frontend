@@ -1,6 +1,6 @@
 import { useContractReads } from "wagmi";
 import { useEffect, useState } from "react";
-import DnftAbi from "@/abis/dnft.json";
+import DnftAbi from "@/abis/DNft.json";
 import { dNftAddress } from "@/generated";
 import { defaultChain } from "@/lib/config";
 
