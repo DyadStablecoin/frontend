@@ -11,8 +11,10 @@ import {
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import { useTransactionStore } from "@/lib/store";
+import ButtonComponent from "@/components/reusable/ButtonComponent";
+import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 
-export function ClaimModalContent() {
+export function EarnKeroseneContent() {
   const { address, isConnected } = useAccount();
   const { setTransactionData } = useTransactionStore();
 
@@ -36,24 +38,38 @@ export function ClaimModalContent() {
 
   const nextNote = parseInt(totalSupply?.toString() || "0", 10);
 
+  const keroseneCardsData = [
+    {
+      currency: "ETH - DYAD (Uniswap)",
+      APY: "24",
+      staked: "390",
+      keroseneEarned: "830",
+    },
+    {
+      currency: "DYAD",
+      APY: "12",
+      staked: "1200",
+      keroseneEarned: "500",
+    },
+  ];
+
   if (isConnected) {
     return (
-      <Button
-        onClick={() => {
-          setTransactionData({
-            config: {
-              address: dNftAddress[defaultChain.id],
-              abi: dNftAbi,
-              functionName: "mintNft",
-              args: [address],
-              value: parseEther(mintPrice),
-            },
-            description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
-          });
-        }}
-      >
-        Mint Note Nº {nextNote} for {mintPrice} ETH
-      </Button>
+      <>
+        <div className="mt-12">
+          <ButtonComponent>Claim 1,863 Kerosene</ButtonComponent>
+        </div>
+        {keroseneCardsData.map((card, index) => (
+          <div className="mt-6" key={index}>
+            <KeroseneCard
+              currency={card.currency}
+              staked={card.staked}
+              APY={card.APY}
+              keroseneEarned={card.keroseneEarned}
+            />
+          </div>
+        ))}
+      </>
     );
   }
 
