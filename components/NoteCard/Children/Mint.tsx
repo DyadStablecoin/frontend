@@ -6,8 +6,8 @@ import { BigIntInput } from "@/components/reusable/BigIntInput";
 import { useTransactionStore } from "@/lib/store";
 import {
   useReadDyadMintedDyad,
-  useReadVaultManagerGetTotalUsdValue,
-  useReadVaultManagerMinCollaterizationRatio,
+  useReadVaultManagerGetTotalValue,
+  useReadVaultManagerMinCollatRatio,
   vaultManagerAbi,
   vaultManagerAddress,
 } from "@/generated";
@@ -28,17 +28,17 @@ const Mint: React.FC<MintProps> = ({ dyadMinted, currentCr, tokenId }) => {
   const { setTransactionData } = useTransactionStore();
 
   const { data: mintedDyad } = useReadDyadMintedDyad({
-    args: [vaultManagerAddress[defaultChain.id], BigInt(tokenId)],
+    args: [BigInt(tokenId)],
     chainId: defaultChain.id,
   });
 
-  const { data: collateralValue } = useReadVaultManagerGetTotalUsdValue({
+  const { data: collateralValue } = useReadVaultManagerGetTotalValue({
     args: [BigInt(tokenId)],
     chainId: defaultChain.id,
   });
 
   const { data: minCollateralizationRatio } =
-    useReadVaultManagerMinCollaterizationRatio({ chainId: defaultChain.id });
+    useReadVaultManagerMinCollatRatio({ chainId: defaultChain.id });
 
   const newCr =
     (mintedDyad || 0n) +
