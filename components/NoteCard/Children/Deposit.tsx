@@ -65,9 +65,11 @@ const Deposit: React.FC<DepositProps> = ({
         </div>
       </div>
       <div className="grid grid-cols-5 gap-[30px]">
-        {supportedVaults.filter((_,i) => !!vaultData?.at(i)).map((address, i) => (
-          <Vault key={i} tokenId={tokenId} vaultAddress={address} />
-        ))}
+        {supportedVaults
+          .filter((_, i) => !!vaultData?.at(i))
+          .map((address, i) => (
+            <Vault key={i} tokenId={tokenId} vaultAddress={address} />
+          ))}
         {availableVaults &&
           Array.apply(null, Array(availableVaults)).map((_, i) => (
             <AddVault
@@ -164,9 +166,16 @@ const Vault = ({
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="font-semibold text-[#FAFAFA] text-sm items-center justify-center flex flex-col gap-2 w-[100px] h-[100px] bg-[#282828]">
+        <div className="font-semibold text-[#FAFAFA] text-sm items-center justify-top flex flex-col gap-2 w-[100px] h-[100px] bg-[#282828] pt-3">
           <p>{collateralString}</p>
           <p>${formatNumber(fromBigNumber(collateralValue))}</p>
+          {collateralString === "KEROSENE" && (
+            <div className="flex gap-1 text-xs text-green-500">
+              <div>2.3 sec</div>
+              <div>/</div>
+              <div>3.8%</div>
+            </div>
+          )}
         </div>
       </DialogTrigger>
       <DialogContent>
