@@ -17,6 +17,7 @@ import {defaultChain} from "@/lib/config";
 import {SnapshotClaim} from "@/components/NoteCard/Children/SnapshotClaim";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 import dynamic from "next/dynamic";
+import { NoteMarketplace } from "@/components/Marketplace/NoteMarketplace";
 
 const TabsComponent = dynamic(
   () => import("@/components/reusable/TabsComponent"),
@@ -116,6 +117,11 @@ export default function Home() {
       tabKey: "airdrop",
       content: <SnapshotClaim />,
     },
+    {
+      label: "Note Marketplace",
+      tabKey: "marketplace",
+      content: <NoteMarketplace />
+    }
   ];
 
   return (
