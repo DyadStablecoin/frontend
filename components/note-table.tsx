@@ -11,7 +11,12 @@ const NoteTable: React.FC<any> = ({}) => {
   const { data: totalSupply } = useReadXpTotalSupply();
 
   function onRowClickHandler(key) {
-    console.log(key);
+    pushModal(
+      <div>
+        <div>hello</div>
+        <div>ziziz</div>
+      </div>
+    );
   }
 
   const GET_ITEMS = gql`
