@@ -4,9 +4,15 @@ import { useQuery, gql } from "@apollo/client";
 import { formatCurrency } from "@/utils/currency";
 import Loader from "./loader";
 import { useReadXpTotalSupply } from "@/generated";
+import useModal from "@/contexts/modal";
 
 const NoteTable: React.FC<any> = ({}) => {
+  const { pushModal } = useModal();
   const { data: totalSupply } = useReadXpTotalSupply();
+
+  function onRowClickHandler(key) {
+    console.log(key);
+  }
 
   const GET_ITEMS = gql`
     query {
@@ -97,7 +103,7 @@ const NoteTable: React.FC<any> = ({}) => {
             ]}
             rows={parsedData}
             size="compact"
-            // onRowClick={onRowClickHandler}
+            onRowClick={onRowClickHandler}
           />
         </div>
       )}

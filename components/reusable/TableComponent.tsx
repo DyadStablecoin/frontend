@@ -88,7 +88,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           {(item: any) => (
             <TableRow
               key={item.key}
-              onClick={onRowClick ? () => onRowClick(item.key) : () => {}}
+              onClick={onRowClick ? () => onRowClick(item.id) : () => {}}
             >
               {(columnKey) => (
                 <TableCell>{getKeyValue(item, columnKey)}</TableCell>
