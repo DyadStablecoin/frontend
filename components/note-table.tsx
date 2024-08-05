@@ -75,6 +75,7 @@ const NoteTable: React.FC<any> = ({}) => {
           dyad
           xp
           collateral
+          lastLiquidation
         }
       }
     }
@@ -194,6 +195,16 @@ const NoteTable: React.FC<any> = ({}) => {
             collateral: formatCurrency(
               (parseFloat(item.collateral) / 1e18).toFixed(0)
             ),
+            lastLiquidation:
+              parseFloat(item.lastLiquidation) === 0
+                ? "N/A"
+                : isNaN(
+                      new Date(parseInt(item.lastLiquidation) * 1000).getTime()
+                    )
+                  ? "N/A"
+                  : new Date(
+                      parseInt(item.lastLiquidation) * 1000
+                    ).toLocaleDateString(),
           }))
           .sort((a: any, b: any) => parseFloat(b.xp) - parseFloat(a.xp))
           .map((item, index) => ({
@@ -309,6 +320,10 @@ const NoteTable: React.FC<any> = ({}) => {
                 key: "market",
                 sortKey: "priceNormalized",
                 label: "Market",
+              },
+              {
+                key: "lastLiquidation",
+                label: "last Liquidation",
               },
             ]}
             rows={parsedData}
