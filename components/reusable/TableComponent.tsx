@@ -72,43 +72,31 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <div className="h-full overflow-scroll">
-      <Table
-        aria-label="Table"
-        removeWrapper
-        shadow="none"
-        classNames={{
-          th: " table-header ",
-          tbody: "px-2 h-full ",
-          tr: `${onRowClick ? "cursor-pointer hover:text-[#a1a1aa]" : ""} ${
-            size === "compact" ? "h-[35px]" : "h-[50px]"
-          } table-row `,
-          td: "px-0 pl-2",
-        }}
-      >
-        <TableHeader columns={columns}>
-          {(column: any) => (
-            <TableColumn
-              key={column.key}
-              onClick={() => requestSort(column.sortKey || column.key)}
+      <div className={`grid grid-cols-${columns.length} auto-cols-min`}>
+        {columns.map((column: any) => (
+          <div
+          onClick={() => requestSort(column.sortKey || column.key)}
               style={{ cursor: "pointer" }}
+            key={column.key}
+            className={`${
+              size === "compact" ? "h-[35px]" : "h-[50px]"
+            } flex items-center justify-start pl-2`}
+          >
+            {column.label}
+          </div>
+        ))}
+        {sortedRows.map((row: any, idx: number) => (
+          columns.map((column: any) => (
+            <div
+              key={`${idx}-${column.key}`}
+              className={`${
+                size === "compact" ? "h-[35px]" : "h-[50px]"
+              } flex items-center justify-start pl-2`}
             >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={sortedRows}>
-          {(item: any) => (
-            <TableRow
-              key={item.key}
-              onClick={onRowClick ? () => onRowClick(item.key) : () => {}}
-            >
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+              {getKeyValue(row, column.key)}
+            </div>
+          ))))}
+      </div>
     </div>
   );
 };
