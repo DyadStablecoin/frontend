@@ -31,15 +31,21 @@ export const fromBigNumber = (
   number: bigint | string | undefined,
   decimals = 18
 ) => {
-  if (number === undefined || number === "." || number === "0." || number === "n/a")
+  if (
+    number === undefined ||
+    number === "." ||
+    number === "0." ||
+    number === "n/a"
+  )
     return NaN;
 
   try {
     if (typeof number === "string") {
       // Handle scientific notation
-      if (number.includes('e')) {
-        const [mantissa, exponent] = number.split('e');
-        const expandedNumber = parseFloat(mantissa) * Math.pow(10, parseInt(exponent));
+      if (number.includes("e")) {
+        const [mantissa, exponent] = number.split("e");
+        const expandedNumber =
+          parseFloat(mantissa) * Math.pow(10, parseInt(exponent));
         number = BigInt(Math.round(expandedNumber));
       } else {
         number = BigInt(number);

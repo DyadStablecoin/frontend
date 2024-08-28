@@ -103,49 +103,58 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({ cardsData }) => {
         <div className="col-span-1 mt-auto mb-auto">CR</div>
         <div className="col-span-2 mt-auto mb-auto">Market</div>
       </div>
-      <div className="mt-2 grid grid-cols-1 gap-y-2 ">
+      <div className="mt-2 grid grid-cols-1 gap-y-2">
         {sortedRows.map((data: any) => (
-          <div className="bg-[#1A1A1A] rounded rounded-lg p-2">
-            <div className="md:hidden justify-between mb-4 flex">
-              <div>
-                <div className="text-lg flex font-bold">Rank #{data.rank}</div>
-                <div className="text-xs text-[#A1A1AA]">Note Nº {data.id}</div>
+          <div key={data.id} className="bg-[#1A1A1A] rounded-lg p-2">
+            <div className="flex flex-col md:hidden">
+              <div className="flex justify-between items-center mb-2">
+                <div>
+                  <div className="text-lg font-bold">Rank #{data.rank}</div>
+                  <div className="text-xs text-[#A1A1AA]">Note Nº {data.id}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-semibold">{data.xp} XP</div>
+                  <div className="text-xs text-[#A1A1AA]">{data.xpPercentage}</div>
+                </div>
               </div>
-              {data.market.props.children === "N/A" ? (
-                <div className="w-1/2 flex justify-center">
-                  <div className="w-full h-9 mt-auto mb-auto text-center border-2 border-dotted border-[#282828] rounded-[5px] text-sm flex">
+              <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                <div>
+                  <div className="text-[#A1A1AA]">KERO</div>
+                  <div>{data.kerosene}</div>
+                </div>
+                <div>
+                  <div className="text-[#A1A1AA]">DYAD</div>
+                  <div>{data.dyad}</div>
+                </div>
+                <div>
+                  <div className="text-[#A1A1AA]">Collateral</div>
+                  <div>{data.collateral}</div>
+                </div>
+                <div>
+                  <div className="text-[#A1A1AA]">CR</div>
+                  <div>{data.collatRatio}</div>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                {data.market.props.children === "N/A" ? (
+                  <div className="w-full h-9 text-center border-2 border-dotted border-[#282828] rounded-[5px] text-sm flex">
                     <div className="m-auto">{data.market}</div>
                   </div>
-                </div>
-              ) : (
-                <div className="w-1/2 flex justify-center items-center">
-                  {{
-                    ...data.market,
-                    props: {
-                      ...data.market.props,
-                      className: `${data.market.props.className} w-full h-9`,
-                    },
-                  }}
-                </div>
-              )}
-            </div>
-
-            <div className="justify-between text-xs text-[#A1A1AA] tracking-wider flex md:hidden">
-              <div className="block justify-between w-auto ">
-                <div className="mb-2">{data.xp} XP</div>
-                <div className="mb-2">{data.kerosene} KERO</div>
-              </div>
-              <div className="block justify-between w-auto ">
-                <div className="mb-2">{data.xpPercentage} of XP</div>
-                <div className="mb-2">{data.collatRatio} CR</div>
-              </div>
-              <div className="block justify-between w-auto ">
-                <div className="mb-2">{data.dyad} DYAD</div>
-                <div className="mb-2">{data.collateral} Collateral</div>
+                ) : (
+                  <div className="w-full flex justify-center items-center">
+                    {{
+                      ...data.market,
+                      props: {
+                        ...data.market.props,
+                        className: `${data.market.props.className} w-full h-9`,
+                      },
+                    }}
+                  </div>
+                )}
               </div>
             </div>
-
-            <div className="hidden justify-between text-xs text-[#A1A1AA] tracking-wider md:grid md:grid-cols-12 md:gap-x-2 text-center">
+            {/* Keep the existing desktop view */}
+            <div className="hidden md:grid md:grid-cols-12 md:gap-x-2 text-center items-center">
               <div className="col-span-1 mt-auto mb-auto">{data.rank}</div>
               <div className="col-span-1 mt-auto mb-auto">{data.id}</div>
               <div className="col-span-1 mt-auto mb-auto">{data.xp}</div>
