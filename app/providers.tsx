@@ -8,7 +8,7 @@ import {
   cacheExchange,
   fetchExchange,
 } from "urql";
-import { NextUIProvider } from "@nextui-org/react";
+import {NextUIProvider} from "@nextui-org/system";
 import { ReactNode } from "react";
 import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "@/lib/config";

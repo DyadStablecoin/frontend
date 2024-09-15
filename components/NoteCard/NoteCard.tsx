@@ -26,7 +26,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@nextui-org/dropdown";
 import { Menu } from "lucide-react";
 
 type ContractData = {

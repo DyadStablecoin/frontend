@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import {Input} from "@nextui-org/input";
 import React from "react";
 
 interface InputComponentProps {

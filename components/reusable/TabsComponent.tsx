@@ -1,5 +1,5 @@
 import React, { Key, useEffect, useState } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/tabs";
 import { TabsDataModel } from "@/models/TabsModel";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";

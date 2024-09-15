@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Data } from "@/models/ChartModels";
 import { getDataItemPercentage } from "@/utils/chartUtils";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/tooltip";
 
 interface LineDataChartProps {
   data: Data[];
