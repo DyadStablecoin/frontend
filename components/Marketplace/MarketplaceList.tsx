@@ -4,7 +4,9 @@ import {getKeyValue} from "@nextui-org/react";
 import {cardsSortData} from "@/constants/MarketplaceList";
 import {ArrowDownUpIcon, ArrowUpIcon} from "lucide-react";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
-import NoteDetails from "./NoteDetails"; // Import the new component
+import dynamic from "next/dynamic";
+
+const NoteDetails = dynamic(() => import("./NoteDetails"), { ssr: false, loading: () => <>Loading...</> });
 
 interface MarketplaceListProps {
   cardsData: any;
