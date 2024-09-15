@@ -1,29 +1,44 @@
 "use client";
 
-import ButtonComponent from "@/components/reusable/ButtonComponent";
-import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
-import NoteCard from "@/components/NoteCard/NoteCard";
-import { EarnKeroseneContent } from "@/components/earn-kerosene";
-import { ClaimModalContent } from "@/components/claim-modal-content";
 import { useAccount } from "wagmi";
 import { useReadDNftBalanceOf } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 import dynamic from "next/dynamic";
-import NoteTable from "@/components/note-table";
-import { BuyNoteWithKerosene } from "@/components/buy-note-kerosene";
 import { useState } from "react";
 
+// Lazy Loading
 const TabsComponent = dynamic(
   () => import("@/components/reusable/TabsComponent"),
   { ssr: false }
 );
 
+const NoteCard = dynamic(
+  () => import("@/components/NoteCard/NoteCard"),
+  { ssr: false }
+);
+
+const NoteTable = dynamic(
+  () => import("@/components/note-table"),
+  { ssr: false }
+);
+
+const EarnKeroseneContent = dynamic(
+  () => import("@/components/earn-kerosene").then(module => module.EarnKeroseneContent),
+  { ssr: false }
+);
+
+const ClaimModalContent = dynamic(
+  () => import("@/components/claim-modal-content").then(module => module.ClaimModalContent),
+  { ssr: false }
+);
+
+
 export default function Home() {
   const { address } = useAccount();
 
   const { data: balance } = useReadDNftBalanceOf({
-    args: [address],
+    args: [address!],
     chainId: defaultChain.id,
   });
 
@@ -31,7 +46,6 @@ export default function Home() {
 
   const manageNotesContent = (
     <>
-      {/* <BuyNoteWithKerosene /> */}
       <div className="my-6 flex justify-between">
         <ClaimModalContent />
       </div>
@@ -39,8 +53,8 @@ export default function Home() {
         {tokens &&
           tokens.map((token) => (
             <NoteCard
-              key={parseInt(token.result)}
-              tokenId={parseInt(token.result)}
+              key={parseInt(token.result!)}
+              tokenId={parseInt(token.result!)}
             />
           ))}
       </div>

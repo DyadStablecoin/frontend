@@ -12,15 +12,21 @@ import {
   useWriteContract,
 } from "wagmi";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-
-import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import Loader from "../loader";
 import { defaultChain } from "@/lib/config";
 import { useTransactionStore } from "@/lib/store";
+import dynamic from "next/dynamic";
+
+// Dynamically import components
+const Dialog = dynamic(() => import("@/components/ui/dialog").then(module => module.Dialog));
+const DialogContent = dynamic(() => import("@/components/ui/dialog").then(module => module.DialogContent));
+const Button = dynamic(() => import("@/components/ui/button").then(module => module.Button));
+const Alert = dynamic(() => import("@/components/ui/alert").then(module => module.Alert));
+const AlertDescription = dynamic(() => import("@/components/ui/alert").then(module => module.AlertDescription));
+const AlertTitle = dynamic(() => import("@/components/ui/alert").then(module => module.AlertTitle));
+const Loader = dynamic(() => import("../loader"));
+const AlertTriangle = dynamic(() => import("lucide-react").then(module => module.AlertTriangle));
+const CheckCircle = dynamic(() => import("lucide-react").then(module => module.CheckCircle));
+const XCircle = dynamic(() => import("lucide-react").then(module => module.XCircle));
 
 enum TransactionState {
   REVIEW = "REVIEW",
@@ -62,7 +68,8 @@ const messages: TransactionStateToDataMappings = {
   },
 };
 
-export const TransactionModal = () => {
+
+const TransactionModal = () => {
   const { transactionData, setTransactionData } = useTransactionStore();
   const [txState, setTxState] = useState<TransactionState>(
     TransactionState.REVIEW
@@ -178,3 +185,5 @@ export const TransactionModal = () => {
     </Dialog>
   );
 };
+
+export default TransactionModal

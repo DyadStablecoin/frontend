@@ -3,13 +3,26 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 
 import { cn } from "@/lib/utils";
-import { Footer } from "@/components/ui/footer";
-import { MainNav } from "@/components/ui/main-nav";
 import { Metadata } from "next";
 import { metadata as meta } from "./metadata";
 import { Providers } from "./providers";
-import { TransactionModal } from "@/components/reusable/TransactionModal";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import dynamic from 'next/dynamic';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
+const MainNav = dynamic(
+  () => import("@/components/ui/main-nav"),
+  { ssr: false }
+);
+
+const Footer = dynamic(
+  () => import("@/components/ui/footer"),
+  { ssr: false }
+);
+
+const TransactionModal = dynamic(
+  () => import("@/components/reusable/TransactionModal"),
+  { ssr: false }
+);
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = meta;
@@ -38,7 +51,6 @@ export default function RootLayout({
             {children}
             <Footer />
           </main>
-          {/* <MobileNotSupported /> */}
           <TransactionModal />
         </Providers>
       </body>

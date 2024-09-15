@@ -10,7 +10,7 @@ import { fromBigNumber } from "@/lib/utils";
 import React from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 
-export const MainNav = React.memo(function MainNav({
+const MainNav = React.memo(function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
@@ -118,4 +118,6 @@ export const MainNav = React.memo(function MainNav({
     </nav>
   );
 });
+
+export default MainNav
 

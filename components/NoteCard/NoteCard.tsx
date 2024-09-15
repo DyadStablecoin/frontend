@@ -1,8 +1,6 @@
 "use client";
 
 import React, { Fragment, useMemo, useState } from "react";
-import NoteCardsContainer from "../reusable/NoteCardsContainer";
-import TabsComponent from "../reusable/TabsComponent";
 import {
   vaultManagerAbi,
   vaultManagerAddress,
@@ -11,16 +9,15 @@ import {
   dyadAddress,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
-import NoteNumber from "./Children/NoteNumber";
 import { NoteNumberDataColumnModel } from "@/models/NoteCardModels";
 import { TabsDataModel } from "@/models/TabsModel";
-import Deposit, { supportedVaults } from "./Children/Deposit";
-import Mint from "./Children/Mint";
+import { supportedVaults } from "./Children/Deposit";
 import { useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
 import { vaultInfo } from "@/lib/constants";
-import { Data } from "../reusable/PieChartComponent";
+import { Data } from "@/models/ChartModels";
+
 import {
   Dropdown,
   DropdownTrigger,
@@ -28,6 +25,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { Menu } from "lucide-react";
+import dynamic from "next/dynamic";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -37,6 +35,13 @@ type ContractData = {
   minCollatRatio?: bigint;
   mintedDyad?: bigint;
 };
+
+  // Lazy loading components
+  const NoteCardsContainer = dynamic(() => import("../reusable/NoteCardsContainer"), { ssr: false });
+  const TabsComponent = dynamic(() => import("../reusable/TabsComponent"), { ssr: false });
+  const NoteNumber = dynamic(() => import("./Children/NoteNumber"), { ssr: false });
+  const Deposit = dynamic(() => import("./Children/Deposit"), { ssr: false });
+  const Mint = dynamic(() => import("./Children/Mint"), { ssr: false });
 
 function NoteCard({ tokenId }: { tokenId: string }) {
   // Fetch collateralization ratio
