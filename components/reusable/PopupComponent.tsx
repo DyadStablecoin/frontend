@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 
 interface PopupComponentProps {
   placement?: any;

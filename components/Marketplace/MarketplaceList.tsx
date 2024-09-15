@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import SortbyComponent from "../reusable/SortbyComponent";
-import {getKeyValue} from "@nextui-org/react";
+import {getKeyValue} from "@nextui-org/table";
 import {cardsSortData} from "@/constants/MarketplaceList";
 import {ArrowDownUpIcon, ArrowUpIcon} from "lucide-react";
 import {Dialog, DialogContent} from "@/components/ui/dialog";

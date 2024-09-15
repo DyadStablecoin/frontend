@@ -6,9 +6,8 @@ import { TabsDataModel } from "@/models/TabsModel";
 import {
   Accordion,
   AccordionItem,
-  Selection,
-  Tooltip,
-} from "@nextui-org/react";
+} from "@nextui-org/accordion";
+import {Tooltip} from "@nextui-org/tooltip";
 import { VaultInfo, vaultInfo } from "@/lib/constants";
 import { defaultChain } from "@/lib/config";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -19,6 +18,7 @@ import {
 import { VaultActions } from "@/models/VaultModels";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
+import { Selection } from "@nextui-org/table";
 
 const Vault = ({
   vault,

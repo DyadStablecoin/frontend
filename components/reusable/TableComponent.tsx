@@ -6,7 +6,7 @@ import {
   TableRow,
   getKeyValue,
   Table,
-} from "@nextui-org/react";
+} from "@nextui-org/table";
 import React, { useState } from "react";
 
 type Alignment = "left" | "center" | "right";

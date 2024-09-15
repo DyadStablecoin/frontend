@@ -7,7 +7,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
-  output: "export",
   webpack: config => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config

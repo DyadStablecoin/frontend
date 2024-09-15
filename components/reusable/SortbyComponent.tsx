@@ -2,7 +2,7 @@ import React from "react";
 import filterIcon from "@/public/filterIconPng.png";
 import PopupComponent from "@/components/reusable/PopupComponent";
 import ButtonComponent from "./ButtonComponent";
-import { RadioGroup, Radio } from "@nextui-org/react";
+import { RadioGroup, Radio } from "@nextui-org/radio";
 
 interface SortOptionsInterface {
   label: string;
