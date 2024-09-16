@@ -2,14 +2,17 @@
 
 import React from "react";
 import { NoteNumberDataColumnModel } from "@/models/NoteCardModels";
-import PieChartComponent from "@/components/reusable/PieChartComponent";
 import { Data } from "@/models/ChartModels";
+import dynamic from "next/dynamic";
 
 interface NoteNumberProps {
   data: NoteNumberDataColumnModel[];
   dyad: number[];
   collateral: Data[];
 }
+
+// Lazy Loading components
+const PieChartComponent = dynamic(() => import("@/components/reusable/PieChartComponent"), { ssr: false });
 
 const NoteNumber: React.FC<NoteNumberProps> = ({ data, dyad, collateral }) => {
   const dyadData = [

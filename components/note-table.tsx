@@ -11,15 +11,18 @@ import { useAccount, useReadContracts } from "wagmi";
 import { defaultChain } from "@/lib/config";
 import { dnftAbi } from "@/lib/abi/Dnft";
 import {
-  BuyModal,
-  CancelListingModal,
-  EditListingModal,
-  ListModal,
   useListings,
 } from "@reservoir0x/reservoir-kit-ui";
 import { maxUint256 } from "viem";
-import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import dynamic from "next/dynamic";
+
+// Lazy Load components
+const BuyModal = dynamic(() => import("@reservoir0x/reservoir-kit-ui").then(mod => mod.BuyModal), { ssr: false });
+const CancelListingModal = dynamic(() => import("@reservoir0x/reservoir-kit-ui").then(mod => mod.CancelListingModal), { ssr: false });
+const EditListingModal = dynamic(() => import("@reservoir0x/reservoir-kit-ui").then(mod => mod.EditListingModal), { ssr: false });
+const ListModal = dynamic(() => import("@reservoir0x/reservoir-kit-ui").then(mod => mod.ListModal), { ssr: false });
+const MarketplaceList = dynamic(() => import("./Marketplace/MarketplaceList"), { ssr: false,  loading: () => <p>Loading...</p> });
 
 const NoteTable: React.FC<any> = ({}) => {
   const listModalOpenState = useState(false);

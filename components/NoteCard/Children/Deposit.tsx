@@ -6,10 +6,9 @@ import { formatNumber, fromBigNumber } from "@/lib/utils";
 import { VaultInfo, vaultInfo } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { vaultAbi } from "@/lib/abi/Vault";
-import Vault from "@/components/NoteCard/vaults/Vault";
-import AddVault from "@/components/NoteCard/vaults/AddVault";
 import { getYields } from "@/utils/vaults";
 import { vaultTableHeaders } from "@/constants/vaults";
+import dynamic from "next/dynamic";
 
 interface DepositProps {
   tokenId: string;
@@ -86,6 +85,9 @@ const Deposit: React.FC<DepositProps> = ({
   }, []);
 
   const renderVaultTable = (vaultData: VaultInfo[]) => {
+    // Lazy Load components
+    const Vault = dynamic(() => import("@/components/NoteCard/vaults/Vault"), { ssr: false });
+    const AddVault = dynamic(() => import("@/components/NoteCard/vaults/AddVault"), { ssr: false });
     return (
       <div>
         <div className="hidden justify-between text-xs tracking-wider md:grid md:grid-cols-9 md:gap-x-2 mt-2 py-2 px-2 sticky top-0">

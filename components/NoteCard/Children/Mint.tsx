@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ButtonComponent from "@/components/reusable/ButtonComponent";
-import { BigIntInput } from "@/components/reusable/BigIntInput";
 import { useTransactionStore } from "@/lib/store";
 import {
   vaultManagerAbi,
@@ -14,6 +12,13 @@ import { defaultChain } from "@/lib/config";
 import { useAccount, useReadContracts } from "wagmi";
 import { formatNumber, fromBigNumber, toBigNumber } from "@/lib/utils";
 import { maxUint256 } from "viem";
+import dynamic from "next/dynamic";
+
+// Lazy Load components
+const ButtonComponent = dynamic(() => import("@/components/reusable/ButtonComponent"), { ssr: false });
+const BigIntInput = dynamic(
+  () => import("@/components/reusable/BigIntInput").then(module => module.BigIntInput), 
+  { ssr: false });
 
 interface MintProps {
   tokenId: string;
