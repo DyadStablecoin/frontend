@@ -12,10 +12,12 @@ import {
   sUsDeAddress,
   weEthVaultAddress,
   weEthAddress,
+  apxEthVaultAddress,
+  apxEthAddress,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
 
-type ColorCode = `#${string}`
+type ColorCode = `#${string}`;
 
 export type VaultInfo = {
   icon: string;
@@ -35,7 +37,7 @@ export const vaultInfo: VaultInfo[] = [
     symbol: "wETH",
     tokenAddress: wethAddress[defaultChain.id],
     color: "#676767",
-    decimals: 8
+    decimals: 8,
   },
   {
     icon: "/wsteth.png",
@@ -45,10 +47,12 @@ export const vaultInfo: VaultInfo[] = [
     color: "#00A3FF",
     decimals: 8,
     getApr: async () => {
-      const resp = await fetch("https://eth-api.lido.fi/v1/protocol/steth/apr/sma");
+      const resp = await fetch(
+        "https://eth-api.lido.fi/v1/protocol/steth/apr/sma"
+      );
       const data = await resp.json();
       return data.data.smaApr;
-    }
+    },
   },
   {
     icon: "/kerosene.png",
@@ -56,7 +60,7 @@ export const vaultInfo: VaultInfo[] = [
     symbol: "KEROSENE",
     tokenAddress: keroseneAddress[defaultChain.id],
     color: "#EDEDED",
-    decimals: 8
+    decimals: 8,
   },
   {
     icon: "/tbtc.svg",
@@ -64,7 +68,7 @@ export const vaultInfo: VaultInfo[] = [
     symbol: "tBTC",
     tokenAddress: tBtcAddress[defaultChain.id],
     color: "#FF9900",
-    decimals: 8
+    decimals: 8,
   },
   {
     icon: "/susde.svg",
@@ -74,7 +78,9 @@ export const vaultInfo: VaultInfo[] = [
     color: "#2A2A2A",
     decimals: 8,
     getApr: async () => {
-      const resp = await fetch("https://ethena.fi/api/yields/protocol-and-staking-yield");
+      const resp = await fetch(
+        "https://ethena.fi/api/yields/protocol-and-staking-yield"
+      );
       const data = await resp.json();
       return data.stakingYield.value;
     },
@@ -87,12 +93,28 @@ export const vaultInfo: VaultInfo[] = [
     color: "#301267",
     decimals: 18,
     getApr: async () => {
-        const resp = await fetch("https://www.etherfi.bid/api/etherfi/apr");
-        const data = await resp.json();
-        const lastValue = data.latest_aprs.slice(-1);
-        const apr = parseFloat(lastValue) / 0.9 / 100;
-        return apr;
+      const resp = await fetch("https://www.etherfi.bid/api/etherfi/apr");
+      const data = await resp.json();
+      const lastValue = data.latest_aprs.slice(-1);
+      const apr = parseFloat(lastValue) / 0.9 / 100;
+      return apr;
     },
-    additionalYield: "3x EtherFi Points"
-  }
+    additionalYield: "3x EtherFi Points",
+  },
+  {
+    icon: "/apxETH.webp",
+    vaultAddress: apxEthVaultAddress[defaultChain.id],
+    symbol: "apxETH",
+    tokenAddress: apxEthAddress[defaultChain.id],
+    color: "#301267",
+    decimals: 8,
+    // getApr: async () => {
+    //   const resp = await fetch("https://www.etherfi.bid/api/etherfi/apr");
+    //   const data = await resp.json();
+    //   const lastValue = data.latest_aprs.slice(-1);
+    //   const apr = parseFloat(lastValue) / 0.9 / 100;
+    //   return apr;
+    // },
+    // additionalYield: "3x EtherFi Points",
+  },
 ];

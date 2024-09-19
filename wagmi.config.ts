@@ -127,6 +127,14 @@ export default defineConfig({
       abi: vaultAbi,
     },
     {
+      name: "apxETHVault",
+      address: {
+        [mainnet.id]: "0xB58d87dD30a67823acC4b9Fa533F464CdEdA737E",
+        [anvil.id]: "0xB58d87dD30a67823acC4b9Fa533F464CdEdA737E",
+      },
+      abi: vaultAbi,
+    },
+    {
       name: "sUSDeVault",
       address: {
         [mainnet.id]: "0x3FC5c0e19b6287f25EB271c2E8e7Ba898FE7ab29",
@@ -233,6 +241,14 @@ export default defineConfig({
       address: {
         [mainnet.id]: "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
         [anvil.id]: "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
+      },
+      abi: erc20Abi,
+    },
+    {
+      name: "apxETH",
+      address: {
+        [mainnet.id]: "0x9Ba021B0a9b958B5E75cE9f6dff97C7eE52cb3E6",
+        [anvil.id]: "0x9Ba021B0a9b958B5E75cE9f6dff97C7eE52cb3E6",
       },
       abi: erc20Abi,
     },
