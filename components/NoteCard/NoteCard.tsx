@@ -20,7 +20,7 @@ import { useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
 import { vaultInfo } from "@/lib/constants";
-import { Data } from "../reusable/PieChartComponent";
+import { Data } from "@/models/ChartModels";
 import {
   Dropdown,
   DropdownTrigger,
@@ -28,6 +28,7 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { Menu } from "lucide-react";
+import Stake from "./Children/Stake";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -264,6 +265,19 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: "Mint & Burn",
       tabKey: "Mint DYAD",
       content: <Mint currentCr={collatRatio} tokenId={tokenId} />,
+    },
+    {
+      label: "Stake & Earn",
+      tabKey: "Stake & Earn",
+      content: (
+        <Stake
+          isStaked={true}
+          APR="83%"
+          liquidityStaked="$64,000"
+          xpBoost="5.3x"
+          XP="3,400"
+        />
+      ),
     },
   ];
 
