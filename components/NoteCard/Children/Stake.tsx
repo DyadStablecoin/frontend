@@ -51,7 +51,7 @@ const Stake: React.FC<StakeProps> = ({
     // To be refactored to use the stake key from the LP
     // if stake key is not set and the LP is already staked, set it to the stake key of the currency in the LP
     if (!stakeKey && isStaked) {
-      setStakeKey(STAKE_CONTRACTS["ETH"].stakeKey);
+      setStakeKey(STAKE_CONTRACTS["USDC"].stakeKey);
     }
   }, [stakeKey, isStaked]);
 
@@ -63,7 +63,7 @@ const Stake: React.FC<StakeProps> = ({
           variant={"bordered"}
           defaultItems={stakeDropdownData}
           placeholder="Serach LP"
-          className="w-full h-[37px] mb-2"
+          className="w-full h-[37px] mb-2 mt-4"
           radius="sm"
           popoverProps={{
             offset: 5,
@@ -101,10 +101,10 @@ const Stake: React.FC<StakeProps> = ({
         <DialogContent className="max-w-[90vw] md:max-w-fit">
           <KeroseneCard
             currency={stakeKey!}
+            stakeData={stakeData}
             stakingContract={
               stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
             }
-            kerosenePrice="0.00"
             actionType={isStaked ? "unstake" : "stake"}
           />
         </DialogContent>

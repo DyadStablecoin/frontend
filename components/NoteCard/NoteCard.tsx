@@ -271,7 +271,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       tabKey: "Stake & Earn",
       content: (
         <Stake
-          isStaked={true}
+          isStaked={false}
           APR="83%"
           liquidityStaked="$64,000"
           xpBoost="5.3x"
