@@ -101,7 +101,9 @@ const Stake: React.FC<StakeProps> = ({
         <DialogContent className="max-w-[90vw] md:max-w-fit">
           <KeroseneCard
             currency={stakeKey!}
-            stakingContract={STAKE_CONTRACTS[stakeKey!].address}
+            stakingContract={
+              stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
+            }
             kerosenePrice="0.00"
             actionType={isStaked ? "unstake" : "stake"}
           />
