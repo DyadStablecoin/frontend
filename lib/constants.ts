@@ -109,9 +109,9 @@ export const vaultInfo: VaultInfo[] = [
     color: "#aa9a36",
     decimals: 8,
     getApr: async() => {
-      const resp = await fetch("https://dinero.xyz/api/apr");
-      const data = await resp.json();
-      return data.apxETH;
+      const resp = await fetch("https://corsproxy.io/?https%3A%2F%2Fdinero.xyz%2Fapi%2Fapr")
+      const data = await resp.json()
+      return parseFloat(data.apxEth);
     }
   },
 ];
