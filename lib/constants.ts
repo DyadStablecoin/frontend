@@ -102,19 +102,16 @@ export const vaultInfo: VaultInfo[] = [
     additionalYield: "3x EtherFi Points",
   },
   {
-    icon: "/apxETH.webp",
+    icon: "/apxETH.png",
     vaultAddress: apxEthVaultAddress[defaultChain.id],
     symbol: "apxETH",
     tokenAddress: apxEthAddress[defaultChain.id],
-    color: "#301267",
+    color: "#aa9a36",
     decimals: 8,
-    // getApr: async () => {
-    //   const resp = await fetch("https://www.etherfi.bid/api/etherfi/apr");
-    //   const data = await resp.json();
-    //   const lastValue = data.latest_aprs.slice(-1);
-    //   const apr = parseFloat(lastValue) / 0.9 / 100;
-    //   return apr;
-    // },
-    // additionalYield: "3x EtherFi Points",
+    getApr: async() => {
+      const resp = await fetch("https://dinero.xyz/api/apr");
+      const data = await resp.json();
+      return data.apxETH;
+    }
   },
 ];
