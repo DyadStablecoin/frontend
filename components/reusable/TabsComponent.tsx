@@ -1,4 +1,4 @@
-import React, { Key, useEffect, useState } from "react";
+import React, { Key, useEffect } from "react";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { TabsDataModel } from "@/models/TabsModel";
 import { cn } from "@/lib/utils";
@@ -21,15 +21,15 @@ export default function TabsComponent({
   selected,
   setSelected,
 }: tabsComponentPropsInterface) {
-  // const [selected, setSelected] = useState<Key>(tabsData[0].tabKey);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
 
   useEffect(() => {
-    if (searchParams.get("tab") && urlUpdate) {
-      setSelected(searchParams.get("tab") as Key);
+    if (tab && urlUpdate) {
+      setSelected(tab as Key);
     }
-  }, []);
+  }, [tab]);
 
   return (
     <div

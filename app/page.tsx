@@ -1,7 +1,5 @@
 "use client";
 
-import ButtonComponent from "@/components/reusable/ButtonComponent";
-import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import NoteCard from "@/components/NoteCard/NoteCard";
 import { EarnKeroseneContent } from "@/components/earn-kerosene";
 import { ClaimModalContent } from "@/components/claim-modal-content";
@@ -11,7 +9,6 @@ import { defaultChain } from "@/lib/config";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 import dynamic from "next/dynamic";
 import NoteTable from "@/components/note-table";
-import { BuyNoteWithKerosene } from "@/components/buy-note-kerosene";
 import { useState } from "react";
 
 const TabsComponent = dynamic(
@@ -31,7 +28,6 @@ export default function Home() {
 
   const manageNotesContent = (
     <>
-      {/* <BuyNoteWithKerosene /> */}
       <div className="my-6 flex justify-between">
         <ClaimModalContent />
       </div>
