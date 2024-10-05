@@ -9,8 +9,7 @@ import { defaultChain } from "@/lib/config";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 import dynamic from "next/dynamic";
 import NoteTable from "@/components/note-table";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const TabsComponent = dynamic(
   () => import("@/components/reusable/TabsComponent"),
@@ -19,9 +18,6 @@ const TabsComponent = dynamic(
 
 export default function Home() {
   const { address } = useAccount();
-  const searchParams = useSearchParams();
-
-  const tab = searchParams.get("tab");
 
   const { data: balance } = useReadDNftBalanceOf({
     args: [address],
@@ -66,12 +62,6 @@ export default function Home() {
   ];
 
   const [selected, setSelected] = useState(tabsData[0].tabKey);
-
-  useEffect(() => {
-    if (tab) {
-      setSelected(tab);
-    }
-  }, [tab]);
 
   return (
     <div className="flex-1 max-w-screen-md w-full p-4 mt-4">
