@@ -13,6 +13,7 @@ import {
 import { defaultChain } from "@/lib/config";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { ReactNode, useEffect, useMemo } from "react";
+import Link from "next/link";
 
 export function EarnKeroseneContent() {
   const { address } = useAccount();
@@ -117,15 +118,13 @@ export function EarnKeroseneContent() {
       bottomComponent: (
         <div className="flex justify-between mt-[32px] w-full">
           <div className="w-full">
-            <ButtonComponent
-              onClick={() => {
-                window.open(window.location.origin + "?tab=notes", "_self");
-              }}
-            >
-              <div className="text-xs md:text-[0.875rem] transition-all">
-                Switch to Manage Notes tab
-              </div>
-            </ButtonComponent>
+            <Link href="/?tab=notes">
+              <ButtonComponent>
+                <div className="text-xs md:text-[0.875rem] transition-all">
+                  Switch to Manage Notes tab
+                </div>
+              </ButtonComponent>
+            </Link>
           </div>
         </div>
       ),

@@ -1,7 +1,5 @@
 "use client";
 
-import ButtonComponent from "@/components/reusable/ButtonComponent";
-import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import NoteCard from "@/components/NoteCard/NoteCard";
 import { EarnKeroseneContent } from "@/components/earn-kerosene";
 import { ClaimModalContent } from "@/components/claim-modal-content";
@@ -11,8 +9,8 @@ import { defaultChain } from "@/lib/config";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
 import dynamic from "next/dynamic";
 import NoteTable from "@/components/note-table";
-import { BuyNoteWithKerosene } from "@/components/buy-note-kerosene";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const TabsComponent = dynamic(
   () => import("@/components/reusable/TabsComponent"),
@@ -21,6 +19,9 @@ const TabsComponent = dynamic(
 
 export default function Home() {
   const { address } = useAccount();
+  const searchParams = useSearchParams();
+
+  const tab = searchParams.get("tab");
 
   const { data: balance } = useReadDNftBalanceOf({
     args: [address],
@@ -31,7 +32,6 @@ export default function Home() {
 
   const manageNotesContent = (
     <>
-      {/* <BuyNoteWithKerosene /> */}
       <div className="my-6 flex justify-between">
         <ClaimModalContent />
       </div>
@@ -66,6 +66,12 @@ export default function Home() {
   ];
 
   const [selected, setSelected] = useState(tabsData[0].tabKey);
+
+  useEffect(() => {
+    if (tab) {
+      setSelected(tab);
+    }
+  }, [tab]);
 
   return (
     <div className="flex-1 max-w-screen-md w-full p-4 mt-4">
