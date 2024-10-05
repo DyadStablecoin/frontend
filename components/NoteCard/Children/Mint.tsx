@@ -136,7 +136,10 @@ const Mint = ({ currentCr, tokenId }: MintProps) => {
     value: string;
   }) => {
     return (
-      <div className="flex flex-row justify-between md:flex-col">
+      <div
+        className={`flex justify-between p-4 rounded-lg shadow-md 
+          text-white bg-[#282828]`}
+      >
         <div className="mr-[5px]">{description}:</div>
         <div>{value}</div>
       </div>
@@ -217,7 +220,7 @@ const Mint = ({ currentCr, tokenId }: MintProps) => {
           </div>
         </div>
       </div>
-      <div className="block md:flex justify-between mt-[32px]">
+      <div className=" grid grid-cols-1 md:grid-cols-2 md: gap-y-4 gap-x-4 mt-[32px]">
         <StackedValue
           description="DYAD minted"
           value={formatNumber(
@@ -244,10 +247,12 @@ const Mint = ({ currentCr, tokenId }: MintProps) => {
         />
 
         {(mintInputValue || burnInputValue) && (
-          <StackedValue
-            description="New CR"
-            value={newCr === 0 ? "Infinity" : `${formatNumber(newCr)}%`}
-          />
+          <div className="col-span-1 md:col-span-2">
+            <StackedValue
+              description="New CR"
+              value={newCr === 0 ? "Infinity" : `${formatNumber(newCr)}%`}
+            />
+          </div>
         )}
       </div>
     </div>
