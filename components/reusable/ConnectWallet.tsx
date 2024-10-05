@@ -18,7 +18,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ hasConnectButton }) => {
   ];
   return (
     <div className="w-full">
-      <div className="grid grid-cols-5 items-center w-full md:w-[70%] mx-auto">
+      <div className="grid grid-cols-5 items-center w-full md:w-[70%] mx-auto grayscale">
         {walletIcons.map((icon, i) => (
           <Image
             className="mx-auto"
