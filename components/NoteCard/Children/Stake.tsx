@@ -119,7 +119,7 @@ const Stake: React.FC<StakeProps> = ({
                 variant="bordered"
               >
                 <div className="text-xs transition-all">
-                  {`Unstake ${STAKE_CONTRACTS["USDC"].label}`}
+                  {`Unstake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
                 </div>
               </ButtonComponent>
             </DialogTrigger>
