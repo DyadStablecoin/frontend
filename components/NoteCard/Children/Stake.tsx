@@ -64,9 +64,14 @@ const Stake: React.FC<StakeProps> = ({
           defaultItems={stakeDropdownData}
           placeholder="Serach LP"
           className="w-full h-[37px] mb-2 mt-4"
-          radius="sm"
+          classNames={{
+            popoverContent: "rounded-none",
+            listbox: "rounded-none",
+          }}
+          radius="none"
           popoverProps={{
             offset: 5,
+            radius: "none",
           }}
           onSelectionChange={(key) => {
             if (key) {
@@ -82,37 +87,69 @@ const Stake: React.FC<StakeProps> = ({
         </Autocomplete>
       )}
 
-      <Dialog>
-        <DialogTrigger className="h-full w-full mt-2" disabled={!stakeKey}>
-          {isStaked ? (
-            <ButtonComponent>
-              <div className="text-xs md:text-[0.875rem] transition-all">
-                Unstake
+      <div className="flex flex-col gap-y-2 md:grid md:grid-cols-3 md:gap-x-8 h-full w-full mt-8 md:mt-4">
+        <Dialog>
+          <DialogTrigger className={isStaked ? "col-span-1" : "col-span-3"}>
+            <ButtonComponent
+              className={`rounded-none ${isStaked ? "h-[47px] text-xs" : "text-sm"}`}
+              variant="bordered"
+              disabled={!stakeKey}
+            >
+              <div className="transition-all">
+                {`Stake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
               </div>
             </ButtonComponent>
-          ) : (
-            <ButtonComponent disabled={!stakeKey}>
-              <div className="text-xs md:text-[0.875rem] transition-all">
-                Stake
-              </div>
-            </ButtonComponent>
-          )}
-        </DialogTrigger>
-        <DialogContent className="max-w-[90vw] md:max-w-fit">
-          <KeroseneCard
-            currency={stakeKey!}
-            stakeData={stakeData}
-            stakingContract={
-              stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
-            }
-            actionType={isStaked ? "unstake" : "stake"}
-          />
-        </DialogContent>
-      </Dialog>
+          </DialogTrigger>
+          <DialogContent className="max-w-[90vw] md:max-w-fit">
+            <KeroseneCard
+              currency={stakeKey!}
+              stakeData={stakeData}
+              stakingContract={
+                stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
+              }
+              actionType="stake"
+            />
+          </DialogContent>
+        </Dialog>
+        {isStaked && (
+          <Dialog>
+            <DialogTrigger>
+              <ButtonComponent
+                className="rounded-none h-[47px]"
+                variant="bordered"
+              >
+                <div className="text-xs transition-all">
+                  {`Unstake ${STAKE_CONTRACTS["USDC"].label}`}
+                </div>
+              </ButtonComponent>
+            </DialogTrigger>
+            <DialogContent className="max-w-[90vw] md:max-w-fit">
+              <KeroseneCard
+                currency={stakeKey!}
+                stakeData={stakeData}
+                stakingContract={
+                  stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
+                }
+                actionType="unstake"
+              />
+            </DialogContent>
+          </Dialog>
+        )}
+        {isStaked && (
+          <ButtonComponent
+            className="rounded-none h-[47px]"
+            variant="bordered"
+            // Functionality to be implemented
+            onClick={() => console.log("KEROSENE claimed")}
+          >
+            <div className="text-xs transition-all">Claim 820 KEROSENE</div>
+          </ButtonComponent>
+        )}
+      </div>
 
       {isStaked && (
         <>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-6">
             {stakeData.map((item: { label: string; value: string }) => (
               <div key={item.label} className={`py-2.5`}>
                 <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
