@@ -5,6 +5,8 @@ import StakingAbi from "@/abis/Staking.json";
 import { DialogClose } from "../ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
+import { useState } from "react";
+import InputComponent from "../reusable/InputComponent";
 
 interface KeroseneProps {
   currency: string;
@@ -19,6 +21,8 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   actionType = "stake",
   stakingContract,
 }) => {
+  const [stakeInputValue, setStakeInputValue] = useState("");
+  const [unstakeInputValue, setUnstakeInputValue] = useState("");
   const { writeContract: writeStake } = useWriteContract();
   const { writeContract: writeUnstake } = useWriteContract();
 
@@ -29,6 +33,25 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
           <div>{STAKE_CONTRACTS[currency as StakeCurenciesType].label}</div>
         </div>
         <div className="mt-4 w-full md:w-[600px]">
+          {actionType === "stake" ? (
+            <div className="flex justify-between mt-[32px] w-full">
+              <InputComponent
+                placeHolder={`Amount of ${currency} to stake`}
+                onValueChange={setStakeInputValue}
+                value={stakeInputValue}
+                type="number"
+              />
+            </div>
+          ) : (
+            <div className="flex justify-between mt-[32px] w-full">
+              <InputComponent
+                placeHolder={`Amount of ${currency} to unstake`}
+                onValueChange={setUnstakeInputValue}
+                value={unstakeInputValue}
+                type="number"
+              />
+            </div>
+          )}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-4">
             {stakeData.map((item: { label: string; value: string }) => (
               <div key={item.label} className={`py-2.5`}>
@@ -45,11 +68,13 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             </DialogClose>
             {actionType === "stake" ? (
               <ButtonComponent
+                disabled={!stakeInputValue || stakeInputValue.length <= 0}
                 onClick={() =>
                   writeStake({
                     address: stakingContract!,
                     abi: StakingAbi.abi,
                     functionName: "stake",
+                    args: [stakeInputValue],
                   })
                 }
               >
@@ -57,11 +82,13 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               </ButtonComponent>
             ) : (
               <ButtonComponent
+                disabled={!unstakeInputValue || unstakeInputValue.length <= 0}
                 onClick={() =>
                   writeUnstake({
                     address: stakingContract!,
                     abi: StakingAbi.abi,
                     functionName: "withdraw",
+                    args: [unstakeInputValue],
                   })
                 }
               >
