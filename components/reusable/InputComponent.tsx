@@ -1,9 +1,9 @@
-import {Input} from "@nextui-org/input";
+import { Input } from "@nextui-org/input";
 import React from "react";
 
 interface InputComponentProps {
   placeHolder: string;
-  onValueChange: (value: string) => void;
+  onValueChange: (value: any) => void;
   value: string;
   type?: "text" | "number" | "email" | "password";
   max?: number;
