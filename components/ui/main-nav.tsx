@@ -14,7 +14,6 @@ export const MainNav = React.memo(function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  const { windowWidth } = useWindowSize();
   const {
     ethPrice,
     isLoading: ethPriceLoading,
@@ -112,10 +111,6 @@ export const MainNav = React.memo(function MainNav({
           </div>
         </div>
       </div>
-      <div className="ml-auto flex items-center space-x-4">
-        <w3m-button size={windowWidth > 768 ? "md" : "sm"} />
-      </div>
     </nav>
   );
 });
-

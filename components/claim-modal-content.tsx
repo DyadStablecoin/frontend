@@ -14,6 +14,7 @@ import { useTransactionStore } from "@/lib/store";
 import { BuyModal, useListings } from "@reservoir0x/reservoir-kit-ui";
 import { useMemo, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import ConnectWallet from "./reusable/ConnectWallet";
 
 export function ClaimModalContent() {
   const buyModalOpenState = useState(false);
@@ -98,9 +99,5 @@ export function ClaimModalContent() {
     );
   }
 
-  return (
-    <p className="text-xs md:text-[0.875rem] transition-all">
-      Connect wallet to view notes
-    </p>
-  );
+  return <ConnectWallet hasConnectButton={true} />;
 }

@@ -21,6 +21,7 @@ import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { useTransactionStore } from "@/lib/store";
 import { defaultChain } from "@/lib/config";
 import { DialogClose } from "@/components/ui/dialog";
+import Image from "next/image";
 
 function AddVaultModal({
   vaults,
@@ -37,6 +38,10 @@ function AddVaultModal({
     })),
     allowFailure: false,
   });
+
+  const vaultIocns = vaults.map(
+    (vault) => vaultInfo.filter((info) => info.vaultAddress === vault)[0].icon
+  );
 
   const vaultSymbols = vaults.map(
     (vault) => vaultInfo.filter((info) => info.vaultAddress === vault)[0].symbol
@@ -77,7 +82,17 @@ function AddVaultModal({
           <TableBody className="text-xs md:text-base">
             {vaults.map((address, i) => (
               <TableRow key={i}>
-                <TableCell>{vaultSymbols[i]}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Image
+                      src={vaultIocns[i]}
+                      alt="icon"
+                      width={23}
+                      height={23}
+                    />
+                    <span>{vaultSymbols[i]}</span>
+                  </div>
+                </TableCell>
                 <TableCell>
                   $
                   {formatNumber(
