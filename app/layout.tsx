@@ -9,7 +9,6 @@ import { Metadata } from "next";
 import { metadata as meta } from "./metadata";
 import { Providers } from "./providers";
 import { TransactionModal } from "@/components/reusable/TransactionModal";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = meta;
@@ -29,11 +28,8 @@ export default function RootLayout({
       >
         <Providers>
           <main className="flex flex-col min-h-screen items-center">
-            <div className="flex relative max-w-screen-md w-full md:w-[745px] justify-start box-border md:pb-8 pb-12 pt-8">
+            <div className="flex relative max-w-screen-md w-full md:w-[745px] justify-start box-border pt-8">
               <MainNav className="mx-4 flex-1 max-w-screen-md" />
-              <div className="ml-auto flex items-center mr-4 text-xs md:text-sm">
-                <ConnectButton showBalance={false} />
-              </div>
             </div>
             {children}
             <Footer />
