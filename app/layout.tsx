@@ -34,7 +34,6 @@ export default function RootLayout({
             {children}
             <Footer />
           </main>
-          {/* <MobileNotSupported /> */}
           <TransactionModal />
         </Providers>
       </body>

@@ -2,7 +2,7 @@ import React, { Key, useEffect } from "react";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { TabsDataModel } from "@/models/TabsModel";
 import { cn } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface tabsComponentPropsInterface {
   tabsData: TabsDataModel[];
@@ -21,7 +21,6 @@ export default function TabsComponent({
   selected,
   setSelected,
 }: tabsComponentPropsInterface) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
 
@@ -59,7 +58,7 @@ export default function TabsComponent({
           onSelectionChange={(key) => {
             setSelected(key);
             if (urlUpdate) {
-              router.replace("?tab=" + key);
+              window.history.pushState({}, "", `/?tab=${key}`);
             }
           }}
           classNames={{
