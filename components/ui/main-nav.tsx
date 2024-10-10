@@ -8,7 +8,8 @@ import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { useReadKeroseneVaultV2AssetPrice } from "@/generated";
 import { fromBigNumber } from "@/lib/utils";
 import React from "react";
-import useWindowSize from "@/hooks/useWindowSize";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import DataCards from "../DataCards/DataCards";
 
 export const MainNav = React.memo(function MainNav({
   className,
@@ -54,63 +55,43 @@ export const MainNav = React.memo(function MainNav({
       : `$${fromBigNumber(keroseneVaultAssetPrice, 8).toFixed(4)}`;
 
   return (
-    <nav
-      className={cn("flex justify-start items-center ", className)}
-      {...props}
-    >
-      <Link
-        href="/"
-        className="text-2xl font-bold transition-colors hover:text-primary"
-      >
-        DYAD
-      </Link>
-      <div
-        className="flex absolute md:relative bottom-0 md:justify-normal justify-evenly border-t pt-4 border-[rgba(225,225,225,0.25)] border-none md:pt-0 text-gray-400 text-[0.7em] md:text-xs transition-all"
-        style={{ width: "calc(100% - 32px)" }}
-      >
-        <div className="flex justify-evenly w-1/2">
-          <a
-            href="https://www.coingecko.com/en/coins/ethereum"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-1/2 justify-center"
-          >
-            <div className="font-semibold">ETH:</div>
-            <div className="ml-1">{ethPriceDisplay}</div>
-          </a>
-          <a
-            href="https://defillama.com/protocol/dyad#information"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-1/2 justify-center"
-          >
-            <div className="font-semibold">TVL:</div>
-            <div className="ml-1">{tvlDisplay}</div>
-          </a>
-        </div>
-        <div className="flex justify-evenly w-1/2">
-          <a
-            href="https://www.coingecko.com/en/coins/kerosene"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-1/2 justify-center"
-          >
-            <div className="font-semibold">KERO:</div>
-            <div className="ml-1">{kerosenePriceDisplay}</div>
-          </a>
-          <div className="flex w-1/2 justify-center">
-            <a
-              href="https://dune.com/coffeexcoin/dyad-stable-v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-1/2 justify-center"
-            >
-              <div className="font-semibold">DV:</div>
-              <div className="ml-1">{keroseneVaultDisplay}</div>
-            </a>
-          </div>
+    <nav className={cn("", className)} {...props}>
+      <div className="flex justify-start items-center">
+        <Link
+          href="/"
+          className="text-2xl font-bold transition-colors hover:text-primary"
+        >
+          DYAD
+        </Link>
+        <div className="ml-auto flex items-center text-xs md:text-sm">
+          <ConnectButton showBalance={false} />
         </div>
       </div>
+      <DataCards
+        className="mt-8 md:mt-6"
+        data={[
+          {
+            label: "ETH",
+            value: ethPriceDisplay,
+            link: "https://www.coingecko.com/en/coins/ethereum",
+          },
+          {
+            label: "TVL",
+            value: tvlDisplay,
+            link: "https://defillama.com/protocol/dyad#information",
+          },
+          {
+            label: "KERO",
+            value: kerosenePriceDisplay,
+            link: "https://www.coingecko.com/en/coins/kerosene",
+          },
+          {
+            label: "DV",
+            value: keroseneVaultDisplay,
+            link: "https://dune.com/coffeexcoin/dyad-stable-v2",
+          },
+        ]}
+      />
     </nav>
   );
 });
