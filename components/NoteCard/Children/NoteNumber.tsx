@@ -26,12 +26,9 @@ const NoteNumber: React.FC<NoteNumberProps> = ({ data, dyad, collateral }) => {
 
   return (
     <div className="flex flex-col items-center w-full text-[#FAFAFA]">
-      {!isDataEmpty(dyadData) ||
-        (!isDataEmpty(collateral) && (
-          <div className="w-full mt-6">
-            <PieChartComponent outsideData={dyadData} insideData={collateral} />
-          </div>
-        ))}
+      <div className="w-full mt-6">
+        <PieChartComponent outsideData={dyadData} insideData={collateral} />
+      </div>
       <div className="w-full mt-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.map((item: any, index: number) => (
