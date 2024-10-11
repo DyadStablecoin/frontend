@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { formatCurrency } from "@/utils/currency";
-import Loader from "./loader";
 import {
   dNftAddress,
   useReadDNftBalanceOf,
@@ -20,6 +19,7 @@ import {
 import { maxUint256 } from "viem";
 import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import MarketPlaceSkeleton from "./Marketplace/MarketPlaceSkeleton";
 
 const NoteTable: React.FC<any> = ({}) => {
   const listModalOpenState = useState(false);
@@ -35,7 +35,7 @@ const NoteTable: React.FC<any> = ({}) => {
   const { openConnectModal, connectModalOpen } = useConnectModal();
 
   useEffect(() => {
-    setRenderCount(prev => prev + 1);
+    setRenderCount((prev) => prev + 1);
   }, []);
 
   const { data: totalSupply } = useReadXpTotalSupply();
@@ -84,7 +84,10 @@ const NoteTable: React.FC<any> = ({}) => {
       }
     }
   `;
-  const { loading, error, data } = useQuery(GET_ITEMS, { fetchPolicy: 'network-only', variables: { renderCount } });
+  const { loading, error, data } = useQuery(GET_ITEMS, {
+    fetchPolicy: "network-only",
+    variables: { renderCount },
+  });
 
   const getMarketplaceData = useCallback(
     (id: string) => {
@@ -264,8 +267,13 @@ const NoteTable: React.FC<any> = ({}) => {
           mutateListings();
         }}
       />
-      {loading && <Loader />}
-      {!loading && !error && <MarketplaceList cardsData={parsedData} ownedNotes={new Set(ownedDnfts?.map(Number) || [])} />}
+      {loading && <MarketPlaceSkeleton />}
+      {!loading && !error && (
+        <MarketplaceList
+          cardsData={parsedData}
+          ownedNotes={new Set(ownedDnfts?.map(Number) || [])}
+        />
+      )}
       {!loading && !error && (
         <div className="flex justify-end mt-4 text-sm text-muted-foreground">
           *only Notes that minted DYAD are ranked
