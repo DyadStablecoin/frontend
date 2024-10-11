@@ -6,6 +6,7 @@ import PieChartComponent from "@/components/reusable/PieChartComponent";
 import { Data } from "@/models/ChartModels";
 import { Blocks } from "lucide-react";
 import { Tooltip } from "@nextui-org/tooltip";
+import { isDataEmpty } from "@/utils/chartUtils";
 
 interface NoteNumberProps {
   data: NoteNumberDataColumnModel[];
@@ -45,9 +46,12 @@ const NoteNumber: React.FC<NoteNumberProps> = ({
           <Blocks size={18} className="m-auto" />
         </div>
       </Tooltip>
-      <div className="w-full mt-6">
-        <PieChartComponent outsideData={dyadData} insideData={collateral} />
-      </div>
+      {!isDataEmpty(dyadData) ||
+        (!isDataEmpty(collateral) && (
+          <div className="w-full mt-6">
+            <PieChartComponent outsideData={dyadData} insideData={collateral} />
+          </div>
+        ))}
       <div className="w-full mt-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.map((item: any, index: number) => (
