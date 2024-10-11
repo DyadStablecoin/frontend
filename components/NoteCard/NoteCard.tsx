@@ -28,6 +28,9 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { Menu } from "lucide-react";
+import NoteEtensionsModal from "../Modals/NoteNumberModals/NoteEtensionsModal";
+import { useDisclosure } from "@nextui-org/modal";
+import { NOTE_EXTENSIONS } from "@/constants/NoteCards";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -39,8 +42,12 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
+  const {
+    isOpen,
+    onOpen: onNoteExtensionsModalOpen,
+    onOpenChange,
+  } = useDisclosure();
   // Fetch collateralization ratio
-
   const {
     data: contractData,
     isSuccess: dataLoaded,
@@ -244,6 +251,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           data={noteData}
           dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
           collateral={vaultAmounts}
+          onNoteExtensionsModalOpen={onNoteExtensionsModalOpen}
         />
       ) : (
         <p>Deposit collateral to open vault</p>
@@ -285,10 +293,17 @@ function NoteCard({ tokenId }: { tokenId: string }) {
                 <Menu />
               </DropdownTrigger>
               <DropdownMenu aria-label="Dropdown Variants">
-                {tabData.map((tab: TabsDataModel) => (
+                {[
+                  ...tabData,
+                  { label: "Note Extensions", tabKey: "Note Extensions" },
+                ].map((tab: TabsDataModel) => (
                   <DropdownItem
                     key={tab.tabKey}
-                    onClick={() => setActiveTab(tab.tabKey)}
+                    onClick={() =>
+                      tab.tabKey === "Note Extensions"
+                        ? onNoteExtensionsModalOpen()
+                        : setActiveTab(tab.tabKey)
+                    }
                   >
                     {tab.label}
                   </DropdownItem>
@@ -305,6 +320,11 @@ function NoteCard({ tokenId }: { tokenId: string }) {
             setSelected={setActiveTab}
           />
         </div>
+        <NoteEtensionsModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          extensions={NOTE_EXTENSIONS}
+        />
       </Fragment>
     </NoteCardsContainer>
   );
