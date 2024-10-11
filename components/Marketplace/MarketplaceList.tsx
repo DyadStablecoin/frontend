@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import SortbyComponent from "../reusable/SortbyComponent";
-import {getKeyValue} from "@nextui-org/table";
-import {cardsSortData} from "@/constants/MarketplaceList";
-import {ArrowDownUpIcon, ArrowUpIcon} from "lucide-react";
-import {Dialog, DialogContent} from "@/components/ui/dialog";
+import { getKeyValue } from "@nextui-org/table";
+import { cardsSortData } from "@/constants/MarketplaceList";
+import { ArrowDownUpIcon, ArrowUpIcon } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import NoteDetails from "./NoteDetails"; // Import the new component
 
 interface MarketplaceListProps {
@@ -18,9 +18,9 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: string;
-  }>({key: "rank", direction: "descending"});
-  const [isModalOpen, setIsModalOpen] = useState(false); // new state
-  const [selectedRow, setSelectedRow] = useState<any>(null); // new state
+  }>({ key: "rank", direction: "descending" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
 
   const parseValue = (value: string) => {
     if (value === undefined || value === "") return 0;
@@ -70,11 +70,12 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
 
   const requestSort = (key: string) => {
     setSortConfig((oldValue) => {
-      return {key, direction: oldValue.direction};
+      return { key, direction: oldValue.direction };
     });
   };
 
-  const handleRowClick = (data: any) => { // new function
+  const handleRowClick = (data: any) => {
+    // new function
     setSelectedRow(data);
     setIsModalOpen(true);
   };
@@ -92,8 +93,8 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         <div className="w-16 ml-2">
           <SortbyComponent
             sortOptions={[
-              {label: "Ascending", value: "ascending"},
-              {label: "Descending", value: "descending"},
+              { label: "Ascending", value: "ascending" },
+              { label: "Descending", value: "descending" },
             ]}
             onValueChange={() =>
               setSortConfig((prevState) => ({
@@ -222,7 +223,8 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
 
       {selectedRow && (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <NoteDetails selectedRow={selectedRow} /> {/* Use the new component */}
+          <NoteDetails selectedRow={selectedRow} />{" "}
+          {/* Use the new component */}
         </Dialog>
       )}
 
