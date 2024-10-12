@@ -19,10 +19,14 @@ import Image from "next/image";
 interface MintProps {
   tokenId: string;
   currentCr: bigint | undefined;
-  setActiveTab: (tab: string) => void;
+  // setActiveTab: (tab: any) => void;
 }
 
-const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
+const Mint = ({
+  currentCr,
+  tokenId,
+  // setActiveTab
+}: MintProps) => {
   const [mintInputValue, setMintInputValue] = useState("");
   const [burnInputValue, setBurnInputValue] = useState("");
   const { setTransactionData } = useTransactionStore();
@@ -139,7 +143,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
         </div>
         <ButtonComponent
           style={{ width: "150px" }}
-          onClick={() => setActiveTab("Deposit and Withdraw")}
+          // onClick={() => setActiveTab("Deposit and Withdraw")}
         >
           Deposit Now
         </ButtonComponent>

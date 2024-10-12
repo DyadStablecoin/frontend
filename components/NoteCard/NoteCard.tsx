@@ -285,7 +285,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         <Mint
           currentCr={collatRatio}
           tokenId={tokenId}
-          setActiveTab={setActiveTab}
+          // setActiveTab={setActiveTab}
         />
       ),
     },
