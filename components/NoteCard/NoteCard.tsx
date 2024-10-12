@@ -20,14 +20,15 @@ import { useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
 import { vaultInfo } from "@/lib/constants";
-import { Data } from "../reusable/PieChartComponent";
+import { Data } from "@/models/ChartModels";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { Menu } from "lucide-react";
+import { Menu, Vault } from "lucide-react";
+import ButtonComponent from "@/components/reusable/ButtonComponent";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -39,8 +40,9 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
-  // Fetch collateralization ratio
+  const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
+  // Fetch collateralization ratio
   const {
     data: contractData,
     isSuccess: dataLoaded,
@@ -246,7 +248,23 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           collateral={vaultAmounts}
         />
       ) : (
-        <p>Deposit collateral to open vault</p>
+        <div className="flex flex-col items-center justify-center space-y-4 pt-4">
+          <Vault size={48} />
+          <div className="text-center text-[#FAFAFA]">
+            <h3 className="text-xl font-semibold text-primary">
+              No Active Vault
+            </h3>
+            <p className="text-sm mt-2">
+              Deposit collateral to open a vault and start using your Note
+            </p>
+          </div>
+          <ButtonComponent
+            style={{ width: "150px" }}
+            onClick={() => setActiveTab("Deposit and Withdraw")}
+          >
+            Deposit Now
+          </ButtonComponent>
+        </div>
       ),
     },
     {
@@ -263,11 +281,15 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       label: "Mint & Burn",
       tabKey: "Mint DYAD",
-      content: <Mint currentCr={collatRatio} tokenId={tokenId} />,
+      content: (
+        <Mint
+          currentCr={collatRatio}
+          tokenId={tokenId}
+          setActiveTab={setActiveTab}
+        />
+      ),
     },
   ];
-
-  const [activeTab, setActiveTab] = useState(tabData[0].tabKey);
 
   const renderActiveTabContent = (activeTabKey: string) => {
     return tabData.find((tab: TabsDataModel) => activeTab === tab.tabKey)
