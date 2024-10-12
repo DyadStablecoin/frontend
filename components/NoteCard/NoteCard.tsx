@@ -20,7 +20,7 @@ import { useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
 import { vaultInfo } from "@/lib/constants";
-import { Data } from "../reusable/PieChartComponent";
+import { Data } from "@/models/ChartModels";
 import {
   Dropdown,
   DropdownTrigger,
@@ -28,7 +28,7 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { Menu, Vault } from "lucide-react";
-import ButtonComponent from "../reusable/ButtonComponent";
+import ButtonComponent from "@/components/reusable/ButtonComponent";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -40,7 +40,7 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
-  const [activeTab, setActiveTab] = useState(`Note Nº`);
+  const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
   // Fetch collateralization ratio
   const {
@@ -240,7 +240,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   const tabData: TabsDataModel[] = [
     {
       label: `Note Nº ${tokenId}`,
-      tabKey: `Note Nº`,
+      tabKey: `Note Nº ${tokenId}`,
       content: hasVault ? (
         <NoteNumber
           data={noteData}
@@ -259,7 +259,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
             </p>
           </div>
           <ButtonComponent
-            className="w-[150px]"
+            style={{ width: "150px" }}
             onClick={() => setActiveTab("Deposit and Withdraw")}
           >
             Deposit Now

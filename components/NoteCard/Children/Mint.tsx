@@ -134,7 +134,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
           </p>
         </div>
         <ButtonComponent
-          className="w-[150px]"
+          style={{ width: "150px" }}
           onClick={() => setActiveTab("Deposit and Withdraw")}
         >
           Deposit Now
