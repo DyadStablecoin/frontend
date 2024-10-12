@@ -241,7 +241,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       label: `Note Nº ${tokenId}`,
       tabKey: `Note Nº ${tokenId}`,
-      content: !hasVault ? (
+      content: hasVault ? (
         <NoteNumber
           data={noteData}
           dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
