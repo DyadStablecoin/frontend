@@ -27,7 +27,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { Menu, Vault } from "lucide-react";
+import { Menu, VaultIcon } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 
 type ContractData = {
@@ -241,7 +241,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       label: `Note Nº ${tokenId}`,
       tabKey: `Note Nº ${tokenId}`,
-      content: hasVault ? (
+      content: !hasVault ? (
         <NoteNumber
           data={noteData}
           dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
@@ -249,7 +249,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         />
       ) : (
         <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-          <Vault size={48} />
+          <VaultIcon size={48} />
           <div className="text-center text-[#FAFAFA]">
             <h3 className="text-xl font-semibold text-primary">
               No Active Vault
@@ -258,12 +258,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
               Deposit collateral to open a vault and start using your Note
             </p>
           </div>
-          {/* <ButtonComponent
+          <ButtonComponent
             style={{ width: "150px" }}
             onClick={() => setActiveTab("Deposit and Withdraw")}
           >
             Deposit Now
-          </ButtonComponent> */}
+          </ButtonComponent>
         </div>
       ),
     },
