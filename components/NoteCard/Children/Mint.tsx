@@ -19,14 +19,10 @@ import Image from "next/image";
 interface MintProps {
   tokenId: string;
   currentCr: bigint | undefined;
-  // setActiveTab: (tab: any) => void;
+  setActiveTab: (tab: any) => void;
 }
 
-const Mint = ({
-  currentCr,
-  tokenId,
-  // setActiveTab
-}: MintProps) => {
+const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
   const [mintInputValue, setMintInputValue] = useState("");
   const [burnInputValue, setBurnInputValue] = useState("");
   const { setTransactionData } = useTransactionStore();
@@ -129,7 +125,7 @@ const Mint = ({
   if (contractData?.exoCollat === 0n && !contractData?.exoCollat) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-        <Image
+        {/* <Image
           src="/android-chrome-256x256.png"
           alt="Empty Vault"
           width={50}
@@ -143,10 +139,10 @@ const Mint = ({
         </div>
         <ButtonComponent
           style={{ width: "150px" }}
-          // onClick={() => setActiveTab("Deposit and Withdraw")}
+          onClick={() => setActiveTab("Deposit and Withdraw")}
         >
           Deposit Now
-        </ButtonComponent>
+        </ButtonComponent> */}
       </div>
     );
   }
