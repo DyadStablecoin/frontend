@@ -40,7 +40,7 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
-  const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
+  const [activeTab, setActiveTab] = useState(`Note Nº`);
 
   // Fetch collateralization ratio
   const {
@@ -240,7 +240,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   const tabData: TabsDataModel[] = [
     {
       label: `Note Nº ${tokenId}`,
-      tabKey: `Note Nº ${tokenId}`,
+      tabKey: `Note Nº`,
       content: hasVault ? (
         <NoteNumber
           data={noteData}
