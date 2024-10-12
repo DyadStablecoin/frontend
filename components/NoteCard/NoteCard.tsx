@@ -27,7 +27,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { Menu, VaultIcon } from "lucide-react";
+import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 
 type ContractData = {
@@ -249,7 +249,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         />
       ) : (
         <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-          {/* <VaultIcon size={48} /> */}
+          <Vault size={48} />
           <div className="text-center text-[#FAFAFA]">
             <h3 className="text-xl font-semibold text-primary">
               No Active Vault
