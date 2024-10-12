@@ -125,7 +125,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
   if (contractData?.exoCollat === 0n && !contractData?.exoCollat) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-        {/* <Image
+        <Image
           src="/android-chrome-256x256.png"
           alt="Empty Vault"
           width={50}
@@ -142,7 +142,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
           onClick={() => setActiveTab("Deposit and Withdraw")}
         >
           Deposit Now
-        </ButtonComponent> */}
+        </ButtonComponent>
       </div>
     );
   }

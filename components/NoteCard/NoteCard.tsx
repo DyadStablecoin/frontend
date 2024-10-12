@@ -249,7 +249,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         />
       ) : (
         <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-          {/* <Vault size={48} />
+          <Vault size={48} />
           <div className="text-center text-[#FAFAFA]">
             <h3 className="text-xl font-semibold text-primary">
               No Active Vault
@@ -258,7 +258,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
               Deposit collateral to open a vault and start using your Note
             </p>
           </div>
-          <ButtonComponent
+          {/* <ButtonComponent
             style={{ width: "150px" }}
             onClick={() => setActiveTab("Deposit and Withdraw")}
           >
