@@ -15,7 +15,6 @@ import { useAccount, useReadContracts } from "wagmi";
 import { formatNumber, fromBigNumber, toBigNumber } from "@/lib/utils";
 import { maxUint256 } from "viem";
 import Image from "next/image";
-import DyadIcon from "@/public/android-chrome-256x256.png";
 
 interface MintProps {
   tokenId: string;
@@ -126,7 +125,12 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
   if (contractData?.exoCollat === 0n && !contractData?.exoCollat) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-        <Image src={DyadIcon} alt="Empty Vault" width={50} height={50} />
+        <Image
+          src="/android-chrome-256x256.png"
+          alt="Empty Vault"
+          width={50}
+          height={50}
+        />
         <div className="text-center text-[#FAFAFA]">
           <h3 className="text-xl font-semibold text-primary">Start Minting</h3>
           <p className="text-sm mt-2">
