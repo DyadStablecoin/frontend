@@ -32,6 +32,9 @@ const NoteNumber: React.FC<NoteNumberProps> = ({
     },
   ];
 
+  const hasCollateral =
+    collateral.length > 0 && collateral.some((item) => item.value > 0);
+
   return (
     <div className="flex flex-col items-center w-full text-[#FAFAFA]">
       <Tooltip
@@ -46,12 +49,11 @@ const NoteNumber: React.FC<NoteNumberProps> = ({
           <Blocks size={18} className="m-auto" />
         </div>
       </Tooltip>
-      {!isDataEmpty(dyadData) ||
-        (!isDataEmpty(collateral) && (
-          <div className="w-full mt-6">
-            <PieChartComponent outsideData={dyadData} insideData={collateral} />
-          </div>
-        ))}
+      {hasCollateral && (
+        <div className="w-full mt-6">
+          <PieChartComponent outsideData={dyadData} insideData={collateral} />
+        </div>
+      )}
       <div className="w-full mt-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.map((item: any, index: number) => (
