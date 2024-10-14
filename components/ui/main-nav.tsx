@@ -20,10 +20,10 @@ import {
 } from "@nextui-org/dropdown";
 import {
   Blocks,
+  ChartNoAxesColumnIncreasing,
   ChartNoAxesGantt,
   ChevronDown,
   LayoutTemplate,
-  ShoppingBag,
 } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
 
@@ -109,7 +109,7 @@ export const MainNav = React.memo(function MainNav({
         setActiveNavItem("marketplace");
         window.history.pushState({}, "", "/?tab=marketplace");
       },
-      icon: <ShoppingBag size={windowWidth > 768 ? 16 : 20} />,
+      icon: <ChartNoAxesColumnIncreasing size={windowWidth > 768 ? 16 : 20} />,
     },
     {
       label: "Extensions",
