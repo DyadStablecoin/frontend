@@ -230,7 +230,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
 
       <a
         href="#"
-        className="bg-[#1A1A1A] border-[1px] border-[#282828] rounded-[100%] w-[50px] h-[50px] fixed top-[85vh] lg:top-[90vh] right-[5vw] cursor-pointer flex"
+        className="bg-[#1A1A1A] border-[1px] border-[#282828] rounded-[100%] w-[50px] h-[50px] fixed bottom-24 lg:top-[90vh] right-[5vw] cursor-pointer flex"
       >
         <ArrowUpIcon className="m-auto text-sm" size={20} />
       </a>

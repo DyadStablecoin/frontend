@@ -154,7 +154,7 @@ export const MainNav = React.memo(function MainNav({
             ))}
           </Tabs>
         </div>
-        <div className="block lg:hidden fixed bottom-2 right-2 left-2 z-50">
+        <div className="block lg:hidden fixed bottom-4 right-2 left-2 z-50">
           <Tabs
             key="NavTabs"
             variant="light"
