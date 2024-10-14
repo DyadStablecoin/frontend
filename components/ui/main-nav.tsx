@@ -25,7 +25,6 @@ import {
   ChevronDown,
   ShoppingBag,
 } from "lucide-react";
-import NoteEtensionsModal from "../NoteEtensions";
 
 export const MainNav = React.memo(function MainNav({
   className,
