@@ -27,9 +27,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import NoteEtensionsModal from "../Modals/NoteNumberModals/NoteEtensionsModal";
 import { useDisclosure } from "@nextui-org/modal";
-import { NOTE_EXTENSIONS } from "@/constants/NoteCards";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 
@@ -255,7 +253,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           data={noteData}
           dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
           collateral={vaultAmounts}
-          onNoteExtensionsModalOpen={onNoteExtensionsModalOpen}
         />
       ) : (
         <div className="flex flex-col items-center justify-center space-y-4 pt-4">
@@ -317,17 +314,10 @@ function NoteCard({ tokenId }: { tokenId: string }) {
                 <Menu />
               </DropdownTrigger>
               <DropdownMenu aria-label="Dropdown Variants">
-                {[
-                  ...tabData,
-                  { label: "Note Extensions", tabKey: "Note Extensions" },
-                ].map((tab: TabsDataModel) => (
+                {tabData.map((tab: TabsDataModel) => (
                   <DropdownItem
                     key={tab.tabKey}
-                    onClick={() =>
-                      tab.tabKey === "Note Extensions"
-                        ? onNoteExtensionsModalOpen()
-                        : setActiveTab(tab.tabKey)
-                    }
+                    onClick={() => setActiveTab(tab.tabKey)}
                   >
                     {tab.label}
                   </DropdownItem>
@@ -344,11 +334,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
             setSelected={setActiveTab}
           />
         </div>
-        <NoteEtensionsModal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          extensions={NOTE_EXTENSIONS}
-        />
       </Fragment>
     </NoteCardsContainer>
   );
