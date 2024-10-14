@@ -19,18 +19,21 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import {
-  BadgeDollarSign,
   Blocks,
   ChartNoAxesGantt,
   ChevronDown,
+  LayoutTemplate,
   ShoppingBag,
 } from "lucide-react";
+import useWindowSize from "@/hooks/useWindowSize";
 
 export const MainNav = React.memo(function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const [activeNavItem, setActiveNavItem] = useState("earn-kerosene");
+
+  const { windowWidth } = useWindowSize();
 
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
@@ -82,22 +85,22 @@ export const MainNav = React.memo(function MainNav({
 
   const navItemsData = [
     {
-      label: "Earn Kerosene",
+      label: "Earn",
       key: "earn-kerosene",
       onClick: () => {
         setActiveNavItem("earn-kerosene");
         window.history.pushState({}, "", "/?tab=earn-kerosene");
       },
-      icon: <BadgeDollarSign />,
+      icon: <LayoutTemplate size={windowWidth > 768 ? 16 : 20} />,
     },
     {
-      label: "Manage Notes",
+      label: "Notes",
       key: "notes",
       onClick: () => {
         setActiveNavItem("notes");
         window.history.pushState({}, "", "/?tab=notes");
       },
-      icon: <ChartNoAxesGantt />,
+      icon: <ChartNoAxesGantt size={windowWidth > 768 ? 16 : 20} />,
     },
     {
       label: "Marketplace",
@@ -106,7 +109,7 @@ export const MainNav = React.memo(function MainNav({
         setActiveNavItem("marketplace");
         window.history.pushState({}, "", "/?tab=marketplace");
       },
-      icon: <ShoppingBag />,
+      icon: <ShoppingBag size={windowWidth > 768 ? 16 : 20} />,
     },
     {
       label: "Extensions",
@@ -115,7 +118,7 @@ export const MainNav = React.memo(function MainNav({
         setActiveNavItem("extensions");
         window.history.pushState({}, "", "/?tab=extensions");
       },
-      icon: <Blocks />,
+      icon: <Blocks size={windowWidth > 768 ? 16 : 20} />,
     },
   ];
 
@@ -148,7 +151,12 @@ export const MainNav = React.memo(function MainNav({
               <Tab
                 href=""
                 key={item.key}
-                title={item.label}
+                title={
+                  <div className="flex items-center gap-1">
+                    {item.icon}
+                    <div>{item.label}</div>
+                  </div>
+                }
                 onClick={item.onClick}
               />
             ))}
@@ -162,7 +170,7 @@ export const MainNav = React.memo(function MainNav({
             aria-label="Navbar tabs"
             className="flex text-sm"
             classNames={{
-              base: "bg-[black] p-2 rounded-full",
+              base: "bg-[black] p-2 rounded-full max-w-lg mx-auto",
               cursor: "group-data-[selected=true]:bg-[#1A1B1F]",
               tabContent: "text-xs text-white",
               tabList: "w-full",
@@ -179,7 +187,7 @@ export const MainNav = React.memo(function MainNav({
                 title={
                   <div className="flex items-center gap-2">
                     {item.icon}
-                    <div className="hidden md:block">{` ${item.label.split(" ")[0]}`}</div>
+                    <div className="hidden md:block">{item.label}</div>
                   </div>
                 }
                 onClick={item.onClick}
@@ -192,15 +200,15 @@ export const MainNav = React.memo(function MainNav({
         <div className="ml-auto flex items-center text-xs md:text-sm">
           <Dropdown>
             <DropdownTrigger>
-              <div className="flex items-center bg-[#1A1B1F] lg:w-[147px] w-[40px] h-[40px] rounded-full lg:rounded-xl mr-4 px-2 cursor-pointer">
-                <div className="w-full hidden lg:flex justify-between text-xs">
+              <div className="flex items-center bg-[#282828] lg:w-[165px] w-[140px] h-[40px] rounded-xl mr-[-20px] px-2 cursor-pointer z-10 pr-6">
+                <div className="w-full flex justify-between text-xs">
                   <div className="font-bold text-[#A1A1AA]">TVL</div>
                   <div className="">{tvlDisplay}</div>
                 </div>
-                <div className="font-bold text-[#A1A1AA] text-lg m-auto lg:hidden block">
+                {/* <div className="font-bold text-[#A1A1AA] text-lg m-auto lg:hidden block">
                   $
-                </div>
-                <div className="h-8 w-8 rounded-full bg-[#1A1B1F] p-0 hidden lg:flex">
+                </div> */}
+                <div className="h-8 w-8 rounded-full bg-[#282828] p-0 flex">
                   <ChevronDown className="w-4 h-4 m-auto" />
                 </div>
               </div>
@@ -272,7 +280,9 @@ export const MainNav = React.memo(function MainNav({
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <ConnectButton showBalance={false} />
+          <div className="z-20">
+            <ConnectButton showBalance={false} />
+          </div>
         </div>
       </div>
     </nav>

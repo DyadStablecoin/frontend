@@ -10,6 +10,7 @@ import { metadata as meta } from "./metadata";
 import { Providers } from "./providers";
 import { TransactionModal } from "@/components/reusable/TransactionModal";
 import { Suspense } from "react";
+import MobileNav from "@/components/ui/mobile-nav";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = meta;
@@ -34,8 +35,8 @@ export default function RootLayout({
                 <MainNav className="mx-4 flex-1 max-w-screen-lg" />
               </div>
               {children}
+              <Footer />
             </Suspense>
-            <Footer />
           </main>
           <TransactionModal />
         </Providers>

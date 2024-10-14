@@ -79,7 +79,7 @@ export default function Home() {
   const [selected, setSelected] = useState(tabsData["earn-kerosene"].tabKey);
 
   return (
-    <div className="flex-1 max-w-screen-lg w-full p-4 mt-4">
+    <div className="flex-1 max-w-screen-md w-full p-4 mt-4">
       {tabsData[selected]?.content}
     </div>
   );
