@@ -6,20 +6,20 @@ export const NOTE_EXTENSIONS = [
     description: "Deposit ETH into your note",
     address: "0xDc40",
     enabled: true,
-    icon: "/android-chrome-256x256.png",
+    icon: "/3d-eth.png",
   },
   {
     label: "Redemption",
     description: "Redeem DYAD for underlying collateral",
     address: "0xDc40",
     enabled: false,
-    icon: "/android-chrome-256x256.png",
+    icon: "/redeem.png",
   },
   {
     label: "Atomic Swap",
     description: "Swap collateral types",
     address: "0xDc40",
     enabled: false,
-    icon: "/android-chrome-256x256.png",
+    icon: "/swap.png",
   },
 ];
