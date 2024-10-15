@@ -4,8 +4,8 @@ export const NOTE_EXTENSIONS = [
   {
     label: "Native ETH",
     description: "Deposit native ETH into your note without manually wrapping it",
-    address: "0xDc40",
-    enabled: false,
+    address: "0x9F77A6775d6aC6A69107326130D65E422002B5B2",
+    enabled: true,
     icon: "/3d-eth.png",
   },
   {
