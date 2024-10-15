@@ -12,6 +12,7 @@ import { dyadXpAbi } from "@/lib/abi/DyadXp";
 import { erc20Abi } from "viem";
 import { angleDistributorAbi } from "./lib/abi/AngleDistributor";
 import { keroseneDnftClaimAbi } from "./lib/abi/KeroseneDnftClaim";
+import { wETHGatewayAbi } from "./lib/abi/WETHGateway";
 
 export default defineConfig({
   out: "generated.ts",
@@ -251,6 +252,14 @@ export default defineConfig({
         [anvil.id]: "0x9Ba021B0a9b958B5E75cE9f6dff97C7eE52cb3E6",
       },
       abi: erc20Abi,
+    },
+    {
+      name: "wETHGateway",
+      address: {
+        [mainnet.id]: "0x9F77A6775d6aC6A69107326130D65E422002B5B2",
+        [anvil.id]: "0x9F77A6775d6aC6A69107326130D65E422002B5B2",
+      },
+      abi: wETHGatewayAbi,
     },
   ],
 

@@ -4,7 +4,6 @@ import React from "react";
 import { NoteNumberDataColumnModel } from "@/models/NoteCardModels";
 import PieChartComponent from "@/components/reusable/PieChartComponent";
 import { Data } from "@/models/ChartModels";
-import { isDataEmpty } from "@/utils/chartUtils";
 
 interface NoteNumberProps {
   data: NoteNumberDataColumnModel[];
@@ -24,7 +23,8 @@ const NoteNumber: React.FC<NoteNumberProps> = ({ data, dyad, collateral }) => {
     },
   ];
 
-  const hasCollateral = collateral.length > 0 && collateral.some(item => item.value > 0);
+  const hasCollateral =
+    collateral.length > 0 && collateral.some((item) => item.value > 0);
 
   return (
     <div className="flex flex-col items-center w-full text-[#FAFAFA]">

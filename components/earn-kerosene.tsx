@@ -15,7 +15,7 @@ import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { ReactNode, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-export function EarnKeroseneContent() {
+export default function EarnKeroseneContent() {
   const { address } = useAccount();
 
   const { currentCampaign: merklData } = useMerklCampaign();
