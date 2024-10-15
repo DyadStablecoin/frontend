@@ -5,7 +5,7 @@ export const NOTE_EXTENSIONS = [
     label: "Native ETH",
     description: "Deposit ETH into your note",
     address: "0xDc40",
-    enabled: true,
+    enabled: false,
     icon: "/3d-eth.png",
   },
   {
