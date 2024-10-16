@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import { TabsDataModel } from "@/models/TabsModel";
-import {
-  Accordion,
-  AccordionItem,
-} from "@nextui-org/accordion";
-import {Tooltip} from "@nextui-org/tooltip";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { Tooltip } from "@nextui-org/tooltip";
 import { VaultInfo, vaultInfo } from "@/lib/constants";
 import { defaultChain } from "@/lib/config";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -19,6 +16,7 @@ import { VaultActions } from "@/models/VaultModels";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { Selection } from "@nextui-org/table";
+import { Switch } from "@nextui-org/switch";
 
 const Vault = ({
   vault,
@@ -27,6 +25,8 @@ const Vault = ({
   vaultAssets,
   selectedKeys,
   setSelectedKeys,
+  isNativeEthActive,
+  setIsNativeEthActive,
 }: {
   vault: VaultInfo;
   tokenId: string;
@@ -42,12 +42,16 @@ const Vault = ({
     | undefined;
   selectedKeys: any;
   setSelectedKeys: (keys: Selection) => any;
+  isNativeEthActive: boolean;
+  setIsNativeEthActive: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [isEditVaultModalOpen, setIsVaultModalOpen] = useState<boolean>(false);
   const [selectedEditVaultTab, setSelectedEditVaultTab] =
     useState<VaultActions>("Deposit");
   const [isEditInDialog, setIsEditInDialog] = useState<boolean>(false);
   const [vaultInputValue, setVaultInputValue] = useState("");
+  //This should be changed to get the real extension status
+  const isNativeEthExtensionEnabled = true;
 
   const { windowWidth } = useWindowSize();
 
@@ -181,6 +185,15 @@ const Vault = ({
         </div>
         <div className="my-auto">
           <div className="flex justify-between text-xs">
+            {isNativeEthExtensionEnabled && (
+              <Switch
+                className={`pointer-events-auto mr-2 ${["wETH", "ETH"].includes(vault.symbol) ? "" : "invisible"}`}
+                size="sm"
+                color="success"
+                isSelected={isNativeEthActive}
+                onValueChange={setIsNativeEthActive}
+              />
+            )}
             <div
               className="cursor-pointer mr-2 h-6 w-6 rounded-[50%] bg-[#1A1A1A] flex"
               onClick={() => {
@@ -235,7 +248,7 @@ const Vault = ({
           isCompact
           className="pointer-events-none"
           title={
-            <div className="hidden justify-between text-xs tracking-wider md:grid md:grid-cols-9 md:gap-x-2 text-center items-center h-9">
+            <div className="hidden justify-between text-xs tracking-wider md:grid md:grid-cols-10 md:gap-x-2 text-center items-center h-9">
               <div className="col-span-2 flex pl-2 items-center">
                 <div>
                   <Image
@@ -250,12 +263,30 @@ const Vault = ({
               <div className="col-span-2 flex justify-center">
                 <div>{vaultAssets?.[vault.vaultAddress]?.asset}</div>
               </div>
-              <div className="col-span-2 ">
+              <div className="col-span-2">
                 ${vaultAssets?.[vault.vaultAddress]?.usdValue}
               </div>
-              <div className="col-span-2 ">{assetYield}</div>
-              <div className="col-span-1 ">
+              <div className="col-span-2">{assetYield}</div>
+              <div className="col-span-2">
                 <div className="flex justify-between">
+                  {isNativeEthExtensionEnabled && (
+                    <Tooltip
+                      className="mb-4"
+                      content={
+                        isNativeEthActive ? "Switch to wETH" : "Switch to ETH"
+                      }
+                      closeDelay={200}
+                    >
+                      <Switch
+                        className={`pointer-events-auto ${["wETH", "ETH"].includes(vault.symbol) ? "" : "invisible"}`}
+                        size="sm"
+                        color="success"
+                        isSelected={isNativeEthActive}
+                        onValueChange={setIsNativeEthActive}
+                      />
+                    </Tooltip>
+                  )}
+
                   <Tooltip
                     content={
                       selectedKeys?.values().next().value ===
