@@ -2,6 +2,8 @@
 .env
 
 /tags
+tags.lock
+tags.temp
 
 # dependencies
 /node_modules

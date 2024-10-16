@@ -268,6 +268,30 @@ export const vaultManagerAbi = [
   },
   {
     inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "extension",
+        type: "address"
+      }
+    ],
+    name: "isExtensionAuthorized",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
       { internalType: "uint256", name: "id", type: "uint256" },
       { internalType: "address", name: "vault", type: "address" },
       { internalType: "uint256", name: "amount", type: "uint256" },

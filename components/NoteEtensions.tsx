@@ -4,17 +4,31 @@ import { Switch } from "@nextui-org/switch";
 import NoteCardsContainer from "./reusable/NoteCardsContainer";
 import Image from "next/image";
 import useWindowSize from "@/hooks/useWindowSize";
+import { useReadVaultManagerIsExtensionAuthorized } from "@/generated";
+import { defaultChain } from "@/lib/config";
+import { useAccount } from "wagmi";
+import ConnectWallet from "./reusable/ConnectWallet";
 
 interface NoteEtensionsProps {
   extensions: NoteExtensionsModel[];
 }
 
 const NoteEtensions: React.FC<NoteEtensionsProps> = ({ extensions }) => {
+  const { address, isConnected } = useAccount();
   const [isRedemptionSelected, setRedemptionSelected] = React.useState(false);
-  const [isNativeEthSelected, setNativeEthSelected] = React.useState(true);
+  const [isNativeEthSelected, setNativeEthSelected] = React.useState(false);
   const [isAtomicSwapSelected, setAtomicSwapSelected] = React.useState(false);
-
   const { windowWidth } = useWindowSize();
+
+  const {data: isNativeEthEnabled} = useReadVaultManagerIsExtensionAuthorized({
+    chainId: defaultChain.id,
+    args: [address, extensions[0].address],
+  });
+
+  if (!isConnected) {
+    return <ConnectWallet hasConnectButton={true} />;
+  }
+
   return (
     <NoteCardsContainer>
       <>
@@ -60,7 +74,7 @@ const NoteEtensions: React.FC<NoteEtensionsProps> = ({ extensions }) => {
                   extension.label === "Redemption"
                     ? isRedemptionSelected
                     : extension.label === "Native ETH"
-                      ? isNativeEthSelected
+                      ? isNativeEthEnabled
                       : extension.label === "Atomic Swap"
                         ? isAtomicSwapSelected
                         : false

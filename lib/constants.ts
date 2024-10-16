@@ -28,6 +28,7 @@ export type VaultInfo = {
   decimals: number;
   getApr?: () => Promise<number>;
   additionalYield?: string;
+  altCurrencyInfo?: VaultInfo;
 };
 
 export const vaultInfo: VaultInfo[] = [
@@ -38,6 +39,14 @@ export const vaultInfo: VaultInfo[] = [
     tokenAddress: wethAddress[defaultChain.id],
     color: "#676767",
     decimals: 8,
+    altCurrencyInfo: {
+      icon: "/eth.png",
+      vaultAddress: wEthVaultAddress[defaultChain.id],
+      symbol: "ETH",
+      tokenAddress: wethAddress[defaultChain.id],
+      color: "#676767",
+      decimals: 8,
+    },
   },
   {
     icon: "/wsteth.png",
@@ -108,10 +117,10 @@ export const vaultInfo: VaultInfo[] = [
     tokenAddress: apxEthAddress[defaultChain.id],
     color: "#aa9a36",
     decimals: 8,
-    getApr: async() => {
-      const resp = await fetch("https://dinero.xyz/api/apr")
-      const data = await resp.json()
+    getApr: async () => {
+      const resp = await fetch("https://dinero.xyz/api/apr");
+      const data = await resp.json();
       return parseFloat(data.apxEth);
-    }
+    },
   },
 ];

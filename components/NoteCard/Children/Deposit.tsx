@@ -26,6 +26,7 @@ const Deposit: React.FC<DepositProps> = ({
 }) => {
   const [assetYields, setAssetYields] = useState();
   const [selectedKeys, setSelectedKeys] = useState<any>();
+  const [isNativeEthActive, setIsNativeEthActive] = useState<boolean>(false);
 
   const { data: vaultData } = useReadContracts({
     contracts: supportedVaults.map((address) => ({
@@ -88,11 +89,11 @@ const Deposit: React.FC<DepositProps> = ({
   const renderVaultTable = (vaultData: VaultInfo[]) => {
     return (
       <div>
-        <div className="hidden justify-between text-xs tracking-wider md:grid md:grid-cols-9 md:gap-x-2 mt-2 py-2 px-2 sticky top-0">
+        <div className="hidden justify-between text-xs tracking-wider md:grid md:grid-cols-10 md:gap-x-2 mt-2 py-2 px-2 sticky top-0">
           {vaultTableHeaders.map((header) => (
             <div
               key={header.columnKey}
-              className={`${header.columnKey === "actionOptions" ? "col-span-1" : "col-span-2"} my-auto ${header.columnKey !== "currency" ? "text-center" : "pl-2"}`}
+              className={`col-span-2 my-auto ${header.columnKey !== "currency" ? "text-center" : "pl-2"}`}
             >
               {header.label}
             </div>
@@ -106,11 +107,17 @@ const Deposit: React.FC<DepositProps> = ({
                 <Vault
                   key={i}
                   tokenId={tokenId}
-                  vault={vault}
+                  vault={
+                    vault.symbol === "wETH" && isNativeEthActive
+                      ? vault.altCurrencyInfo!
+                      : vault
+                  }
                   assetYield={assetYields && assetYields[vault.vaultAddress]}
                   vaultAssets={vaultAssets}
                   selectedKeys={selectedKeys}
                   setSelectedKeys={setSelectedKeys}
+                  isNativeEthActive={isNativeEthActive}
+                  setIsNativeEthActive={setIsNativeEthActive}
                 />
               );
             })}
