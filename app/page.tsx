@@ -20,7 +20,7 @@ const EarnKeroseneContent = dynamic(
 );
 
 export default function Home() {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
 
@@ -43,16 +43,14 @@ export default function Home() {
         <ClaimModalContent />
       </div>
       <div className="flex flex-col gap-4">
-        {tokens && tokens?.length ? (
-          tokens.map((token) => (
-            <NoteCard
-              key={parseInt(token.result)}
-              tokenId={parseInt(token.result)}
-            />
-          ))
-        ) : (
-          <NoNotesAvailable />
-        )}
+        {tokens && tokens?.length
+          ? tokens.map((token) => (
+              <NoteCard
+                key={parseInt(token.result)}
+                tokenId={parseInt(token.result)}
+              />
+            ))
+          : isConnected && <NoNotesAvailable />}
       </div>
     </>
   );
