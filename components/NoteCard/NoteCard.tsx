@@ -27,7 +27,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { useDisclosure } from "@nextui-org/modal";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 
@@ -41,12 +40,6 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
-  const {
-    isOpen,
-    onOpen: onNoteExtensionsModalOpen,
-    onOpenChange,
-  } = useDisclosure();
-
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
   // Fetch collateralization ratio
