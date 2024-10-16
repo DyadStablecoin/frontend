@@ -65,9 +65,6 @@ const Vault = ({
     chainId: defaultChain.id,
   });
 
-  const { tokenAddress: collateralAddress, symbol: collateralString } =
-    vaultInfo.filter((value) => value.vaultAddress === vault.vaultAddress)[0];
-
   const accordionCloseHandler = () => {
     setSelectedKeys(new Set());
     setVaultInputValue("");
@@ -112,8 +109,8 @@ const Vault = ({
       content: (
         <EditVaultTabContent
           action="deposit"
-          token={collateralAddress}
-          symbol={collateralString}
+          token={vault.tokenAddress}
+          symbol={vault.symbol}
           collateralizationRatio={collatRatio}
           tokenId={tokenId}
           vault={vault}
@@ -130,8 +127,8 @@ const Vault = ({
       content: (
         <EditVaultTabContent
           action="withdraw"
-          token={collateralAddress}
-          symbol={collateralString}
+          token={vault.tokenAddress}
+          symbol={vault.symbol}
           collateralizationRatio={collatRatio}
           tokenId={tokenId}
           vault={vault}
@@ -158,7 +155,7 @@ const Vault = ({
       <DialogContent className="max-w-[90vw] md:max-w-lg px-[0px] md:px-8 pt-8 ml-auto">
         <EditVaultModal
           tabsData={tabs}
-          logo={collateralString}
+          logo={vault.symbol}
           selectedTab={selectedEditVaultTab}
         />
       </DialogContent>
