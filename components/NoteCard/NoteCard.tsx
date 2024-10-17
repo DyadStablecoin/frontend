@@ -239,7 +239,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   // Prepare tabs data
   const tabData: TabsDataModel[] = [
     {
-      label: `Note Nº ${tokenId}`,
+      label: `Stats`,
       tabKey: `Note Nº ${tokenId}`,
       content: hasVault ? (
         <NoteNumber

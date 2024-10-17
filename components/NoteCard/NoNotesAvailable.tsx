@@ -1,8 +1,8 @@
 import React from "react";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
 import { NotebookText } from "lucide-react";
-import ButtonComponent from "../reusable/ButtonComponent";
 import Link from "next/link";
+import { ClaimModalContent } from "../claim-modal-content";
 
 interface NoNotesAvailableProps {}
 
@@ -19,14 +19,18 @@ const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
             Notes are the cornerstone of the DYAD ecosystem
           </p>
         </div>
-        <ButtonComponent style={{ width: "150px" }}>
-          <Link
-            href="https://dyad.gitbook.io/docs/overview/notes"
-            target="_blank"
-          >
-            Learn more
-          </Link>
-        </ButtonComponent>
+        <div className="w-full">
+          <div className="w-full md:w-2/3 m-auto">
+            <ClaimModalContent />
+          </div>
+        </div>
+        <Link
+          className="text-sm mx-auto w-fit mt-2 underline"
+          href="https://dyad.gitbook.io/docs/overview/notes"
+          target="_blank"
+        >
+          Learn more
+        </Link>
       </div>
     </NoteCardsContainer>
   );

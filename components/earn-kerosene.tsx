@@ -106,8 +106,8 @@ export default function EarnKeroseneContent() {
       description: "Claim or buy a Note",
       bottomComponent: (
         <div className="flex justify-between mt-[32px] w-full">
-          <div className="w-full flex gap-4">
-            <ClaimModalContent />
+          <div className="w-full">
+            <ClaimModalContent isOldDesign={true} />
           </div>
         </div>
       ),
