@@ -15,6 +15,8 @@ import { BuyModal, useListings } from "@reservoir0x/reservoir-kit-ui";
 import { useMemo, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import ConnectWallet from "./reusable/ConnectWallet";
+import { Tooltip } from "@nextui-org/tooltip";
+import { CirclePlus } from "lucide-react";
 
 export function ClaimModalContent() {
   const buyModalOpenState = useState(false);
@@ -61,41 +63,51 @@ export function ClaimModalContent() {
 
   if (isConnected) {
     return bestListing ? (
-      <BuyModal
-        trigger={
-          <ButtonComponent>
-            <div className="text-xs md:text-[0.875rem] transition-all">
-              Buy Note Nº {bestListing?.criteria?.data?.token?.tokenId} for{" "}
-              {bestListing.price?.amount?.decimal} ETH
-            </div>
-          </ButtonComponent>
-        }
-        token={`${dNftAddress[defaultChain.id]}:${bestListing?.criteria?.data?.token?.tokenId}`}
-        onConnectWallet={async () => {
-          openConnectModal?.();
-          buyModalOpenState[1](false);
-        }}
-        openState={buyModalOpenState}
-      />
-    ) : (
-      <ButtonComponent
-        onClick={() => {
-          setTransactionData({
-            config: {
-              address: dNftAddress[defaultChain.id],
-              abi: dNftAbi,
-              functionName: "mintNft",
-              args: [address],
-              value: parseEther(mintPrice),
-            },
-            description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
-          });
-        }}
+      <Tooltip
+        content={`Buy Note Nº ${bestListing?.criteria?.data?.token?.tokenId} for ${bestListing.price?.amount?.decimal} ETH`}
+        placement="bottom"
       >
-        <div className="text-xs md:text-[0.875rem] transition-all">
-          Mint Note Nº {nextNote} for {mintPrice} ETH
+        <div>
+          <BuyModal
+            trigger={
+              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold rounded-full flex items-center justify-center">
+                <CirclePlus size={20} className="mr-2" />
+                <div className="text-xs md:text-[0.875rem] transition-all">
+                  Buy Note
+                </div>
+              </div>
+            }
+            token={`${dNftAddress[defaultChain.id]}:${bestListing?.criteria?.data?.token?.tokenId}`}
+            onConnectWallet={async () => {
+              openConnectModal?.();
+              buyModalOpenState[1](false);
+            }}
+            openState={buyModalOpenState}
+          />
         </div>
-      </ButtonComponent>
+      </Tooltip>
+    ) : (
+      <Tooltip content={`Mint Note Nº ${nextNote} for ${mintPrice} ETH`}>
+        <div
+          className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold rounded-full flex items-center justify-center"
+          onClick={() => {
+            setTransactionData({
+              config: {
+                address: dNftAddress[defaultChain.id],
+                abi: dNftAbi,
+                functionName: "mintNft",
+                args: [address],
+                value: parseEther(mintPrice),
+              },
+              description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
+            });
+          }}
+        >
+          <div className="text-xs md:text-[0.875rem] transition-all">
+            Mint Note
+          </div>
+        </div>
+      </Tooltip>
     );
   }
 

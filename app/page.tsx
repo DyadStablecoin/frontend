@@ -13,8 +13,14 @@ import { useSearchParams } from "next/navigation";
 import NoteEtensions from "@/components/NoteEtensions";
 import { NOTE_EXTENSIONS } from "@/constants/NoteCards";
 import NoNotesAvailable from "@/components/NoteCard/NoNotesAvailable";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import NoteCardsContainer from "@/components/reusable/NoteCardsContainer";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
+import { ChevronDownIcon } from "lucide-react";
 
 const EarnKeroseneContent = dynamic(
   () => import("@/components/earn-kerosene"),
@@ -39,77 +45,61 @@ export default function Home() {
 
   const { tokens } = useIDsByOwner(address, balance);
 
-  const [selectedNote, setSelectedNote] = useState();
-
-  const onSelectionChange = (id) => {
-    setSelectedNote(id);
-  };
+  const [selectedNote, setSelectedNote] = useState<any>();
 
   useEffect(() => {
-    tokens && tokens.length > 0 && onSelectionChange(`${tokens[0].result}`);
+    if (tokens && tokens.length) {
+      setSelectedNote(`${tokens[0].result}`);
+    }
   }, [tokens]);
 
-  const [filteredTokens, setFilteredTokens] = useState(
-    tokens && tokens.length && selectedNote
-      ? tokens?.filter((token) => {
-          return `${token.result}` === selectedNote;
-        })
-      : []
-  );
-
-  useEffect(() => {
-    setFilteredTokens(
-      tokens && tokens.length && selectedNote
-        ? tokens?.filter((token) => {
-            return `${token.result}` === selectedNote;
-          })
-        : []
-    );
-  }, [selectedNote, tokens]);
-
   const manageNotesContent = (
-    <>
-      <div className="my-6 flex justify-between">
-        <ClaimModalContent />
-      </div>
+    <div className="mt-4">
+      {!isConnected && (
+        <div className="my-6 flex justify-between">
+          <ClaimModalContent />
+        </div>
+      )}
       <div className="flex flex-col gap-4">
         {tokens && tokens?.length ? (
           <>
-            <div className="flex justify-between items-center">
-              <div className="text-2xl md:text-3xl">
+            <div className="md:flex justify-between items-center">
+              <div className="text-3xl mb-6">
                 {selectedNote && `Note Nº ${selectedNote}`}
               </div>
-              <Autocomplete
-                label="Notes"
-                isClearable={false}
-                isRequired
-                defaultItems={tokens.map((token) => ({
-                  label: `${token.result}`,
-                  value: `${token.result}`,
-                }))}
-                // label="Notes"
-                placeholder={
-                  selectedNote ? `Nº ${selectedNote}` : "Search notes"
-                }
-                className="w-[150px] md:w-[200px] ml-auto"
-                radius="sm"
-                selectedKey={selectedNote}
-                onSelectionChange={onSelectionChange}
-              >
-                {(item) => (
-                  <AutocompleteItem key={item.value}>
-                    Note Nº {item.label}
-                  </AutocompleteItem>
+              <div className="flex flex-row md:justify-between justify-end items-center gap-2">
+                {isConnected && (
+                  <div className="w-1/2 md:px-[130]">
+                    <ClaimModalContent />
+                  </div>
                 )}
-              </Autocomplete>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <div className="w-1/2 md:w-[200px] text-sm md:ml-auto cursor-pointer bg-[#282828] p-3 rounded-full">
+                      <div className="flex justify-between items-center">
+                        <div>{`Note Nº ${selectedNote}`}</div>
+                        <ChevronDownIcon size={20} />
+                      </div>
+                    </div>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Notes Dropdown"
+                    onAction={(key) => setSelectedNote(key)}
+                  >
+                    {tokens.map((token) => (
+                      <DropdownItem
+                        key={`${token.result}`}
+                      >{`Note Nº ${token.result}`}</DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
-            {filteredTokens.length ? (
-              tokens.map((token) => (
-                <NoteCard
-                  key={parseInt(token.result)}
-                  tokenId={parseInt(token.result)}
-                />
-              ))
+            {selectedNote ? (
+              <NoteCard
+                key={parseInt(selectedNote)}
+                tokenId={parseInt(selectedNote)}
+              />
             ) : (
               <NoteCardsContainer>
                 <div className="text-xl text-center w-full">
@@ -122,7 +112,7 @@ export default function Home() {
           isConnected && <NoNotesAvailable />
         )}
       </div>
-    </>
+    </div>
   );
 
   const tabsData: any = {
