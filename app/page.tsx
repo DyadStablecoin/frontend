@@ -64,7 +64,7 @@ export default function Home() {
         {tokens && tokens?.length ? (
           <>
             <div className="md:flex justify-between items-center">
-              <div className="text-3xl mb-6">
+              <div className="text-3xl md:mb-0 mb-6">
                 {selectedNote && `Note Nº ${selectedNote}`}
               </div>
               <div className="flex flex-row md:justify-between justify-end items-center gap-2">
