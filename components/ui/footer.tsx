@@ -9,7 +9,7 @@ export function Footer({
   return (
     <footer
       className={cn(
-        "flex items-center space-x-4 lg:space-x-6 my-2 mb-6",
+        "flex items-center space-x-4 lg:space-x-6 my-2 mb-6 lg:pb-0 pb-20",
         className
       )}
       {...props}

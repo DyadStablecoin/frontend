@@ -15,7 +15,7 @@ import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { ReactNode, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-export function EarnKeroseneContent() {
+export default function EarnKeroseneContent() {
   const { address } = useAccount();
 
   const { currentCampaign: merklData } = useMerklCampaign();
@@ -106,8 +106,8 @@ export function EarnKeroseneContent() {
       description: "Claim or buy a Note",
       bottomComponent: (
         <div className="flex justify-between mt-[32px] w-full">
-          <div className="w-full flex gap-4">
-            <ClaimModalContent />
+          <div className="w-full">
+            <ClaimModalContent isOldDesign={true} />
           </div>
         </div>
       ),

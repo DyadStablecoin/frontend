@@ -8,3 +8,6 @@ export const getDataItemPercentage = (dataItem: Data, data: Data[]) => {
 
   return dataItem.value / sum;
 };
+
+export const isDataEmpty = (data: Data[]) =>
+  data.find((item) => (item.value > 0 ? true : false));

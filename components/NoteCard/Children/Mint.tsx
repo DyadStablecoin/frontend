@@ -14,13 +14,15 @@ import { defaultChain } from "@/lib/config";
 import { useAccount, useReadContracts } from "wagmi";
 import { formatNumber, fromBigNumber, toBigNumber } from "@/lib/utils";
 import { maxUint256 } from "viem";
+import Image from "next/image";
 
 interface MintProps {
   tokenId: string;
   currentCr: bigint | undefined;
+  setActiveTab: (tab: any) => void;
 }
 
-const Mint = ({ currentCr, tokenId }: MintProps) => {
+const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
   const [mintInputValue, setMintInputValue] = useState("");
   const [burnInputValue, setBurnInputValue] = useState("");
   const { setTransactionData } = useTransactionStore();
@@ -122,9 +124,26 @@ const Mint = ({ currentCr, tokenId }: MintProps) => {
 
   if (contractData?.exoCollat === 0n && !contractData?.exoCollat) {
     return (
-      <p className="text-sm md:text-base mt-4">
-        Deposit collateral to mint DYAD
-      </p>
+      <div className="flex flex-col items-center justify-center space-y-4 pt-4">
+        <Image
+          src="/android-chrome-256x256.png"
+          alt="Empty Vault"
+          width={50}
+          height={50}
+        />
+        <div className="text-center text-[#FAFAFA]">
+          <h3 className="text-xl font-semibold text-primary">Start Minting</h3>
+          <p className="text-sm mt-2">
+            Deposit collateral to start minting Dyad
+          </p>
+        </div>
+        <ButtonComponent
+          style={{ width: "150px" }}
+          onClick={() => setActiveTab("Deposit and Withdraw")}
+        >
+          Deposit Now
+        </ButtonComponent>
+      </div>
     );
   }
 
