@@ -7,7 +7,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import React, { useEffect, useState } from "react";
 
 interface StakeProps {
-  isStaked: boolean;
+  isStaked?: boolean;
   APR: string;
   liquidityStaked: string;
   xpBoost: string;
@@ -15,7 +15,8 @@ interface StakeProps {
 }
 
 const Stake: React.FC<StakeProps> = ({
-  isStaked,
+  // For now isStaked is set to true as the stake key is set to USDC only
+  isStaked = true,
   APR,
   liquidityStaked,
   xpBoost,
@@ -50,6 +51,7 @@ const Stake: React.FC<StakeProps> = ({
   useEffect(() => {
     // To be refactored to use the stake key from the LP
     // if stake key is not set and the LP is already staked, set it to the stake key of the currency in the LP
+    // Stake key is set to USDC as that is the only currency in the LP for now (could changed in the future to allow multiple currencies)
     if (!stakeKey && isStaked) {
       setStakeKey(STAKE_CONTRACTS["USDC"].stakeKey);
     }
@@ -103,7 +105,6 @@ const Stake: React.FC<StakeProps> = ({
           <DialogContent className="max-w-[90vw] md:max-w-fit">
             <KeroseneCard
               currency={stakeKey!}
-              stakeData={stakeData}
               stakingContract={
                 stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
               }
@@ -126,7 +127,6 @@ const Stake: React.FC<StakeProps> = ({
             <DialogContent className="max-w-[90vw] md:max-w-fit">
               <KeroseneCard
                 currency={stakeKey!}
-                stakeData={stakeData}
                 stakingContract={
                   stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
                 }

@@ -10,14 +10,12 @@ import InputComponent from "../reusable/InputComponent";
 
 interface KeroseneProps {
   currency: string;
-  stakeData: { label: string; value: string }[];
   actionType?: "stake" | "unstake";
   stakingContract?: `0x${string}`;
 }
 
 const KeroseneCard: React.FC<KeroseneProps> = ({
   currency,
-  stakeData,
   actionType = "stake",
   stakingContract,
 }) => {
@@ -52,16 +50,6 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               />
             </div>
           )}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-4">
-            {stakeData.map((item: { label: string; value: string }) => (
-              <div key={item.label} className={`py-2.5`}>
-                <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
-                  <div>{item.label}</div>
-                  <div className="text-right">{item.value}</div>
-                </div>
-              </div>
-            ))}
-          </div>
           <div className="grid grid-cols-2 gap-x-4 md:gap-x-6 w-full mt-6">
             <DialogClose>
               <ButtonComponent variant="bordered">Cancel</ButtonComponent>

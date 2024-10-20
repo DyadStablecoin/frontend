@@ -214,6 +214,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
     {
+      text: "Total APR",
+      // To be refactored to use the actual APR value
+      value: "83%",
+      highlighted: false,
+    },
+    {
       text: "Collateralization ratio",
       value: collateralizationRatio,
       highlighted: true,
@@ -294,13 +300,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: "Stake & Earn",
       tabKey: "Stake & Earn",
       content: (
-        <Stake
-          isStaked={false}
-          APR="83%"
-          liquidityStaked="$64,000"
-          xpBoost="5.3x"
-          XP="3,400"
-        />
+        <Stake APR="83%" liquidityStaked="$64,000" xpBoost="5.3x" XP="3,400" />
       ),
     },
   ];
