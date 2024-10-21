@@ -38,12 +38,14 @@ const NoteNumber: React.FC<NoteNumberProps> = ({ data, dyad, collateral }) => {
           {data.map((item: any, index: number) => (
             <div
               key={index}
-              className={`flex justify-between p-4 rounded-lg shadow-md ${
-                item.highlighted ? "bg-[#1A1A1A]" : "bg-[#282828]"
-              }`}
+              className={`py-2.5 ${item.text === "Total APR" ? "cols-span-1 md:col-span-2" : "cols-span-1"}`}
             >
-              <div className="text-sm font-medium">{item.text}</div>
-              <div className="text-sm text-right">{item.value}</div>
+              <div
+                className={`flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]`}
+              >
+                <div>{item.text}</div>
+                <div className="text-right">{item.value}</div>
+              </div>
             </div>
           ))}
         </div>
