@@ -73,7 +73,7 @@ export function ClaimModalContent({ isOldDesign = false }) {
                 </div>
               </ButtonComponent>
             ) : (
-              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold rounded-full flex items-center justify-center">
+              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
                 <CirclePlus size={20} className="mr-2" />
                 <div className="text-xs md:text-[0.875rem] transition-all">
                   Buy Note
@@ -110,7 +110,7 @@ export function ClaimModalContent({ isOldDesign = false }) {
       </ButtonComponent>
     ) : (
       <div
-        className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold rounded-full flex items-center justify-center"
+        className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center"
         onClick={() => {
           setTransactionData({
             config: {

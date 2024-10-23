@@ -25,7 +25,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
       type={type}
       value={value}
       classNames={{
-        inputWrapper: "border-[#434343] border h-[39px] rounded-[5px]",
+        inputWrapper: "border-[#434343] border h-[39px] rounded-none",
       }}
       size="sm"
       variant="bordered"
