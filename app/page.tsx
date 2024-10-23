@@ -29,6 +29,8 @@ export default function Home() {
   useEffect(() => {
     if (tab) {
       setSelected(tab as string);
+    } else {
+      setSelected("notes");
     }
   }, [tab]);
 
