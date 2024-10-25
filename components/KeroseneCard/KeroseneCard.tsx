@@ -7,7 +7,7 @@ import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
 import { useState } from "react";
 import InputComponent from "../reusable/InputComponent";
-import {useReadCurveM0DyadAllowance, useWriteCurveM0DyadApprove, useWriteDyadLpStakingCurveM0DyadDeposit} from "@/generated";
+import {useReadCurveM0DyadAllowance, useWriteCurveM0DyadApprove, useWriteDyadLpStakingCurveM0DyadDeposit, useWriteDyadLpStakingCurveM0DyadWithdraw} from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
 import { parseUnits } from "viem";
 
@@ -28,13 +28,13 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const {address} = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
-  const { writeContract: writeUnstake } = useWriteContract();
 
   const { writeContract: writeApprove } = useWriteCurveM0DyadApprove();
   const { writeContract: writeStake } = useWriteDyadLpStakingCurveM0DyadDeposit();
   const { data: allowance } = useReadCurveM0DyadAllowance({
     args: [address!, stakingContract!],
   });
+  const { writeContract: writeUnstake } = useWriteDyadLpStakingCurveM0DyadWithdraw();
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
@@ -88,10 +88,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 disabled={!unstakeInputValue || unstakeInputValue.length <= 0}
                 onClick={() =>
                   writeUnstake({
-                    address: stakingContract!,
-                    abi: StakingAbi.abi,
-                    functionName: "withdraw",
-                    args: [unstakeInputValue],
+                    args: [tokenId, parseUnits(unstakeInputValue, 18)]
                   })
                 }
               >
