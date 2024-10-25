@@ -9,6 +9,7 @@ import InputComponent from "../reusable/InputComponent";
 import {
   useReadCurveM0DyadAllowance,
   useReadCurveM0DyadBalanceOf,
+  useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
   useWriteCurveM0DyadApprove,
   useWriteDyadLpStakingCurveM0DyadDeposit,
   useWriteDyadLpStakingCurveM0DyadWithdraw,
@@ -33,8 +34,6 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const { address } = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
-  const [maxStakeInputValue, setMaxStakeInputValue] = useState(999999);
-  const [maxUnstakeInputValue, setMaxUnstakeInputValue] = useState(999999);
 
   const { writeContract: writeApprove } = useWriteCurveM0DyadApprove();
   const { writeContract: writeStake } =
@@ -48,6 +47,11 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const { data: lpBalance } = useReadCurveM0DyadBalanceOf({
     args: [address!],
   });
+
+  const { data: stakeBalance } =
+    useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited({
+      args: [tokenId],
+    });
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
@@ -84,7 +88,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 onClick={() =>
                   actionType === "stake"
                     ? setStakeInputValue(`${lpBalance?.toString()}`)
-                    : setUnstakeInputValue(`${maxUnstakeInputValue}`)
+                    : setUnstakeInputValue(`${stakeBalance?.toString()}`)
                 }
               >
                 Max

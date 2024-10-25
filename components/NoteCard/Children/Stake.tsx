@@ -22,7 +22,7 @@ const Stake: React.FC<StakeProps> = ({
   liquidityStaked,
   xpBoost,
   XP,
-  tokenId, 
+  tokenId,
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
@@ -134,6 +134,7 @@ const Stake: React.FC<StakeProps> = ({
                   stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
                 }
                 actionType="unstake"
+                tokenId={tokenId}
               />
             </DialogContent>
           </Dialog>
