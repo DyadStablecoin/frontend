@@ -13,6 +13,8 @@ import { erc20Abi } from "viem";
 import { angleDistributorAbi } from "./lib/abi/AngleDistributor";
 import { keroseneDnftClaimAbi } from "./lib/abi/KeroseneDnftClaim";
 import { wETHGatewayAbi } from "./lib/abi/WETHGateway";
+import { dyadLPStakingFactoryAbi } from "./lib/abi/DyadLPStakingFactory";
+import { dyadLPStakingAbi } from "./lib/abi/DyadLPStaking";
 
 export default defineConfig({
   out: "generated.ts",
@@ -260,6 +262,22 @@ export default defineConfig({
         [anvil.id]: "0x9F77A6775d6aC6A69107326130D65E422002B5B2",
       },
       abi: wETHGatewayAbi,
+    },
+    {
+      name: "dyadLPStakingFactory",
+      address: {
+        [mainnet.id]: "0xD19DCbB8B82805d779a6A2182d8F4355275CC30a",
+        [anvil.id]: "0xD19DCbB8B82805d779a6A2182d8F4355275CC30a",
+      },
+      abi: dyadLPStakingFactoryAbi,
+    },
+    {
+      name: "dyadLPStakingCurveM0DYAD",
+      address: {
+        [mainnet.id]: "0xe48c80CF20C7fCE3458896BB263D9D8D6404b39f",
+        [anvil.id]: "0xe48c80CF20C7fCE3458896BB263D9D8D6404b39f",
+      },
+      abi: dyadLPStakingAbi,
     },
   ],
 
