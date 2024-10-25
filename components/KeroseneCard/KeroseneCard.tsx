@@ -62,9 +62,9 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             </div>
           ) : (
             <div className="flex justify-between mt-[32px] w-full">
-              <InputComponent
-                placeHolder={`Amount of ${currency} to unstake`}
-                onValueChange={setUnstakeInputValue}
+              <BigIntInput
+                placeHolder={`Amount of ${STAKE_CONTRACTS[currency].name} to unstake`}
+                onChange={setUnstakeInputValue}
                 value={unstakeInputValue}
                 type="number"
               />
