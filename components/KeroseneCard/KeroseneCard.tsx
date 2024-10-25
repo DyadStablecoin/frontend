@@ -8,12 +8,14 @@ import { useState } from "react";
 import InputComponent from "../reusable/InputComponent";
 import {
   useReadCurveM0DyadAllowance,
+  useReadCurveM0DyadBalanceOf,
   useWriteCurveM0DyadApprove,
   useWriteDyadLpStakingCurveM0DyadDeposit,
   useWriteDyadLpStakingCurveM0DyadWithdraw,
 } from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
+import { format } from "path";
 
 interface KeroseneProps {
   currency: string;
@@ -42,6 +44,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   });
   const { writeContract: writeUnstake } =
     useWriteDyadLpStakingCurveM0DyadWithdraw();
+
+  const { data: lpBalance } = useReadCurveM0DyadBalanceOf({
+    args: [address!],
+  });
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
@@ -77,7 +83,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 width={"100px"}
                 onClick={() =>
                   actionType === "stake"
-                    ? setStakeInputValue(`${maxStakeInputValue}`)
+                    ? setStakeInputValue(`${lpBalance?.toString()}`)
                     : setUnstakeInputValue(`${maxUnstakeInputValue}`)
                 }
               >
