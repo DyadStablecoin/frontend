@@ -11,6 +11,8 @@ import {
   dyadAddress,
   xpAddress,
   xpAbi,
+  dyadLpStakingCurveM0DyadAddress,
+  dyadLpStakingCurveM0DyadAbi,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import NoteNumber from "./Children/NoteNumber";
@@ -82,6 +84,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         functionName: "balanceOf",
         args: [address],
       },
+      {
+        address: dyadLpStakingCurveM0DyadAddress[defaultChain.id],
+        abi: dyadLpStakingCurveM0DyadAbi,
+        functionName: "noteIdToAmountDeposited",
+        args: [BigInt(tokenId)],
+      },
     ],
     allowFailure: false,
     query: {
@@ -93,6 +101,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         const mintedDyad = data[3];
         const totalCollateralValue = exoCollateralValue + keroCollateralValue;
         const xpBalance = data[4]
+        const dyadLpStakingCurveM0DyadBalance = data[5]
 
         return {
           collatRatio,
@@ -101,7 +110,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           totalCollateralValue,
           minCollatRatio,
           mintedDyad,
-          xpBalance
+          xpBalance,
+          dyadLpStakingCurveM0DyadBalance, 
         };
       },
     },
@@ -313,7 +323,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       content: (
         <Stake
           APR="83%"
-          liquidityStaked="$64,000"
+          liquidityStaked={contractData?.dyadLpStakingCurveM0DyadBalance ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2) : "0"}
           xpBoost="5.3x"
           XP={contractData?.xpBalance ? fromBigNumber(contractData.xpBalance).toFixed(0) : "0"}
           tokenId={tokenId}
