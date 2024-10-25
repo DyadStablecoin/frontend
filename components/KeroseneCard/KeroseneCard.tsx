@@ -1,7 +1,6 @@
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
-import StakingAbi from "@/abis/Staking.json";
 import { DialogClose } from "../ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
@@ -57,7 +56,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             {actionType === "stake" ? (
               <div className="flex justify-between w-full">
                 <BigIntInput
-                  placeholder={`Amount of ${currency} to stake`}
+                  placeholder={`Amount of ${STAKE_CONTRACTS[currency].name} to stake`}
                   onChange={setStakeInputValue}
                   value={stakeInputValue}
                   decimals={18}
@@ -66,7 +65,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             ) : (
               <div className="flex justify-between items-center w-full">
                 <InputComponent
-                  placeHolder={`Amount of ${currency} to unstake`}
+                  placeHolder={`Amount of ${STAKE_CONTRACTS[currency].name} to unstake`}
                   onValueChange={setUnstakeInputValue}
                   value={unstakeInputValue}
                   type="number"

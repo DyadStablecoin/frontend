@@ -12,6 +12,8 @@ import {
   xpAbi,
   dyadLpStakingCurveM0DyadAddress,
   dyadLpStakingCurveM0DyadAbi,
+  keroseneVaultV2Address,
+  keroseneVaultV2Abi,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import NoteNumber from "./Children/NoteNumber";
@@ -31,6 +33,8 @@ import {
 import Stake from "./Children/Stake";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
+import { from } from "@apollo/client";
+import { formatCurrency, formatUSD } from "@/utils/currency";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -83,6 +87,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         functionName: "noteIdToAmountDeposited",
         args: [BigInt(tokenId)],
       },
+      {
+        address: keroseneVaultV2Address[defaultChain.id],
+        abi: keroseneVaultV2Abi,
+        functionName: "id2asset",
+        args: [BigInt(tokenId)],
+      },
     ],
     allowFailure: false,
     query: {
@@ -95,6 +105,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         const totalCollateralValue = exoCollateralValue + keroCollateralValue;
         const xpBalance = data[4];
         const dyadLpStakingCurveM0DyadBalance = data[5];
+        const keroseneDeposited = data[6];
 
         return {
           collatRatio,
@@ -105,6 +116,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           mintedDyad,
           xpBalance,
           dyadLpStakingCurveM0DyadBalance,
+          keroseneDeposited,
         };
       },
     },
@@ -156,25 +168,24 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "DYAD minted",
-      value: totalDyad,
+      value: formatNumber(totalDyad),
       highlighted: false,
     },
     {
-      text: "Liquidity Staked",
-      // To be refactored to use the actual APR value
-      value: "$240,000",
+      text: "Collateral",
+      value: totalCollateral,
       highlighted: false,
     },
     {
       text: "KEROSENE Deposited",
-      // To be refactored to use the actual APR value
-      value: "20,000",
+      value: formatNumber(fromBigNumber(contractData?.keroseneDeposited), 0),
       highlighted: false,
     },
     {
-      text: "APR Boost",
-      // To be refactored to use the actual APR value
-      value: "2.3x",
+      text: "Liquidity Staked",
+      value: fromBigNumber(
+        contractData?.dyadLpStakingCurveM0DyadBalance
+      ).toFixed(2),
       highlighted: false,
     },
     {
