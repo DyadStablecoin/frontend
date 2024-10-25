@@ -1,4 +1,4 @@
-import { useWriteContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
 import StakingAbi from "@/abis/Staking.json";
@@ -7,22 +7,35 @@ import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
 import { useState } from "react";
 import InputComponent from "../reusable/InputComponent";
+import {useReadCurveM0DyadAllowance, useWriteCurveM0DyadApprove, useWriteDyadLpStakingCurveM0DyadDeposit, useWriteDyadLpStakingCurveM0DyadWithdraw} from "@/generated";
+import { BigIntInput } from "@/components/reusable/BigIntInput";
+import { parseUnits } from "viem";
 
 interface KeroseneProps {
   currency: string;
   actionType?: "stake" | "unstake";
   stakingContract?: `0x${string}`;
+  tokenId: any;
 }
 
 const KeroseneCard: React.FC<KeroseneProps> = ({
   currency,
   actionType = "stake",
   stakingContract,
+  tokenId,
 }) => {
+  const {address} = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
-  const { writeContract: writeStake } = useWriteContract();
-  const { writeContract: writeUnstake } = useWriteContract();
+
+  const { writeContract: writeApprove } = useWriteCurveM0DyadApprove();
+  const { writeContract: writeStake } = useWriteDyadLpStakingCurveM0DyadDeposit();
+  const { data: allowance } = useReadCurveM0DyadAllowance({
+    args: [address!, stakingContract!],
+  });
+  const { writeContract: writeUnstake } = useWriteDyadLpStakingCurveM0DyadWithdraw();
+
+  const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
   return (
     <NoteCardsContainer>
@@ -33,11 +46,11 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
         <div className="mt-4 w-full md:w-[600px]">
           {actionType === "stake" ? (
             <div className="flex justify-between mt-[32px] w-full">
-              <InputComponent
-                placeHolder={`Amount of ${currency} to stake`}
-                onValueChange={setStakeInputValue}
+              <BigIntInput
+                placeholder={`Amount of ${currency} to stake`}
+                onChange={setStakeInputValue}
                 value={stakeInputValue}
-                type="number"
+                decimals={18} 
               />
             </div>
           ) : (
@@ -56,27 +69,25 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             </DialogClose>
             {actionType === "stake" ? (
               <ButtonComponent
-                disabled={!stakeInputValue || stakeInputValue.length <= 0}
+                disabled={!stakeInputValue || BigInt(stakeInputValue) === 0n}
                 onClick={() =>
-                  writeStake({
-                    address: stakingContract!,
-                    abi: StakingAbi.abi,
-                    functionName: "stake",
-                    args: [stakeInputValue],
-                  })
+                  needsApproval
+                    ? writeApprove({
+                        args: [stakingContract!, parseUnits(stakeInputValue, 18)],
+                      })
+                    : writeStake({
+                        args: [tokenId, parseUnits(stakeInputValue, 18)],
+                      })
                 }
               >
-                Stake
+                {needsApproval ? "Approve" : "Stake"}
               </ButtonComponent>
             ) : (
               <ButtonComponent
                 disabled={!unstakeInputValue || unstakeInputValue.length <= 0}
                 onClick={() =>
                   writeUnstake({
-                    address: stakingContract!,
-                    abi: StakingAbi.abi,
-                    functionName: "withdraw",
-                    args: [unstakeInputValue],
+                    args: [tokenId, parseUnits(unstakeInputValue, 18)]
                   })
                 }
               >

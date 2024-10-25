@@ -8,6 +8,10 @@ import {
   vaultManagerAddress,
   dyadAbi,
   dyadAddress,
+  xpAddress,
+  xpAbi,
+  dyadLpStakingCurveM0DyadAddress,
+  dyadLpStakingCurveM0DyadAbi,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import NoteNumber from "./Children/NoteNumber";
@@ -15,7 +19,7 @@ import { NoteNumberDataColumnModel } from "@/models/NoteCardModels";
 import { TabsDataModel } from "@/models/TabsModel";
 import Deposit, { supportedVaults } from "./Children/Deposit";
 import Mint from "./Children/Mint";
-import { useReadContracts } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
 import {
@@ -38,6 +42,7 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
+  const {address} = useAccount();
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
   // Fetch collateralization ratio
@@ -66,6 +71,18 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         functionName: "mintedDyad",
         args: [BigInt(tokenId)],
       },
+      {
+        address: xpAddress[defaultChain.id],
+        abi: xpAbi,
+        functionName: "balanceOf",
+        args: [address],
+      },
+      {
+        address: dyadLpStakingCurveM0DyadAddress[defaultChain.id],
+        abi: dyadLpStakingCurveM0DyadAbi,
+        functionName: "noteIdToAmountDeposited",
+        args: [BigInt(tokenId)],
+      },
     ],
     allowFailure: false,
     query: {
@@ -76,6 +93,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         const minCollatRatio = data[2];
         const mintedDyad = data[3];
         const totalCollateralValue = exoCollateralValue + keroCollateralValue;
+        const xpBalance = data[4]
+        const dyadLpStakingCurveM0DyadBalance = data[5]
 
         return {
           collatRatio,
@@ -84,6 +103,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           totalCollateralValue,
           minCollatRatio,
           mintedDyad,
+          xpBalance,
+          dyadLpStakingCurveM0DyadBalance, 
         };
       },
     },
@@ -217,7 +238,13 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: "Stake & Earn",
       tabKey: "Stake & Earn",
       content: (
-        <Stake APR="83%" liquidityStaked="$64,000" xpBoost="5.3x" XP="3,400" />
+        <Stake
+          APR="83%"
+          liquidityStaked={contractData?.dyadLpStakingCurveM0DyadBalance ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2) : "0"}
+          xpBoost="5.3x"
+          XP={contractData?.xpBalance ? fromBigNumber(contractData.xpBalance).toFixed(0) : "0"}
+          tokenId={tokenId}
+        />
       ),
     },
   ];

@@ -12,6 +12,7 @@ interface StakeProps {
   liquidityStaked: string;
   xpBoost: string;
   XP: string;
+  tokenId: any;
 }
 
 const Stake: React.FC<StakeProps> = ({
@@ -21,6 +22,7 @@ const Stake: React.FC<StakeProps> = ({
   liquidityStaked,
   xpBoost,
   XP,
+  tokenId, 
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
@@ -53,7 +55,7 @@ const Stake: React.FC<StakeProps> = ({
     // if stake key is not set and the LP is already staked, set it to the stake key of the currency in the LP
     // Stake key is set to USDC as that is the only currency in the LP for now (could changed in the future to allow multiple currencies)
     if (!stakeKey && isStaked) {
-      setStakeKey(STAKE_CONTRACTS["USDC"].stakeKey);
+      setStakeKey(STAKE_CONTRACTS["CURVE_M0_DYAD_LP"].stakeKey);
     }
   }, [stakeKey, isStaked]);
 
@@ -109,6 +111,7 @@ const Stake: React.FC<StakeProps> = ({
                 stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
               }
               actionType="stake"
+              tokenId={tokenId}
             />
           </DialogContent>
         </Dialog>
@@ -142,7 +145,7 @@ const Stake: React.FC<StakeProps> = ({
             // Functionality to be implemented
             onClick={() => console.log("KEROSENE claimed")}
           >
-            <div className="text-xs transition-all">Claim 820 KEROSENE</div>
+            <div className="text-xs transition-all">Claim 0 KEROSENE</div>
           </ButtonComponent>
         )}
       </div>
