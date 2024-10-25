@@ -1,6 +1,4 @@
-import React, { Fragment, useMemo, useState } from "react";
-import NoteCardsContainer from "../reusable/NoteCardsContainer";
-import TabsComponent from "../reusable/TabsComponent";
+import React, { useMemo } from "react";
 import {
   vaultManagerAbi,
   vaultManagerAddress,
@@ -36,11 +34,7 @@ type ContractData = {
 };
 
 const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
-  const {
-    data: contractData,
-    isSuccess: dataLoaded,
-    isError: loadDataError,
-  } = useReadContracts({
+  const { data: contractData, isSuccess: dataLoaded } = useReadContracts({
     contracts: [
       {
         address: vaultManagerAddress[defaultChain.id],
@@ -111,29 +105,27 @@ const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
     }
   }, [contractData]);
 
-  const { data: usdCollateral, isError: vaultCollateralError } =
-    useReadContracts({
-      contracts: supportedVaults.map((address) => ({
-        address: address,
-        abi: wEthVaultAbi,
-        functionName: "getUsdValue",
-        args: [BigInt(selectedRow.id)],
-        chainId: defaultChain.id,
-      })),
-      allowFailure: false,
-    });
+  const { data: usdCollateral } = useReadContracts({
+    contracts: supportedVaults.map((address) => ({
+      address: address,
+      abi: wEthVaultAbi,
+      functionName: "getUsdValue",
+      args: [BigInt(selectedRow.id)],
+      chainId: defaultChain.id,
+    })),
+    allowFailure: false,
+  });
 
-  const { data: tokenCollateral, isError: tokenCollateralError } =
-    useReadContracts({
-      contracts: supportedVaults.map((address) => ({
-        address: address,
-        abi: wEthVaultAbi,
-        functionName: "id2asset",
-        args: [BigInt(selectedRow.id)],
-        chainId: defaultChain.id,
-      })),
-      allowFailure: false,
-    });
+  const { data: tokenCollateral } = useReadContracts({
+    contracts: supportedVaults.map((address) => ({
+      address: address,
+      abi: wEthVaultAbi,
+      functionName: "id2asset",
+      args: [BigInt(selectedRow.id)],
+      chainId: defaultChain.id,
+    })),
+    allowFailure: false,
+  });
 
   const vaultAmounts: Data[] = useMemo(() => {
     if (!usdCollateral || !tokenCollateral) {
@@ -199,7 +191,7 @@ const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
   ];
 
   // Check if the vault exists
-  const { data: hasVaultData, isError: hasVaultError } = useReadContracts({
+  const { data: hasVaultData } = useReadContracts({
     contracts: supportedVaults.map((address) => ({
       address: vaultManagerAddress[defaultChain.id],
       abi: vaultManagerAbi,
@@ -211,39 +203,6 @@ const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
   });
   const hasVault = (hasVaultData?.filter((data) => !!data)?.length || 0) > 0;
 
-  const mintableDyad = useMemo(() => {
-    if (
-      !dataLoaded ||
-      totalCollateralValue === undefined ||
-      minCollatRatio === undefined ||
-      mintedDyad === undefined ||
-      exoCollateralValue === undefined ||
-      keroCollateralValue === undefined
-    ) {
-      return "N/A";
-    }
-    let usableKero = keroCollateralValue;
-    if (keroCollateralValue > exoCollateralValue) {
-      usableKero = exoCollateralValue;
-    }
-    let maxDyad =
-      ((usableKero + exoCollateralValue) * 1000000000000000000n) /
-      minCollatRatio;
-
-    if (maxDyad > exoCollateralValue) {
-      maxDyad = exoCollateralValue;
-    }
-
-    return maxDyad - (mintedDyad || 0n);
-  }, [
-    dataLoaded,
-    totalCollateralValue,
-    minCollatRatio,
-    mintedDyad,
-    exoCollateralValue,
-    keroCollateralValue,
-  ]);
-
   return (
     <DialogContent>
       {selectedRow && (
@@ -251,15 +210,16 @@ const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between", // Updated to space between
+              justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "10px",
             }}
           >
-            <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>Note Nº {selectedRow.id}</h2>{" "}
-            {/* Note ID - Made bigger and bold */}
+            <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
+              Note Nº {selectedRow.id}
+            </h2>{" "}
             {contractData && (
-              <p style={{ margin: 0, marginRight: "20px" }}> {/* Added margin-right */}
+              <p style={{ margin: 0, marginRight: "20px" }}>
                 Owner:{" "}
                 <a
                   href={`https://etherscan.io/address/${contractData.ownerOf}`}
@@ -281,11 +241,7 @@ const NoteDetails: React.FC<NoteDetailsProps> = ({ selectedRow }) => {
             )}
           </div>
           {hasVault ? (
-            <NoteNumber
-              data={noteData}
-              dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
-              collateral={vaultAmounts}
-            />
+            <NoteNumber data={noteData} />
           ) : (
             <p>Deposit collateral to open vault</p>
           )}

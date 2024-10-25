@@ -6,7 +6,6 @@ import TabsComponent from "../reusable/TabsComponent";
 import {
   vaultManagerAbi,
   vaultManagerAddress,
-  wEthVaultAbi,
   dyadAbi,
   dyadAddress,
 } from "@/generated";
@@ -19,8 +18,6 @@ import Mint from "./Children/Mint";
 import { useReadContracts } from "wagmi";
 import { maxUint256 } from "viem";
 import { formatNumber, fromBigNumber } from "@/lib/utils";
-import { vaultInfo } from "@/lib/constants";
-import { Data } from "@/models/ChartModels";
 import {
   Dropdown,
   DropdownTrigger,
@@ -44,11 +41,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
   // Fetch collateralization ratio
-  const {
-    data: contractData,
-    isSuccess: dataLoaded,
-    isError: loadDataError,
-  } = useReadContracts({
+  const { data: contractData, isSuccess: dataLoaded } = useReadContracts({
     contracts: [
       {
         address: vaultManagerAddress[defaultChain.id],
@@ -96,14 +89,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
   });
 
-  const {
-    collatRatio,
-    exoCollateralValue,
-    keroCollateralValue,
-    totalCollateralValue,
-    minCollatRatio,
-    mintedDyad,
-  } = useMemo<ContractData>(() => {
+  const { collatRatio, totalCollateralValue } = useMemo<ContractData>(() => {
     if (contractData) {
       return contractData;
     } else {
@@ -112,7 +98,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   }, [contractData]);
 
   // Check if the vault exists
-  const { data: hasVaultData, isError: hasVaultError } = useReadContracts({
+  const { data: hasVaultData } = useReadContracts({
     contracts: supportedVaults.map((address) => ({
       address: vaultManagerAddress[defaultChain.id],
       abi: vaultManagerAbi,
@@ -123,43 +109,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     allowFailure: false,
   });
   const hasVault = (hasVaultData?.filter((data) => !!data)?.length || 0) > 0;
-
-  // Fetch vault collateral values
-  const { data: usdCollateral, isError: vaultCollateralError } =
-    useReadContracts({
-      contracts: supportedVaults.map((address) => ({
-        address: address,
-        abi: wEthVaultAbi,
-        functionName: "getUsdValue",
-        args: [BigInt(tokenId)],
-        chainId: defaultChain.id,
-      })),
-      allowFailure: false,
-    });
-
-  const { data: tokenCollateral, isError: tokenCollateralError } =
-    useReadContracts({
-      contracts: supportedVaults.map((address) => ({
-        address: address,
-        abi: wEthVaultAbi,
-        functionName: "id2asset",
-        args: [BigInt(tokenId)],
-        chainId: defaultChain.id,
-      })),
-      allowFailure: false,
-    });
-
-  const vaultAmounts: Data[] = useMemo(() => {
-    if (!usdCollateral || !tokenCollateral) {
-      return [];
-    }
-
-    return usdCollateral.map((collateral, index) => ({
-      label: `${vaultInfo[index].symbol}|${fromBigNumber(tokenCollateral[index]).toFixed(4)}`,
-      value: fromBigNumber(collateral),
-      color: vaultInfo[index].color,
-    }));
-  }, [tokenCollateral, usdCollateral]);
 
   // Calculate total collateral and collateralization ratio
   const totalCollateral = dataLoaded
@@ -177,48 +126,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     ? `${Math.floor(fromBigNumber(contractData.mintedDyad))}`
     : "N/A";
 
-  // Calculate mintable DYAD
-  const mintableDyad = useMemo(() => {
-    if (
-      !dataLoaded ||
-      totalCollateralValue === undefined ||
-      minCollatRatio === undefined ||
-      mintedDyad === undefined ||
-      exoCollateralValue === undefined ||
-      keroCollateralValue === undefined
-    ) {
-      return "N/A";
-    }
-    let usableKero = keroCollateralValue;
-    if (keroCollateralValue > exoCollateralValue) {
-      usableKero = exoCollateralValue;
-    }
-    let maxDyad =
-      ((usableKero + exoCollateralValue) * 1000000000000000000n) /
-      minCollatRatio;
-
-    if (maxDyad > exoCollateralValue) {
-      maxDyad = exoCollateralValue;
-    }
-
-    return maxDyad - (mintedDyad || 0n);
-  }, [
-    dataLoaded,
-    totalCollateralValue,
-    minCollatRatio,
-    mintedDyad,
-    exoCollateralValue,
-    keroCollateralValue,
-  ]);
-
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
-    {
-      text: "Total APR",
-      // To be refactored to use the actual APR value
-      value: "83%",
-      highlighted: false,
-    },
     {
       text: "Collateralization ratio",
       value: collateralizationRatio,
@@ -230,15 +139,27 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       highlighted: false,
     },
     {
-      text: "Collateral",
-      value: totalCollateral,
+      text: "Liquidity Staked",
+      // To be refactored to use the actual APR value
+      value: "$240,000",
       highlighted: false,
     },
     {
-      text: "Exogenous Collateral",
-      value: !dataLoaded
-        ? "N/A"
-        : `$${formatNumber(fromBigNumber(exoCollateralValue))}`,
+      text: "KEROSENE Deposited",
+      // To be refactored to use the actual APR value
+      value: "20,000",
+      highlighted: false,
+    },
+    {
+      text: "APR Boost",
+      // To be refactored to use the actual APR value
+      value: "2.3x",
+      highlighted: false,
+    },
+    {
+      text: "Your APR",
+      // To be refactored to use the actual APR value
+      value: "83%",
       highlighted: false,
     },
   ];
@@ -249,11 +170,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: `Stats`,
       tabKey: `Note Nº ${tokenId}`,
       content: hasVault ? (
-        <NoteNumber
-          data={noteData}
-          dyad={[fromBigNumber(mintableDyad), fromBigNumber(mintedDyad)]}
-          collateral={vaultAmounts}
-        />
+        <NoteNumber data={noteData} />
       ) : (
         <div className="flex flex-col items-center justify-center space-y-4 pt-4">
           <Vault size={48} />
@@ -305,7 +222,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
   ];
 
-  const renderActiveTabContent = (activeTabKey: string) => {
+  const renderActiveTabContent = () => {
     return tabData.find((tab: TabsDataModel) => activeTab === tab.tabKey)
       ?.content;
   };
@@ -332,7 +249,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
               </DropdownMenu>
             </Dropdown>
           </div>
-          {renderActiveTabContent(activeTab)}
+          {renderActiveTabContent()}
         </div>
         <div className="hidden md:block">
           <TabsComponent
