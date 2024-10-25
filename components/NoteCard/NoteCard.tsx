@@ -34,6 +34,7 @@ import Stake from "./Children/Stake";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { from } from "@apollo/client";
+import { formatCurrency, formatUSD } from "@/utils/currency";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -171,10 +172,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       highlighted: false,
     },
     {
-      text: "Liquidity Staked",
-      value: fromBigNumber(
-        contractData?.dyadLpStakingCurveM0DyadBalance
-      ).toFixed(2),
+      text: "Collateral",
+      value: totalCollateral,
       highlighted: false,
     },
     {
@@ -183,9 +182,10 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       highlighted: false,
     },
     {
-      text: "APR Boost",
-      // To be refactored to use the actual APR value
-      value: "2.3x",
+      text: "Liquidity Staked",
+      value: fromBigNumber(
+        contractData?.dyadLpStakingCurveM0DyadBalance
+      ).toFixed(2),
       highlighted: false,
     },
     {
