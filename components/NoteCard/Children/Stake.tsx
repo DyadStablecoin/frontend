@@ -145,7 +145,7 @@ const Stake: React.FC<StakeProps> = ({
             // Functionality to be implemented
             onClick={() => console.log("KEROSENE claimed")}
           >
-            <div className="text-xs transition-all">Claim 820 KEROSENE</div>
+            <div className="text-xs transition-all">Claim 0 KEROSENE</div>
           </ButtonComponent>
         )}
       </div>

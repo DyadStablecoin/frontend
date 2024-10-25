@@ -24,7 +24,6 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   stakingContract,
   tokenId,
 }) => {
-  console.log("tokenId", tokenId)
   const {address} = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
@@ -51,7 +50,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 placeholder={`Amount of ${currency} to stake`}
                 onChange={setStakeInputValue}
                 value={stakeInputValue}
-                decimals={18} // Adjust this based on the token's decimals
+                decimals={18} 
               />
             </div>
           ) : (
