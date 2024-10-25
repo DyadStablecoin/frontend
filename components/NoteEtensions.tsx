@@ -47,7 +47,7 @@ const NoteEtensions: React.FC<NoteEtensionsProps> = ({ extensions }) => {
               </div>
             </div>
             {!extension.enabled && (
-              <div className="w-[72px] md:w-auto text-[0.55em] md:text-xs my-auto ml-auto mr-0 md:mr-4 border-1 px-2 py-1 rounded-full text-[grey] border-[grey] text-center">
+              <div className="w-[72px] md:w-auto text-[0.55em] md:text-xs my-auto ml-auto mr-0 md:mr-4 px-2 py-1 text-[grey] text-center">
                 <div>Coming Soon</div>
               </div>
             )}

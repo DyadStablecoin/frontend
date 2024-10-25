@@ -27,6 +27,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/dropdown";
+import Stake from "./Children/Stake";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 
@@ -213,6 +214,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
     {
+      text: "Total APR",
+      // To be refactored to use the actual APR value
+      value: "83%",
+      highlighted: false,
+    },
+    {
       text: "Collateralization ratio",
       value: collateralizationRatio,
       highlighted: true,
@@ -287,6 +294,13 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           tokenId={tokenId}
           setActiveTab={setActiveTab}
         />
+      ),
+    },
+    {
+      label: "Stake & Earn",
+      tabKey: "Stake & Earn",
+      content: (
+        <Stake APR="83%" liquidityStaked="$64,000" xpBoost="5.3x" XP="3,400" />
       ),
     },
   ];

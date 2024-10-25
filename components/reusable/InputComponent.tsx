@@ -1,9 +1,9 @@
-import {Input} from "@nextui-org/input";
+import { Input } from "@nextui-org/input";
 import React from "react";
 
 interface InputComponentProps {
   placeHolder: string;
-  onValueChange: (value: string) => void;
+  onValueChange: (value: any) => void;
   value: string;
   type?: "text" | "number" | "email" | "password";
   max?: number;
@@ -25,7 +25,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
       type={type}
       value={value}
       classNames={{
-        inputWrapper: "border-[#434343] border h-[39px] rounded-[5px]",
+        inputWrapper: "border-[#434343] border h-[39px] rounded-none",
       }}
       size="sm"
       variant="bordered"

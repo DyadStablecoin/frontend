@@ -3,7 +3,7 @@ import SortbyComponent from "../reusable/SortbyComponent";
 import { getKeyValue } from "@nextui-org/table";
 import { cardsSortData } from "@/constants/MarketplaceList";
 import { ArrowDownUpIcon, ArrowUpIcon } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import NoteDetails from "./NoteDetails"; // Import the new component
 
 interface MarketplaceListProps {
@@ -129,7 +129,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
       <div className="mt-2 grid grid-cols-1 gap-y-2 ">
         {sortedRows.map((data: any) => (
           <div
-            className="bg-[#1A1A1A] rounded rounded-lg p-2 cursor-pointer hover:bg-[#2A2A2A]"
+            className="bg-[#1A1A1A] p-2 cursor-pointer hover:bg-[#2A2A2A]"
             onClick={() => handleRowClick(data)} // updated to handle click
           >
             <div className="md:hidden justify-between mb-4 flex">
@@ -139,7 +139,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
               </div>
               {data.market.props.children === "N/A" ? (
                 <div className="w-1/2 flex justify-center">
-                  <div className="w-full h-9 mt-auto mb-auto text-center border-2 border-dotted border-[#282828] rounded-[5px] text-sm flex">
+                  <div className="w-full h-9 mt-auto mb-auto text-center border-2 border-dotted border-[#282828] text-sm flex">
                     <div className="m-auto">{data.market}</div>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
               </div>
               {data.market.props.children === "N/A" ? (
                 <div className="w-full flex justify-center col-span-2">
-                  <div className="w-full h-9 mt-auto mb-auto text-center border-2 border-dotted border-[#282828] rounded-[5px] text-sm flex">
+                  <div className="w-full h-9 mt-auto mb-auto text-center border-2 border-dotted border-[#282828] text-sm flex">
                     <div className="m-auto text-xs">{data.market}</div>
                   </div>
                 </div>
@@ -230,7 +230,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
 
       <a
         href="#"
-        className="bg-[#1A1A1A] border-[1px] border-[#282828] rounded-[100%] w-[50px] h-[50px] fixed bottom-24 lg:top-[90vh] right-[5vw] cursor-pointer flex"
+        className="bg-[#1A1A1A] border-[1px] border-[#282828] w-[50px] h-[50px] fixed bottom-24 lg:top-[90vh] right-[5vw] cursor-pointer flex"
       >
         <ArrowUpIcon className="m-auto text-sm" size={20} />
       </a>
