@@ -42,7 +42,7 @@ type ContractData = {
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
-  const {address} = useAccount();
+  const { address } = useAccount();
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
 
   // Fetch collateralization ratio
@@ -93,8 +93,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         const minCollatRatio = data[2];
         const mintedDyad = data[3];
         const totalCollateralValue = exoCollateralValue + keroCollateralValue;
-        const xpBalance = data[4]
-        const dyadLpStakingCurveM0DyadBalance = data[5]
+        const xpBalance = data[4];
+        const dyadLpStakingCurveM0DyadBalance = data[5];
 
         return {
           collatRatio,
@@ -104,7 +104,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           minCollatRatio,
           mintedDyad,
           xpBalance,
-          dyadLpStakingCurveM0DyadBalance, 
+          dyadLpStakingCurveM0DyadBalance,
         };
       },
     },
@@ -240,9 +240,19 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       content: (
         <Stake
           APR="83%"
-          liquidityStaked={contractData?.dyadLpStakingCurveM0DyadBalance ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2) : "0"}
+          liquidityStaked={
+            contractData?.dyadLpStakingCurveM0DyadBalance
+              ? fromBigNumber(
+                  contractData.dyadLpStakingCurveM0DyadBalance
+                ).toFixed(2)
+              : "0"
+          }
           xpBoost="5.3x"
-          XP={contractData?.xpBalance ? fromBigNumber(contractData.xpBalance).toFixed(0) : "0"}
+          XP={
+            contractData?.xpBalance
+              ? fromBigNumber(contractData.xpBalance).toFixed(0)
+              : "0"
+          }
           tokenId={tokenId}
         />
       ),
