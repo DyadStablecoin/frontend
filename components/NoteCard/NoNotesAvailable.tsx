@@ -15,8 +15,15 @@ const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
           <h3 className="text-xl font-semibold text-primary">
             No Notes Available
           </h3>
-          <p className="text-sm mt-2">
-            Notes are the cornerstone of the DYAD ecosystem
+          <p className="text-sm mt-2 text-[grey] w-full md:w-2/3 mx-auto ">
+            <div>
+              DYAD is a stablecoin that you can mint with extreme capital
+              efficiency against wETH, wstETH, tBTC, weETH, and apxETH
+            </div>
+            <div className="py-2">
+              Use DYAD to earn the highest stable yield on mainnet.{" "}
+            </div>
+            <div>To get started, buy a Note NFT</div>
           </p>
         </div>
         <div className="w-full">
