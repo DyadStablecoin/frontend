@@ -1,10 +1,10 @@
 import { StakeCurrencies, StakeContractsType } from "@/models/Stake";
 
 export const STAKE_CONTRACTS: StakeContractsType = {
-  [StakeCurrencies.USDC]: {
-    label: "USDC - DYAD",
-    stakeKey: StakeCurrencies.USDC,
-    address: "0x8e0e695fEC31d5502C2f3E860Fe560Ea80b03E1D",
+  [StakeCurrencies.CURVE_M0_DYAD_LP]: {
+    label: "M0 - DYAD",
+    stakeKey: StakeCurrencies.CURVE_M0_DYAD_LP,
+    address: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
   },
   [StakeCurrencies.ETH]: {
     label: "ETH - DYAD",

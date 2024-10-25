@@ -300,7 +300,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: "Stake & Earn",
       tabKey: "Stake & Earn",
       content: (
-        <Stake APR="83%" liquidityStaked="$64,000" xpBoost="5.3x" XP="3,400" />
+        <Stake APR="83%" liquidityStaked="$64,000" xpBoost="5.3x" XP="3,400" tokenId={tokenId} />
       ),
     },
   ];

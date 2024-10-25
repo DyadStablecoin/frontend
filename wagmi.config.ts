@@ -279,6 +279,14 @@ export default defineConfig({
       },
       abi: dyadLPStakingAbi,
     },
+    {
+      name: "curveM0DYAD",
+      address: {
+        [mainnet.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
+        [anvil.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
+      },
+      abi: erc20Abi,
+    },
   ],
 
   plugins: [react()],
