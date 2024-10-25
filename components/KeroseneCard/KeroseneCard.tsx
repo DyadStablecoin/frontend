@@ -7,7 +7,12 @@ import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
 import { useState } from "react";
 import InputComponent from "../reusable/InputComponent";
-import {useReadCurveM0DyadAllowance, useWriteCurveM0DyadApprove, useWriteDyadLpStakingCurveM0DyadDeposit, useWriteDyadLpStakingCurveM0DyadWithdraw} from "@/generated";
+import {
+  useReadCurveM0DyadAllowance,
+  useWriteCurveM0DyadApprove,
+  useWriteDyadLpStakingCurveM0DyadDeposit,
+  useWriteDyadLpStakingCurveM0DyadWithdraw,
+} from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
 import { parseUnits } from "viem";
 
@@ -24,16 +29,20 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   stakingContract,
   tokenId,
 }) => {
-  const {address} = useAccount();
+  const { address } = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
+  const [maxStakeInputValue, setMaxStakeInputValue] = useState(999999);
+  const [maxUnstakeInputValue, setMaxUnstakeInputValue] = useState(999999);
 
   const { writeContract: writeApprove } = useWriteCurveM0DyadApprove();
-  const { writeContract: writeStake } = useWriteDyadLpStakingCurveM0DyadDeposit();
+  const { writeContract: writeStake } =
+    useWriteDyadLpStakingCurveM0DyadDeposit();
   const { data: allowance } = useReadCurveM0DyadAllowance({
     args: [address!, stakingContract!],
   });
-  const { writeContract: writeUnstake } = useWriteDyadLpStakingCurveM0DyadWithdraw();
+  const { writeContract: writeUnstake } =
+    useWriteDyadLpStakingCurveM0DyadWithdraw();
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
@@ -44,25 +53,40 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
           <div>{STAKE_CONTRACTS[currency as StakeCurenciesType].label}</div>
         </div>
         <div className="mt-4 w-full md:w-[600px]">
-          {actionType === "stake" ? (
-            <div className="flex justify-between mt-[32px] w-full">
-              <BigIntInput
-                placeholder={`Amount of ${currency} to stake`}
-                onChange={setStakeInputValue}
-                value={stakeInputValue}
-                decimals={18} 
-              />
+          <div className="flex justify-between gap-6 mt-[32px]">
+            {actionType === "stake" ? (
+              <div className="flex justify-between w-full">
+                <BigIntInput
+                  placeholder={`Amount of ${currency} to stake`}
+                  onChange={setStakeInputValue}
+                  value={stakeInputValue}
+                  decimals={18}
+                />
+              </div>
+            ) : (
+              <div className="flex justify-between items-center w-full">
+                <InputComponent
+                  placeHolder={`Amount of ${currency} to unstake`}
+                  onValueChange={setUnstakeInputValue}
+                  value={unstakeInputValue}
+                  type="number"
+                />
+              </div>
+            )}
+            <div>
+              <ButtonComponent
+                width={"100px"}
+                onClick={() =>
+                  actionType === "stake"
+                    ? setStakeInputValue(`${maxStakeInputValue}`)
+                    : setUnstakeInputValue(`${maxUnstakeInputValue}`)
+                }
+              >
+                Max
+              </ButtonComponent>
             </div>
-          ) : (
-            <div className="flex justify-between mt-[32px] w-full">
-              <InputComponent
-                placeHolder={`Amount of ${currency} to unstake`}
-                onValueChange={setUnstakeInputValue}
-                value={unstakeInputValue}
-                type="number"
-              />
-            </div>
-          )}
+          </div>
+
           <div className="grid grid-cols-2 gap-x-4 md:gap-x-6 w-full mt-6">
             <DialogClose>
               <ButtonComponent variant="bordered">Cancel</ButtonComponent>
@@ -73,7 +97,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 onClick={() =>
                   needsApproval
                     ? writeApprove({
-                        args: [stakingContract!, parseUnits(stakeInputValue, 18)],
+                        args: [
+                          stakingContract!,
+                          parseUnits(stakeInputValue, 18),
+                        ],
                       })
                     : writeStake({
                         args: [tokenId, parseUnits(stakeInputValue, 18)],
@@ -87,7 +114,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 disabled={!unstakeInputValue || unstakeInputValue.length <= 0}
                 onClick={() =>
                   writeUnstake({
-                    args: [tokenId, parseUnits(unstakeInputValue, 18)]
+                    args: [tokenId, parseUnits(unstakeInputValue, 18)],
                   })
                 }
               >
