@@ -5,7 +5,6 @@ import { DialogClose } from "../ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
 import { useState } from "react";
-import InputComponent from "../reusable/InputComponent";
 import {
   useReadCurveM0DyadAllowance,
   useReadCurveM0DyadBalanceOf,
@@ -15,7 +14,6 @@ import {
   useWriteDyadLpStakingCurveM0DyadWithdraw,
 } from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
-import { parseUnits } from "viem";
 
 interface KeroseneProps {
   currency: string;
