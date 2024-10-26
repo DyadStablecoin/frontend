@@ -55,6 +55,8 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const canUnstake =
     stakeBalance && BigInt(unstakeInputValue || "0") <= stakeBalance;
 
+  const canStake = lpBalance && BigInt(stakeInputValue || "0") <= lpBalance;
+
   return (
     <NoteCardsContainer>
       <div className="text-sm font-semibold text-[#A1A1AA]">
