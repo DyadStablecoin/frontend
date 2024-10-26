@@ -155,9 +155,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     : "N/A";
 
   // Calculate total DYAD
-  const totalDyad = contractData?.mintedDyad
-    ? `${Math.floor(fromBigNumber(contractData.mintedDyad))}`
-    : "N/A";
+  const totalDyad =
+    fromBigNumber(contractData?.mintedDyad)?.toString() ?? "N/A";
 
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
