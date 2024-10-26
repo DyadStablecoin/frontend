@@ -108,7 +108,7 @@ const Stake: React.FC<StakeProps> = ({
             <KeroseneCard
               currency={stakeKey!}
               stakingContract={
-                stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
+                stakeKey ? STAKE_CONTRACTS[stakeKey].stakingContract : "0x"
               }
               actionType="stake"
               tokenId={tokenId}
