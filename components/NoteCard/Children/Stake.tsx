@@ -26,6 +26,7 @@ const Stake: React.FC<StakeProps> = ({
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const stakeDropdownData = Object.values(STAKE_CONTRACTS).map((contract) => ({
     label: contract.label,
     value: contract.stakeKey,
@@ -92,7 +93,7 @@ const Stake: React.FC<StakeProps> = ({
       )}
 
       <div className="flex flex-col gap-y-2 md:grid md:grid-cols-3 md:gap-x-8 h-full w-full mt-8 md:mt-4">
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger className={isStaked ? "col-span-1" : "col-span-3"}>
             <ButtonComponent
               className={`rounded-none ${isStaked ? "h-[47px] text-xs" : "text-sm"}`}
@@ -112,6 +113,7 @@ const Stake: React.FC<StakeProps> = ({
               }
               actionType="stake"
               tokenId={tokenId}
+              onSuccess={() => setDialogOpen(false)}
             />
           </DialogContent>
         </Dialog>
@@ -135,6 +137,7 @@ const Stake: React.FC<StakeProps> = ({
                 }
                 actionType="unstake"
                 tokenId={tokenId}
+                onSuccess={() => setDialogOpen(false)}
               />
             </DialogContent>
           </Dialog>

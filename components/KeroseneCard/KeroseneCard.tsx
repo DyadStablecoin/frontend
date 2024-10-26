@@ -20,6 +20,7 @@ interface KeroseneProps {
   actionType?: "stake" | "unstake";
   stakingContract?: `0x${string}`;
   tokenId: any;
+  onSuccess?: () => void;
 }
 
 const KeroseneCard: React.FC<KeroseneProps> = ({
@@ -27,6 +28,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   actionType = "stake",
   stakingContract,
   tokenId,
+  onSuccess,
 }) => {
   const { address } = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
@@ -112,6 +114,9 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                       })
                     : writeStake({
                         args: [tokenId, stakeInputValue],
+                        onSuccess: () => {
+                          onSuccess?.();
+                        },
                       })
                 }
               >
@@ -127,6 +132,9 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 onClick={() =>
                   writeUnstake({
                     args: [tokenId, unstakeInputValue],
+                    onSuccess: () => {
+                      onSuccess?.();
+                    },
                   })
                 }
               >
