@@ -15,8 +15,7 @@ import {
   useWriteDyadLpStakingCurveM0DyadWithdraw,
 } from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
-import { formatUnits, parseUnits } from "viem";
-import { format } from "path";
+import { parseUnits } from "viem";
 
 interface KeroseneProps {
   currency: string;
@@ -54,6 +53,9 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
     });
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
+
+  const canUnstake =
+    stakeBalance && BigInt(unstakeInputValue || "0") <= stakeBalance;
 
   return (
     <NoteCardsContainer>
@@ -106,13 +108,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 onClick={() =>
                   needsApproval
                     ? writeApprove({
-                        args: [
-                          stakingContract!,
-                          parseUnits(stakeInputValue, 18),
-                        ],
+                        args: [stakingContract!, stakeInputValue],
                       })
                     : writeStake({
-                        args: [tokenId, parseUnits(stakeInputValue, 18)],
+                        args: [tokenId, stakeInputValue],
                       })
                 }
               >
@@ -120,10 +119,14 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               </ButtonComponent>
             ) : (
               <ButtonComponent
-                disabled={!unstakeInputValue || unstakeInputValue.length <= 0}
+                disabled={
+                  !unstakeInputValue ||
+                  unstakeInputValue.length <= 0 ||
+                  !canUnstake
+                }
                 onClick={() =>
                   writeUnstake({
-                    args: [tokenId, parseUnits(unstakeInputValue, 18)],
+                    args: [tokenId, unstakeInputValue],
                   })
                 }
               >
