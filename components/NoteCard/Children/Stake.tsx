@@ -2,6 +2,7 @@ import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
+import { useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited } from "@/generated";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import React, { useEffect, useState } from "react";
@@ -31,6 +32,11 @@ const Stake: React.FC<StakeProps> = ({
     label: contract.label,
     value: contract.stakeKey,
   }));
+
+  const { data: stakeBalance } =
+    useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited({
+      args: [tokenId],
+    });
 
   const stakeData = [
     {
@@ -117,7 +123,7 @@ const Stake: React.FC<StakeProps> = ({
             />
           </DialogContent>
         </Dialog>
-        {isStaked && (
+        {isStaked && stakeBalance !== undefined && stakeBalance > 0n && (
           <Dialog>
             <DialogTrigger>
               <ButtonComponent
