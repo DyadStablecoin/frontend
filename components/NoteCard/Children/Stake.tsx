@@ -98,7 +98,9 @@ const Stake: React.FC<StakeProps> = ({
         </Autocomplete>
       )}
 
-      <div className="flex flex-col gap-y-2 md:grid md:grid-cols-3 md:gap-x-8 h-full w-full mt-8 md:mt-4">
+      <div
+        className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+      >
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger className={isStaked ? "col-span-1" : "col-span-3"}>
             <ButtonComponent
