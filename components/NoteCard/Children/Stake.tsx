@@ -5,7 +5,7 @@ import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited } from "@/generated";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { PiggyBank } from "lucide-react";
+import { PiggyBank, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -30,8 +30,6 @@ const Stake: React.FC<StakeProps> = ({
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  // rename to a more appropriate name
-  const [isActionPerformed, setIsActionPerformed] = useState(false);
   const stakeDropdownData = Object.values(STAKE_CONTRACTS).map((contract) => ({
     label: contract.label,
     value: contract.stakeKey,
@@ -102,7 +100,6 @@ const Stake: React.FC<StakeProps> = ({
         </Autocomplete>
       )}
 
-      {isActionPerformed ? (
         <div
           className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-3" : "md:grid-cols-2"}`}
         >
@@ -166,24 +163,6 @@ const Stake: React.FC<StakeProps> = ({
             </ButtonComponent>
           )}
         </div>
-      ) : (
-        <div className="w-full text-center py-8">
-          <PiggyBank size={48} className="mx-auto" />
-          <div className="text-xl">No deposits yet</div>
-          <div className="text-sm text-[grey] mt-2">
-            Please perform this action before staking or claiming, visit{" "}
-            <Link
-              className="text-[#966CF3] underline"
-              href="https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Curve.fi
-            </Link>{" "}
-            to get started
-          </div>
-        </div>
-      )}
 
       {isStaked && (
         <>
@@ -199,6 +178,21 @@ const Stake: React.FC<StakeProps> = ({
           </div>
         </>
       )}
+
+      <div className="w-full text-center py-8">
+        <div className="text-sm text-[grey] mt-2">
+          Provide Liquidity to the wM/DYAD pool on{" "}
+          <Link
+            className="text-[#966CF3] underline"
+            href="https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Curve.fi
+          </Link>{" "}
+          here
+        </div>
+      </div>
     </div>
   );
 };
