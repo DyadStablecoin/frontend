@@ -65,7 +65,17 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
         <div>{STAKE_CONTRACTS[currency as StakeCurenciesType].label}</div>
       </div>
       <div className="mt-4 w-full md:w-[600px]">
-        <div className="flex flex-col md:flex-row justify-between gap-6 mt-[32px]">
+        <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-6 mt-[32px]">
+          <div
+            className="ml-auto cursor-pointer md:hidden"
+            onClick={() =>
+              actionType === "stake"
+                ? setStakeInputValue(`${lpBalance?.toString()}`)
+                : setUnstakeInputValue(`${stakeBalance?.toString()}`)
+            }
+          >
+            Max
+          </div>
           {actionType === "stake" ? (
             <div className="flex justify-between w-full">
               <BigIntInput
@@ -87,7 +97,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               />
             </div>
           )}
-          <div>
+          <div className="hidden md:block">
             <ButtonComponent
               width={"100px"}
               onClick={() =>
