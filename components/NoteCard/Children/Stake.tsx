@@ -2,7 +2,10 @@ import KeroseneCard from "@/components/KeroseneCard/KeroseneCard";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
-import { useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited } from "@/generated";
+import {
+  useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
+  useWriteDyadLpStakingFactoryClaim,
+} from "@/generated";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { PiggyBank, CircleDollarSign } from "lucide-react";
@@ -30,10 +33,13 @@ const Stake: React.FC<StakeProps> = ({
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [claimData, setClaimData] = useState();
   const stakeDropdownData = Object.values(STAKE_CONTRACTS).map((contract) => ({
     label: contract.label,
     value: contract.stakeKey,
   }));
+
+  const { writeContract: writeClaim } = useWriteDyadLpStakingFactoryClaim();
 
   const { data: stakeBalance } =
     useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited({
@@ -68,6 +74,25 @@ const Stake: React.FC<StakeProps> = ({
     }
   }, [stakeKey, isStaked]);
 
+  useEffect(() => {
+    const fetchClaimData = async () => {
+      try {
+        const response = await fetch(
+          `https://api.dyadstable.xyz/api/rewards/${tokenId}`
+        );
+        const data = await response.json();
+        console.log("Claim data:", data);
+        setClaimData(data);
+      } catch (error) {
+        console.error("Claim data: Error fetching rewards:", error);
+      }
+    };
+
+    if (tokenId) {
+      fetchClaimData();
+    }
+  }, [tokenId]);
+
   return (
     <div>
       {!isStaked && (
@@ -100,18 +125,42 @@ const Stake: React.FC<StakeProps> = ({
         </Autocomplete>
       )}
 
-        <div
-          className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-3" : "md:grid-cols-2"}`}
-        >
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger className={isStaked ? "col-span-1" : "col-span-3"}>
+      <div
+        className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+      >
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger className={isStaked ? "col-span-1" : "col-span-3"}>
+            <ButtonComponent
+              className={`rounded-none ${isStaked ? "h-[47px] text-xs" : "text-sm"}`}
+              variant="bordered"
+              disabled={!stakeKey}
+            >
+              <div className="transition-all">
+                {`Stake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
+              </div>
+            </ButtonComponent>
+          </DialogTrigger>
+          <DialogContent className="max-w-[90vw] md:max-w-fit">
+            <KeroseneCard
+              currency={stakeKey!}
+              stakingContract={
+                stakeKey ? STAKE_CONTRACTS[stakeKey].stakingContract : "0x"
+              }
+              actionType="stake"
+              tokenId={tokenId}
+              onSuccess={() => setDialogOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+        {isStaked && stakeBalance !== undefined && stakeBalance > 0n && (
+          <Dialog>
+            <DialogTrigger>
               <ButtonComponent
-                className={`rounded-none ${isStaked ? "h-[47px] text-xs" : "text-sm"}`}
+                className="rounded-none h-[47px]"
                 variant="bordered"
-                disabled={!stakeKey}
               >
-                <div className="transition-all">
-                  {`Stake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
+                <div className="text-xs transition-all">
+                  {`Unstake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
                 </div>
               </ButtonComponent>
             </DialogTrigger>
@@ -119,50 +168,31 @@ const Stake: React.FC<StakeProps> = ({
               <KeroseneCard
                 currency={stakeKey!}
                 stakingContract={
-                  stakeKey ? STAKE_CONTRACTS[stakeKey].stakingContract : "0x"
+                  stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
                 }
-                actionType="stake"
+                actionType="unstake"
                 tokenId={tokenId}
                 onSuccess={() => setDialogOpen(false)}
               />
             </DialogContent>
           </Dialog>
-          {isStaked && stakeBalance !== undefined && stakeBalance > 0n && (
-            <Dialog>
-              <DialogTrigger>
-                <ButtonComponent
-                  className="rounded-none h-[47px]"
-                  variant="bordered"
-                >
-                  <div className="text-xs transition-all">
-                    {`Unstake ${stakeKey ? STAKE_CONTRACTS[stakeKey].label : ""}`}
-                  </div>
-                </ButtonComponent>
-              </DialogTrigger>
-              <DialogContent className="max-w-[90vw] md:max-w-fit">
-                <KeroseneCard
-                  currency={stakeKey!}
-                  stakingContract={
-                    stakeKey ? STAKE_CONTRACTS[stakeKey].address : "0x"
-                  }
-                  actionType="unstake"
-                  tokenId={tokenId}
-                  onSuccess={() => setDialogOpen(false)}
-                />
-              </DialogContent>
-            </Dialog>
-          )}
-          {isStaked && (
-            <ButtonComponent
-              className="rounded-none h-[47px]"
-              variant="bordered"
-              // Functionality to be implemented
-              onClick={() => console.log("KEROSENE claimed")}
-            >
-              <div className="text-xs transition-all">Claim 0 KEROSENE</div>
-            </ButtonComponent>
-          )}
-        </div>
+        )}
+        {isStaked && (
+          <ButtonComponent
+            className="rounded-none h-[47px]"
+            variant="bordered"
+            onClick={() =>
+              writeClaim({
+                args: [tokenId, claimData?.amount, claimData?.proof],
+              })
+            }
+          >
+            <div className="text-xs transition-all">
+              Claim {claimData?.amount} KEROSENE
+            </div>
+          </ButtonComponent>
+        )}
+      </div>
 
       {isStaked && (
         <>
