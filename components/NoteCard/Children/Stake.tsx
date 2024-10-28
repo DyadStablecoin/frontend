@@ -188,7 +188,9 @@ const Stake: React.FC<StakeProps> = ({
             }
           >
             <div className="text-xs transition-all">
-              Claim {claimData?.amount} KEROSENE
+              Claim{" "}
+              {claimData?.amount ? Number(claimData.amount) / 10 ** 18 : 0}{" "}
+              KEROSENE
             </div>
           </ButtonComponent>
         )}
