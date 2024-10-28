@@ -186,6 +186,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   const totalDyad =
     fromBigNumber(contractData?.mintedDyad)?.toString() ?? "N/A";
 
+  // Calculate APR
+  const calculatedAPR =
+    yieldData && Number(yieldData.noteLiquidity) !== 0
+      ? `${((Number(yieldData.kerosenePerYear) / Number(yieldData.noteLiquidity)) * 100 * (kerosenePrice || 0)).toFixed(2)}%`
+      : "0%";
+
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
     {
@@ -217,16 +223,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Your APR",
-      value: yieldData
-        ? Number(yieldData.noteLiquidity) === 0
-          ? "0%"
-          : `${(
-              (Number(yieldData.kerosenePerYear) /
-                Number(yieldData.noteLiquidity)) *
-              100 *
-              (kerosenePrice || 0)
-            ).toFixed(2)}%`
-        : "Loading...",
+      value: calculatedAPR,
       highlighted: false,
     },
   ];
@@ -285,7 +282,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       tabKey: "Stake & Earn",
       content: (
         <Stake
-          APR="83%"
+          APR={calculatedAPR}
           liquidityStaked={
             contractData?.dyadLpStakingCurveM0DyadBalance
               ? fromBigNumber(
