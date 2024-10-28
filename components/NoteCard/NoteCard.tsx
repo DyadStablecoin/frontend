@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useMemo, useState, useEffect } from "react";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
 import TabsComponent from "../reusable/TabsComponent";
 import {
@@ -35,6 +35,7 @@ import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { from } from "@apollo/client";
 import { formatCurrency, formatUSD } from "@/utils/currency";
+import useKerosenePrice from "@/hooks/useKerosenePrice";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -45,9 +46,36 @@ type ContractData = {
   mintedDyad?: bigint;
 };
 
+type YieldData = {
+  totalLiquidity: string;
+  totalXp: string;
+  noteLiquidity: string;
+  noteXp: string;
+  rewardRate: string;
+  kerosenePerYear: string;
+};
+
 function NoteCard({ tokenId }: { tokenId: string }) {
   const { address } = useAccount();
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
+  const [yieldData, setYieldData] = useState<YieldData | null>(null);
+  const { kerosenePrice } = useKerosenePrice();
+
+  useEffect(() => {
+    const fetchYieldData = async () => {
+      try {
+        const response = await fetch(
+          `https://api.dyadstable.xyz/api/yield?noteId=${tokenId}&pool=0xa969cfcd9e583edb8c8b270dc8cafb33d6cf662d`
+        );
+        const data = await response.json();
+        setYieldData(data);
+      } catch (error) {
+        console.error("Error fetching yield data:", error);
+      }
+    };
+
+    fetchYieldData();
+  }, [tokenId]);
 
   // Fetch collateralization ratio
   const { data: contractData, isSuccess: dataLoaded } = useReadContracts({
@@ -189,8 +217,16 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Your APR",
-      // To be refactored to use the actual APR value
-      value: "83%",
+      value: yieldData
+        ? Number(yieldData.noteLiquidity) === 0
+          ? "$0"
+          : `$${(
+              (Number(yieldData.kerosenePerYear) /
+                Number(yieldData.noteLiquidity)) *
+              100 *
+              (kerosenePrice || 0)
+            ).toFixed(2)}`
+        : "Loading...",
       highlighted: false,
     },
   ];
