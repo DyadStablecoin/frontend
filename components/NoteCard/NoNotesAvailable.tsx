@@ -13,7 +13,7 @@ const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
         <NotebookText size={48} />
         <div className="text-center text-[#FAFAFA]">
           <h3 className="text-xl font-semibold text-primary">
-            No Notes Available
+            Welcome to DYAD
           </h3>
           <p className="text-sm mt-2 text-[grey] w-full md:w-2/3 mx-auto ">
             <div>
