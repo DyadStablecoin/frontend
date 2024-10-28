@@ -219,13 +219,13 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       text: "Your APR",
       value: yieldData
         ? Number(yieldData.noteLiquidity) === 0
-          ? "$0"
-          : `$${(
+          ? "0%"
+          : `${(
               (Number(yieldData.kerosenePerYear) /
                 Number(yieldData.noteLiquidity)) *
               100 *
               (kerosenePrice || 0)
-            ).toFixed(2)}`
+            ).toFixed(2)}%`
         : "Loading...",
       highlighted: false,
     },
