@@ -23,7 +23,6 @@ import {
   ChartNoAxesColumnIncreasing,
   ChartNoAxesGantt,
   ChevronDown,
-  LayoutTemplate,
 } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
 
@@ -31,7 +30,7 @@ export const MainNav = React.memo(function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  const [activeNavItem, setActiveNavItem] = useState("earn-kerosene");
+  const [activeNavItem, setActiveNavItem] = useState("notes");
 
   const { windowWidth } = useWindowSize();
 
@@ -85,15 +84,6 @@ export const MainNav = React.memo(function MainNav({
 
   const navItemsData = [
     {
-      label: "Earn",
-      key: "earn-kerosene",
-      onClick: () => {
-        setActiveNavItem("earn-kerosene");
-        window.history.pushState({}, "", "/?tab=earn-kerosene");
-      },
-      icon: <LayoutTemplate size={windowWidth > 768 ? 16 : 20} />,
-    },
-    {
       label: "Notes",
       key: "notes",
       onClick: () => {
@@ -135,7 +125,7 @@ export const MainNav = React.memo(function MainNav({
           <Tabs
             key="NavTabs"
             variant="light"
-            radius="full"
+            radius="none"
             aria-label="Navbar tabs"
             className="ml-6 flex text-sm"
             classNames={{
@@ -166,11 +156,11 @@ export const MainNav = React.memo(function MainNav({
           <Tabs
             key="NavTabs"
             variant="light"
-            radius="full"
+            radius="none"
             aria-label="Navbar tabs"
             className="flex text-sm"
             classNames={{
-              base: "bg-[black] p-2 rounded-full max-w-lg mx-auto",
+              base: "bg-[black] p-2 rounded-none max-w-lg mx-auto",
               cursor: "group-data-[selected=true]:bg-[#1A1B1F]",
               tabContent: "text-xs text-white",
               tabList: "w-full",
@@ -198,17 +188,14 @@ export const MainNav = React.memo(function MainNav({
         </div>
 
         <div className="ml-auto flex items-center text-xs md:text-sm">
-          <Dropdown>
+          <Dropdown radius="none">
             <DropdownTrigger>
-              <div className="flex items-center bg-[#282828] lg:w-[165px] w-[140px] h-[40px] rounded-xl mr-[-20px] px-2 cursor-pointer z-10 pr-6">
+              <div className="flex items-center bg-[#282828] lg:w-[165px] w-[140px] h-[40px] mr-[-20px] px-2 cursor-pointer z-10 pr-6">
                 <div className="w-full flex justify-between text-xs">
                   <div className="font-bold text-[#A1A1AA]">TVL</div>
                   <div className="">{tvlDisplay}</div>
                 </div>
-                {/* <div className="font-bold text-[#A1A1AA] text-lg m-auto lg:hidden block">
-                  $
-                </div> */}
-                <div className="h-8 w-8 rounded-full bg-[#282828] p-0 flex">
+                <div className="h-8 w-8 bg-[#282828] p-0 flex">
                   <ChevronDown className="w-4 h-4 m-auto" />
                 </div>
               </div>
@@ -222,6 +209,7 @@ export const MainNav = React.memo(function MainNav({
                 showDivider
               >
                 <DropdownItem
+                  className="hover:rounded-none rounded-none"
                   key="ETH"
                   href="https://www.coingecko.com/en/coins/ethereum"
                   target="_blank"
@@ -240,6 +228,7 @@ export const MainNav = React.memo(function MainNav({
                 showDivider
               >
                 <DropdownItem
+                  className="hover:rounded-none rounded-none"
                   key="TVL"
                   href="https://defillama.com/protocol/dyad#information"
                   target="_blank"
@@ -257,7 +246,10 @@ export const MainNav = React.memo(function MainNav({
                 }}
                 showDivider
               >
-                <DropdownItem key="KERO">
+                <DropdownItem
+                  className="hover:rounded-none rounded-none"
+                  key="KERO"
+                >
                   <Link
                     href="https://www.coingecko.com/en/coins/kerosene"
                     target="_blank"
@@ -268,7 +260,10 @@ export const MainNav = React.memo(function MainNav({
                   </Link>
                 </DropdownItem>
               </DropdownSection>
-              <DropdownItem key="DV">
+              <DropdownItem
+                className="hover:rounded-none rounded-none mb-1"
+                key="DV"
+              >
                 <Link
                   href="https://dune.com/coffeexcoin/dyad-stable-v2"
                   target="_blank"

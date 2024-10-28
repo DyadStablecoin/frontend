@@ -155,12 +155,13 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
     value: string;
   }) => {
     return (
-      <div
-        className={`flex justify-between p-4 rounded-lg shadow-md 
-          text-white bg-[#282828]`}
-      >
-        <div className="mr-[5px]">{description}:</div>
-        <div>{value}</div>
+      <div className={`py-2.5 cols-span-2 md:col-span-1`}>
+        <div
+          className={`flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]`}
+        >
+          <div>{description}</div>
+          <div className="text-right">{value}</div>
+        </div>
       </div>
     );
   };

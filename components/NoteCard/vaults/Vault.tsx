@@ -3,11 +3,8 @@ import Image from "next/image";
 import EditVaultModal from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultModal";
 import EditVaultTabContent from "@/components/Modals/NoteCardModals/DepositModals/EditVault/EditVaultTabContent";
 import { TabsDataModel } from "@/models/TabsModel";
-import {
-  Accordion,
-  AccordionItem,
-} from "@nextui-org/accordion";
-import {Tooltip} from "@nextui-org/tooltip";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { Tooltip } from "@nextui-org/tooltip";
 import { VaultInfo, vaultInfo } from "@/lib/constants";
 import { defaultChain } from "@/lib/config";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -162,10 +159,7 @@ const Vault = ({
   );
 
   return (
-    <div
-      className="bg-[#282828] rounded rounded-lg p-2 md:p-0"
-      key={vault.tokenAddress}
-    >
+    <div className="bg-[#282828] p-2 md:p-0" key={vault.tokenAddress}>
       {renderActionButton()}
       <div className="md:hidden justify-between mb-4 flex">
         <div className=" my-auto flex">

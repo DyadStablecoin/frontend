@@ -1,9 +1,8 @@
-import {Input} from "@nextui-org/input";
 import React from "react";
 
 interface InputComponentProps {
   placeHolder: string;
-  onValueChange: (value: string) => void;
+  onValueChange: (value: any) => void;
   value: string;
   type?: "text" | "number" | "email" | "password";
   max?: number;
@@ -19,18 +18,14 @@ const InputComponent: React.FC<InputComponentProps> = ({
   min,
 }) => {
   return (
-    <Input
+    <input
       max={max}
       min={min ? min : 0}
       type={type}
       value={value}
-      classNames={{
-        inputWrapper: "border-[#434343] border h-[39px] rounded-[5px]",
-      }}
-      size="sm"
-      variant="bordered"
+      className="border-[#212121] border-2 bg-transparent px-2 h-[39px] rounded-none w-full outline-none"
       placeholder={placeHolder}
-      onValueChange={onValueChange}
+      onChange={(e) => onValueChange(e.target.value)}
     />
   );
 };

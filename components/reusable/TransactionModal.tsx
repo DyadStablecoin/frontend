@@ -6,14 +6,12 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Address } from "viem";
 import {
-  useAccount,
   useSimulateContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 
 import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 
@@ -21,6 +19,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Loader from "../loader";
 import { defaultChain } from "@/lib/config";
 import { useTransactionStore } from "@/lib/store";
+import ButtonComponent from "./ButtonComponent";
 
 enum TransactionState {
   REVIEW = "REVIEW",
@@ -147,7 +146,7 @@ export const TransactionModal = () => {
           <p className="text-2xl font-funky">{status.title}</p>
           {status?.icon}
         </div>
-        <p>{transactionData?.description}</p>
+        <p className="py-4">{transactionData?.description}</p>
         {error && (
           <Alert variant="destructive" className="max-w-full break-words">
             <AlertTriangle />
@@ -155,22 +154,33 @@ export const TransactionModal = () => {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
-        <div className="flex gap-10">
+        <div className="flex gap-6">
           {txState === TransactionState.REVIEW && (
             <>
-              <Close>
-                <Button variant="secondary">Cancel</Button>
+              <Close className="w-full">
+                <ButtonComponent variant="bordered">Cancel</ButtonComponent>
               </Close>
 
-              <Button onClick={handleConfirm} loading={!simulateData?.request}>
-                Confirm Transaction
-              </Button>
+              <ButtonComponent
+                onClick={handleConfirm}
+                className="w-full"
+                disabled={!simulateData?.request}
+              >
+                <div className="flex gap-3 justify-center">
+                  {!simulateData?.request && (
+                    <div className="my-auto">
+                      <Loader />
+                    </div>
+                  )}
+                  <div>Confirm Transaction</div>
+                </div>
+              </ButtonComponent>
             </>
           )}
           {(txState === TransactionState.ERROR ||
             txState === TransactionState.SUCCESS) && (
             <Close>
-              <Button>Return to App</Button>
+              <ButtonComponent>Return to App</ButtonComponent>
             </Close>
           )}
         </div>

@@ -22,7 +22,11 @@ const CustomTooltip = ({
 
     return (
       <div className="bg-black border rounded-md p-4">
-        {split.map((label, index) => (<p key={index} className="label">{label}</p>))}
+        {split.map((label, index) => (
+          <p key={index} className="label">
+            {label}
+          </p>
+        ))}
       </div>
     );
   }
@@ -38,20 +42,24 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
   return (
     <div>
       <div className="block rounded-[25px] w-full">
-        <LineDataChart
-          data={outsideData}
-          fillColors={outsideFillColors}
-          isTooltipOpen={isTooltipOpen}
-          setIsTooltipOpen={setIsTooltipOpen}
-        />
-        
-        <LineDataChart
-          data={insideData}
-          fillColors={insideData.map((item) => item.color ?? "")}
-          isTooltipOpen={isTooltipOpen}
-          setIsTooltipOpen={setIsTooltipOpen}
-          labelDataIndex="$"
-        />
+        {outsideData.find((item) => item.value > 0) && (
+          <LineDataChart
+            data={outsideData}
+            fillColors={outsideFillColors}
+            isTooltipOpen={isTooltipOpen}
+            setIsTooltipOpen={setIsTooltipOpen}
+          />
+        )}
+
+        {insideData.find((item) => item.value > 0) && (
+          <LineDataChart
+            data={insideData}
+            fillColors={insideData.map((item) => item.color ?? "")}
+            isTooltipOpen={isTooltipOpen}
+            setIsTooltipOpen={setIsTooltipOpen}
+            labelDataIndex="$"
+          />
+        )}
       </div>
     </div>
   );

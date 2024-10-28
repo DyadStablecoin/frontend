@@ -13,6 +13,8 @@ import { erc20Abi } from "viem";
 import { angleDistributorAbi } from "./lib/abi/AngleDistributor";
 import { keroseneDnftClaimAbi } from "./lib/abi/KeroseneDnftClaim";
 import { wETHGatewayAbi } from "./lib/abi/WETHGateway";
+import { dyadLPStakingFactoryAbi } from "./lib/abi/DyadLPStakingFactory";
+import { dyadLPStakingAbi } from "./lib/abi/DyadLPStaking";
 
 export default defineConfig({
   out: "generated.ts",
@@ -153,41 +155,6 @@ export default defineConfig({
       },
       abi: paymentsAbi,
     },
-    // {
-    //   name: "Kerosene",
-    //   address: {
-    //     [sepolia.id]: "0x956Ca322C709A97c5C2b4de3326D7b34dA7e9d75",
-    //   },
-    //   abi: "",
-    // },
-    // {
-    //   name: "KeroseneManager",
-    //   address: {
-    //     [sepolia.id]: "0xDe663DdFB9e1F4ED902b0ac46BEB0d3ae59a90CB",
-    //   },
-    //   abi: "",
-    // },
-    // {
-    //   name: "Staking",
-    //   address: {
-    //     [sepolia.id]: "0x795Ca95DD918856CDb8a56E9585A43A3E168774E",
-    //   },
-    //   abi: "",
-    // },
-    // {
-    //   name: "UnboundedKeroseneVault",
-    //   address: {
-    //     [sepolia.id]: "0x0CD9502D4B649c87c1c42eEd71E679E79EFe8cE9",
-    //   },
-    //   abi: "",
-    // },
-    // {
-    //   name: "BoundedKeroseneVault",
-    //   address: {
-    //     [sepolia.id]: "0x0eCa8b2Bd088163Be2533d1537b1Ff0d476fe28A",
-    //   },
-    //   abi: "",
-    // },
     {
       name: "WETH",
       address: {
@@ -260,6 +227,30 @@ export default defineConfig({
         [anvil.id]: "0x9F77A6775d6aC6A69107326130D65E422002B5B2",
       },
       abi: wETHGatewayAbi,
+    },
+    {
+      name: "dyadLPStakingFactory",
+      address: {
+        [mainnet.id]: "0xD19DCbB8B82805d779a6A2182d8F4355275CC30a",
+        [anvil.id]: "0xD19DCbB8B82805d779a6A2182d8F4355275CC30a",
+      },
+      abi: dyadLPStakingFactoryAbi,
+    },
+    {
+      name: "dyadLPStakingCurveM0DYAD",
+      address: {
+        [mainnet.id]: "0xe48c80CF20C7fCE3458896BB263D9D8D6404b39f",
+        [anvil.id]: "0xe48c80CF20C7fCE3458896BB263D9D8D6404b39f",
+      },
+      abi: dyadLPStakingAbi,
+    },
+    {
+      name: "curveM0DYAD",
+      address: {
+        [mainnet.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
+        [anvil.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
+      },
+      abi: erc20Abi,
     },
   ],
 

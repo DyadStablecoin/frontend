@@ -6,7 +6,6 @@ import { useAccount } from "wagmi";
 import { useReadDNftBalanceOf } from "@/generated";
 import { defaultChain } from "@/lib/config";
 import useIDsByOwner from "@/hooks/useIDsByOwner";
-import dynamic from "next/dynamic";
 import NoteTable from "@/components/note-table";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -22,11 +21,6 @@ import {
 } from "@nextui-org/dropdown";
 import { ChevronDownIcon } from "lucide-react";
 
-const EarnKeroseneContent = dynamic(
-  () => import("@/components/earn-kerosene"),
-  { ssr: false }
-);
-
 export default function Home() {
   const { address, isConnected } = useAccount();
   const searchParams = useSearchParams();
@@ -35,6 +29,8 @@ export default function Home() {
   useEffect(() => {
     if (tab) {
       setSelected(tab as string);
+    } else {
+      setSelected("notes");
     }
   }, [tab]);
 
@@ -45,7 +41,7 @@ export default function Home() {
 
   const { tokens } = useIDsByOwner(address, balance);
 
-  const [selectedNote, setSelectedNote] = useState<any>();
+  const [selectedNote, setSelectedNote] = useState<string | undefined>();
 
   useEffect(() => {
     if (tokens && tokens.length) {
@@ -73,9 +69,9 @@ export default function Home() {
                     <ClaimModalContent />
                   </div>
                 )}
-                <Dropdown>
+                <Dropdown radius="none">
                   <DropdownTrigger>
-                    <div className="w-1/2 md:w-[200px] text-sm md:ml-auto cursor-pointer bg-[#282828] p-3 rounded-full">
+                    <div className="w-1/2 md:w-[200px] text-sm md:ml-auto cursor-pointer bg-[#282828] p-3">
                       <div className="flex justify-between items-center">
                         <div>{`Note Nº ${selectedNote}`}</div>
                         <ChevronDownIcon size={20} />
@@ -84,10 +80,11 @@ export default function Home() {
                   </DropdownTrigger>
                   <DropdownMenu
                     aria-label="Notes Dropdown"
-                    onAction={(key) => setSelectedNote(key)}
+                    onAction={(key) => setSelectedNote(key as string)}
                   >
                     {tokens.map((token) => (
                       <DropdownItem
+                        className="hover:rounded-none rounded-none"
                         key={`${token.result}`}
                       >{`Note Nº ${token.result}`}</DropdownItem>
                     ))}
@@ -116,11 +113,6 @@ export default function Home() {
   );
 
   const tabsData: any = {
-    "earn-kerosene": {
-      label: "Earn Kerosene",
-      tabKey: "earn-kerosene",
-      content: <EarnKeroseneContent />,
-    },
     notes: {
       label: "Manage Notes",
       tabKey: "notes",
@@ -138,11 +130,11 @@ export default function Home() {
     },
   };
 
-  const [selected, setSelected] = useState(tabsData["earn-kerosene"].tabKey);
+  const [selected, setSelected] = useState<string | undefined>();
 
   return (
     <div className="flex-1 max-w-screen-md w-full p-4 mt-4">
-      {tabsData[selected]?.content}
+      {selected && tabsData[selected]?.content}
     </div>
   );
 }
