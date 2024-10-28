@@ -12,19 +12,20 @@ const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
     <NoteCardsContainer>
       <div className="flex flex-col items-center justify-center space-y-4 py-4">
         <Image src={dyadIcon} width={48} alt="DYAD" />
-        <div className="text-center text-[#FAFAFA]">
-          <h3 className="text-xl font-semibold text-primary">
+        <div className="text-[#FAFAFA]">
+          <h3 className="text-center text-xl font-semibold text-primary">
             Welcome to DYAD
           </h3>
-          <p className="text-sm mt-2 text-[grey] w-full md:w-2/3 mx-auto ">
+          <p className="text-sm mt-2 w-full md:w-2/3 mx-auto ">
             <div>
-              DYAD is a stablecoin that you can mint with extreme capital
-              efficiency against wETH, wstETH, tBTC, weETH, and apxETH
+              Dyad is a decentralized stablecoin that allows you to earn the
+              highest stable yield on mainnet.
             </div>
             <div className="py-2">
-              Use DYAD to earn the highest stable yield on mainnet.{" "}
+              Dyad runs on a unique system of NFTs called notes where you can
+              manage your positions and maximize your yield.
             </div>
-            <div>To get started, buy a Note NFT</div>
+            <div>Get started by purchasing your first Note:</div>
           </p>
         </div>
         <div className="w-full">
