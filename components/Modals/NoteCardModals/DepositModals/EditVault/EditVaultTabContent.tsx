@@ -311,6 +311,14 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
           </ButtonComponent>
         )}
       </div>
+      {action === "withdraw" && symbol === "KEROSENE" && (
+        <div className="flex pt-2">
+          <div className="text-xs text-[#966cf3] mr-1 my-auto">*</div>
+          <div className="text-xs">
+            Withdrawing {symbol} will result in some of your XP getting slashed
+          </div>
+        </div>
+      )}
     </div>
   );
 };
