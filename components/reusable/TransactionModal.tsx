@@ -146,7 +146,7 @@ export const TransactionModal = () => {
           <p className="text-2xl font-funky">{status.title}</p>
           {status?.icon}
         </div>
-        <p>{transactionData?.description}</p>
+        <p className="py-4">{transactionData?.description}</p>
         {error && (
           <Alert variant="destructive" className="max-w-full break-words">
             <AlertTriangle />

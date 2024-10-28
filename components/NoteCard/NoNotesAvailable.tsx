@@ -1,8 +1,9 @@
 import React from "react";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
-import { NotebookText } from "lucide-react";
 import Link from "next/link";
 import { ClaimModalContent } from "../claim-modal-content";
+import Image from "next/image";
+import dyadIcon from "../../public/android-chrome-256x256.png";
 
 interface NoNotesAvailableProps {}
 
@@ -10,7 +11,7 @@ const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
   return (
     <NoteCardsContainer>
       <div className="flex flex-col items-center justify-center space-y-4 py-4">
-        <NotebookText size={48} />
+        <Image src={dyadIcon} width={48} alt="DYAD" />
         <div className="text-center text-[#FAFAFA]">
           <h3 className="text-xl font-semibold text-primary">
             Welcome to DYAD
