@@ -55,6 +55,7 @@ type YieldData = {
   noteXp: string;
   rewardRate: string;
   kerosenePerYear: string;
+  effectiveSize: string;
 };
 
 function NoteCard({ tokenId }: { tokenId: string }) {
@@ -200,29 +201,9 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       : "0%";
 
   // Calculate Boost
-  let boost = "N/A";
-  if (yieldData) {
-    const totalXp = Number(yieldData.totalXp);
-    const noteXp = Number(yieldData.noteXp);
-    const totalLiquidity = Number(yieldData.totalLiquidity);
-    const noteLiquidity = Number(yieldData.noteLiquidity);
-
-    // Calculate theoretical total XP with note's XP set to 1
-    const theoreticalTotalXp = totalXp - noteXp + 1;
-
-    // Calculate actual yield proportion
-    const actualYieldProportion =
-      (noteLiquidity * noteXp) / (totalLiquidity * totalXp);
-
-    // Calculate theoretical yield proportion with 1 XP
-    const theoreticalYieldProportion =
-      (noteLiquidity * 1) / (totalLiquidity * theoreticalTotalXp);
-
-    // Calculate Boost
-    const boostValue = (
-      actualYieldProportion / theoreticalYieldProportion
-    ).toFixed(2);
-    boost = isNaN(Number(boostValue)) ? "0x" : `${boostValue}x`;
+  let boost = "0x";
+  if (yieldData && !isNaN(Number(yieldData.effectiveSize))) {
+    boost = `${Number(yieldData.effectiveSize).toFixed(2)}x`;
   }
 
   // Prepare data for the note
