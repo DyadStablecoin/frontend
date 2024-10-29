@@ -7,7 +7,7 @@ import {
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
   useReadDyadLpStakingFactoryNoteIdToTotalClaimed,
   useReadVaultManagerIsExtensionAuthorized,
-  useWriteDyadLpStakingFactoryClaim,
+  useWriteDyadLpStakingFactoryClaimToVault,
   useWriteVaultManagerAuthorizeExtension,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
@@ -89,7 +89,7 @@ const Stake: React.FC<StakeProps> = ({
   const {
     writeContract: writeClaim,
     data: claimTransactionHash,
-  } = useWriteDyadLpStakingFactoryClaim();
+  } = useWriteDyadLpStakingFactoryClaimToVault();
 
   const { status: claimReceiptStatus } = useWaitForTransactionReceipt({
     hash: claimTransactionHash,
