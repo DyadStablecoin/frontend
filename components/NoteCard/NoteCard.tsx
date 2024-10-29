@@ -292,9 +292,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           }
           xpBoost="5.3x"
           XP={
-            contractData?.xpBalance
-              ? fromBigNumber(contractData.xpBalance).toFixed(0)
-              : "0"
+            contractData?.xpBalance ?? 0n
           }
           tokenId={tokenId}
           userAddress={address}
