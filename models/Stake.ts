@@ -7,7 +7,7 @@ export enum StakeCurrencies {
   CURVE_M0_DYAD_LP = "CURVE_M0_DYAD_LP",
 }
 
-export type StakeCurenciesType = "USDC" | "ETH" | "FRAX" | "CURVE_M0_DYAD_LP";
+export type StakeCurenciesType = "ETH" | "FRAX" | "CURVE_M0_DYAD_LP";
 
 export type StakeContractsType = {
   [key in StakeCurenciesType]: {
