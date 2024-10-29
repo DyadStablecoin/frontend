@@ -148,8 +148,8 @@ const Stake: React.FC<StakeProps> = ({
   });
 
   const totalClaimable = useMemo(() => {
-    if (totalClaimed && claimData) {
-      const claimable = claimData.amount - totalClaimed;
+    if (totalClaimed !== undefined && claimData) {
+      const claimable = BigInt(claimData.amount) - totalClaimed;
       return claimable > 0n ? claimable : 0n;
     }
     return 0n;
@@ -257,7 +257,7 @@ const Stake: React.FC<StakeProps> = ({
               }
             >
               <div className="text-xs transition-all">
-                Claim {formatEther(totalClaimable)} KEROSENE
+                Claim {Number(formatEther(totalClaimable)).toFixed(4)} KEROSENE
               </div>
             </ButtonComponent>
           ) : (
