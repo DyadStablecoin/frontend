@@ -6,7 +6,6 @@ import {
   dyadLpStakingFactoryAddress,
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
   useReadDyadLpStakingFactoryNoteIdToTotalClaimed,
-  useReadDyadLpStakingFactoryTotalClaimed,
   useReadVaultManagerIsExtensionAuthorized,
   useWriteDyadLpStakingFactoryClaim,
   useWriteVaultManagerAuthorizeExtension,
@@ -14,7 +13,6 @@ import {
 import { defaultChain } from "@/lib/config";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { PiggyBank, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
@@ -91,7 +89,6 @@ const Stake: React.FC<StakeProps> = ({
   const {
     writeContract: writeClaim,
     data: claimTransactionHash,
-    status: claimTransactionStatus,
   } = useWriteDyadLpStakingFactoryClaim();
 
   const { status: claimReceiptStatus } = useWaitForTransactionReceipt({
