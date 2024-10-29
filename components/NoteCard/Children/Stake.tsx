@@ -3,22 +3,30 @@ import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import {
+  dyadLpStakingFactoryAddress,
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
-  useWriteDyadLpStakingFactoryClaim,
+  useReadDyadLpStakingFactoryNoteIdToTotalClaimed,
+  useReadVaultManagerIsExtensionAuthorized,
+  useWriteDyadLpStakingFactoryClaimToVault,
+  useWriteVaultManagerAuthorizeExtension,
 } from "@/generated";
+import { defaultChain } from "@/lib/config";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { PiggyBank, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import useSWR from "swr";
+import { formatEther, formatUnits } from "viem";
+import { useWaitForTransactionReceipt } from "wagmi";
 
 interface StakeProps {
   isStaked?: boolean;
   APR: string;
   liquidityStaked: string;
   xpBoost: string;
-  XP: string;
-  tokenId: any;
+  XP: bigint;
+  tokenId: string;
+  userAddress: `0x${string}` | undefined;
 }
 
 const Stake: React.FC<StakeProps> = ({
@@ -29,21 +37,73 @@ const Stake: React.FC<StakeProps> = ({
   xpBoost,
   XP,
   tokenId,
+  userAddress,
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [claimData, setClaimData] = useState();
   const stakeDropdownData = Object.values(STAKE_CONTRACTS).map((contract) => ({
     label: contract.label,
     value: contract.stakeKey,
   }));
 
-  const { writeContract: writeClaim } = useWriteDyadLpStakingFactoryClaim();
+  const { data: totalClaimed, refetch: refetchTotalClaimed } =
+    useReadDyadLpStakingFactoryNoteIdToTotalClaimed({
+      args: [BigInt(tokenId)],
+    });
+
+  const { data: extensionEnabled, refetch: refetchExtensionEnabled } =
+    useReadVaultManagerIsExtensionAuthorized({
+      args: [userAddress!, dyadLpStakingFactoryAddress[defaultChain.id]],
+      query: {
+        enabled: !!userAddress,
+      },
+    });
+
+  const {
+    writeContract: writeEnableExtension,
+    data: enableExtensionTransactionHash,
+    status: enableExtensionTransactionStatus,
+  } = useWriteVaultManagerAuthorizeExtension();
+
+  const {
+    status: enableExtensionReceiptStatus,
+    data: enableExtensionReceiptData,
+  } = useWaitForTransactionReceipt({
+    hash: enableExtensionTransactionHash,
+  });
+
+  useEffect(() => {
+    if (
+      enableExtensionTransactionStatus === "success" &&
+      enableExtensionReceiptData?.status === "success"
+    ) {
+      refetchExtensionEnabled();
+    }
+  }, [
+    enableExtensionTransactionStatus,
+    enableExtensionReceiptData,
+    refetchExtensionEnabled,
+  ]);
+
+  const {
+    writeContract: writeClaim,
+    data: claimTransactionHash,
+  } = useWriteDyadLpStakingFactoryClaimToVault();
+
+  const { status: claimReceiptStatus } = useWaitForTransactionReceipt({
+    hash: claimTransactionHash,
+  });
+
+  useEffect(() => {
+    if (claimReceiptStatus === "success") {
+      refetchTotalClaimed();
+    }
+  }, [claimReceiptStatus, refetchTotalClaimed]);
 
   const { data: stakeBalance } =
     useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited({
-      args: [tokenId],
+      args: [BigInt(tokenId)],
     });
 
   const stakeData = [
@@ -53,7 +113,7 @@ const Stake: React.FC<StakeProps> = ({
     },
     {
       label: "XP",
-      value: XP,
+      value: Number(formatUnits(XP, 27)).toFixed(2),
     },
     {
       label: "XP boost",
@@ -74,24 +134,26 @@ const Stake: React.FC<StakeProps> = ({
     }
   }, [stakeKey, isStaked]);
 
-  useEffect(() => {
-    const fetchClaimData = async () => {
-      try {
-        const response = await fetch(
-          `https://api.dyadstable.xyz/api/rewards/${tokenId}`
-        );
-        const data = await response.json();
-        console.log("Claim data:", data);
-        setClaimData(data);
-      } catch (error) {
-        console.error("Claim data: Error fetching rewards:", error);
-      }
-    };
-
-    if (tokenId) {
-      fetchClaimData();
+  const { data: claimData } = useSWR(tokenId, async (tokenId) => {
+    if (!tokenId) return undefined;
+    try {
+      const response = await fetch(
+        `https://api.dyadstable.xyz/api/rewards/${tokenId}`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Claim data: Error fetching rewards:", error);
     }
-  }, [tokenId]);
+  });
+
+  const totalClaimable = useMemo(() => {
+    if (totalClaimed !== undefined && claimData) {
+      const claimable = BigInt(claimData.amount) - totalClaimed;
+      return claimable > 0n ? claimable : 0n;
+    }
+    return 0n;
+  }, [totalClaimed, claimData]);
 
   return (
     <div>
@@ -177,21 +239,47 @@ const Stake: React.FC<StakeProps> = ({
             </DialogContent>
           </Dialog>
         )}
-        {isStaked && (
-          <ButtonComponent
-            className="rounded-none h-[47px]"
-            variant="bordered"
-            onClick={() =>
-              writeClaim({
-                args: [tokenId, claimData?.amount, claimData?.proof],
-              })
-            }
-          >
-            <div className="text-xs transition-all">
-              Claim {claimData?.amount} KEROSENE
-            </div>
-          </ButtonComponent>
-        )}
+        {isStaked &&
+          (extensionEnabled ? (
+            <ButtonComponent
+              disabled={
+                totalClaimable === 0n ||
+                enableExtensionTransactionStatus === "pending" ||
+                (enableExtensionTransactionHash &&
+                  enableExtensionReceiptStatus === "pending")
+              }
+              className="rounded-none h-[47px]"
+              variant="bordered"
+              onClick={() =>
+                writeClaim({
+                  args: [BigInt(tokenId), claimData?.amount, claimData?.proof],
+                })
+              }
+            >
+              <div className="text-xs transition-all">
+                Claim {Number(formatEther(totalClaimable)).toFixed(4)} KEROSENE
+              </div>
+            </ButtonComponent>
+          ) : (
+            <ButtonComponent
+              disabled={
+                enableExtensionTransactionStatus === "pending" ||
+                (enableExtensionTransactionHash &&
+                  enableExtensionReceiptStatus === "pending")
+              }
+              className="rounded-none h-[47px]"
+              variant="bordered"
+              onClick={() =>
+                writeEnableExtension({
+                  args: [dyadLpStakingFactoryAddress[defaultChain.id], true],
+                })
+              }
+            >
+              <div className="text-xs transition-all">
+                Enable extension to claim
+              </div>
+            </ButtonComponent>
+          ))}
       </div>
 
       {isStaked && (
