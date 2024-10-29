@@ -107,7 +107,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         address: xpAddress[defaultChain.id],
         abi: xpAbi,
         functionName: "balanceOf",
-        args: [address],
+        args: [address!],
       },
       {
         address: dyadLpStakingCurveM0DyadAddress[defaultChain.id],
