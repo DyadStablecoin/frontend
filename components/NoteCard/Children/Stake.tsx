@@ -49,9 +49,10 @@ const Stake: React.FC<StakeProps> = ({
     value: contract.stakeKey,
   }));
 
-  const { data: totalClaimed, refetch: refetchTotalClaimed } = useReadDyadLpStakingFactoryNoteIdToTotalClaimed({
-    args: [BigInt(tokenId)],
-  });
+  const { data: totalClaimed, refetch: refetchTotalClaimed } =
+    useReadDyadLpStakingFactoryNoteIdToTotalClaimed({
+      args: [BigInt(tokenId)],
+    });
 
   const { data: extensionEnabled, refetch: refetchExtensionEnabled } =
     useReadVaultManagerIsExtensionAuthorized({
@@ -67,19 +68,31 @@ const Stake: React.FC<StakeProps> = ({
     status: enableExtensionTransactionStatus,
   } = useWriteVaultManagerAuthorizeExtension();
 
-  const { status: enableExtensionReceiptStatus } = useWaitForTransactionReceipt(
-    {
-      hash: enableExtensionTransactionHash,
-    }
-  );
+  const {
+    status: enableExtensionReceiptStatus,
+    data: enableExtensionReceiptData,
+  } = useWaitForTransactionReceipt({
+    hash: enableExtensionTransactionHash,
+  });
 
   useEffect(() => {
-    if (enableExtensionTransactionStatus === "success") {
+    if (
+      enableExtensionTransactionStatus === "success" &&
+      enableExtensionReceiptData?.status === "success"
+    ) {
       refetchExtensionEnabled();
     }
-  }, [enableExtensionTransactionStatus, refetchExtensionEnabled]);
+  }, [
+    enableExtensionTransactionStatus,
+    enableExtensionReceiptData,
+    refetchExtensionEnabled,
+  ]);
 
-  const { writeContract: writeClaim, data: claimTransactionHash, status: claimTransactionStatus } = useWriteDyadLpStakingFactoryClaim();
+  const {
+    writeContract: writeClaim,
+    data: claimTransactionHash,
+    status: claimTransactionStatus,
+  } = useWriteDyadLpStakingFactoryClaim();
 
   const { status: claimReceiptStatus } = useWaitForTransactionReceipt({
     hash: claimTransactionHash,
@@ -127,7 +140,9 @@ const Stake: React.FC<StakeProps> = ({
   const { data: claimData } = useSWR(tokenId, async (tokenId) => {
     if (!tokenId) return undefined;
     try {
-      const response = await fetch(`https://api.dyadstable.xyz/api/rewards/${tokenId}`);
+      const response = await fetch(
+        `https://api.dyadstable.xyz/api/rewards/${tokenId}`
+      );
       const data = await response.json();
       return data;
     } catch (error) {
@@ -230,7 +245,12 @@ const Stake: React.FC<StakeProps> = ({
         {isStaked &&
           (extensionEnabled ? (
             <ButtonComponent
-              disabled={totalClaimable === 0n || enableExtensionTransactionStatus === "pending" || enableExtensionReceiptStatus === "pending"}
+              disabled={
+                totalClaimable === 0n ||
+                enableExtensionTransactionStatus === "pending" ||
+                (enableExtensionTransactionHash &&
+                  enableExtensionReceiptStatus === "pending")
+              }
               className="rounded-none h-[47px]"
               variant="bordered"
               onClick={() =>
@@ -245,7 +265,11 @@ const Stake: React.FC<StakeProps> = ({
             </ButtonComponent>
           ) : (
             <ButtonComponent
-              disabled={enableExtensionTransactionStatus === "pending" || enableExtensionReceiptStatus === "pending"}
+              disabled={
+                enableExtensionTransactionStatus === "pending" ||
+                (enableExtensionTransactionHash &&
+                  enableExtensionReceiptStatus === "pending")
+              }
               className="rounded-none h-[47px]"
               variant="bordered"
               onClick={() =>
