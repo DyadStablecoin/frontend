@@ -33,7 +33,6 @@ import {
 import Stake from "./Children/Stake";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
-import { from } from "@apollo/client";
 import { formatCurrency, formatUSD } from "@/utils/currency";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
 
@@ -44,6 +43,9 @@ type ContractData = {
   totalCollateralValue?: bigint;
   minCollatRatio?: bigint;
   mintedDyad?: bigint;
+  xpBalance?: bigint;
+  dyadLpStakingCurveM0DyadBalance?: bigint;
+  keroseneDeposited?: bigint;
 };
 
 type YieldData = {
@@ -77,7 +79,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     fetchYieldData();
   }, [tokenId]);
 
-  // Fetch collateralization ratio
+  // Fetch contract data
   const { data: contractData, isSuccess: dataLoaded } = useReadContracts({
     contracts: [
       {
@@ -189,8 +191,39 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   // Calculate APR
   const calculatedAPR =
     yieldData && Number(yieldData.noteLiquidity) !== 0
-      ? `${((Number(yieldData.kerosenePerYear) / Number(yieldData.noteLiquidity)) * 100 * (kerosenePrice || 0)).toFixed(2)}%`
+      ? `${(
+          (Number(yieldData.kerosenePerYear) /
+            Number(yieldData.noteLiquidity)) *
+          100 *
+          (kerosenePrice || 0)
+        ).toFixed(2)}%`
       : "0%";
+
+  // Calculate Boost
+  let boost = "N/A";
+  if (yieldData) {
+    const totalXp = Number(yieldData.totalXp);
+    const noteXp = Number(yieldData.noteXp);
+    const totalLiquidity = Number(yieldData.totalLiquidity);
+    const noteLiquidity = Number(yieldData.noteLiquidity);
+
+    // Calculate theoretical total XP with note's XP set to 1
+    const theoreticalTotalXp = totalXp - noteXp + 1;
+
+    // Calculate actual yield proportion
+    const actualYieldProportion =
+      (noteLiquidity * noteXp) / (totalLiquidity * totalXp);
+
+    // Calculate theoretical yield proportion with 1 XP
+    const theoreticalYieldProportion =
+      (noteLiquidity * 1) / (totalLiquidity * theoreticalTotalXp);
+
+    // Calculate Boost
+    const boostValue = (
+      actualYieldProportion / theoreticalYieldProportion
+    ).toFixed(2);
+    boost = isNaN(Number(boostValue)) ? "0x" : `${boostValue}x`;
+  }
 
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
@@ -216,9 +249,9 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Liquidity Staked",
-      value: fromBigNumber(
-        contractData?.dyadLpStakingCurveM0DyadBalance
-      ).toFixed(2),
+      value: contractData?.dyadLpStakingCurveM0DyadBalance
+        ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2)
+        : "0",
       highlighted: false,
     },
     {
@@ -290,10 +323,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
                 ).toFixed(2)
               : "0"
           }
-          xpBoost="5.3x"
-          XP={
-            contractData?.xpBalance ?? 0n
-          }
+          xpBoost={boost}
+          XP={contractData?.xpBalance ?? 0n}
           tokenId={tokenId}
           userAddress={address}
         />
