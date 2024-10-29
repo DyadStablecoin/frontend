@@ -297,6 +297,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
               : "0"
           }
           tokenId={tokenId}
+          userAddress={address}
         />
       ),
     },

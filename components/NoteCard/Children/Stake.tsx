@@ -3,14 +3,19 @@ import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import {
+  dyadLpStakingFactoryAddress,
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
+  useReadVaultManagerIsExtensionAuthorized,
   useWriteDyadLpStakingFactoryClaim,
+  useWriteVaultManagerAuthorizeExtension,
 } from "@/generated";
+import { defaultChain } from "@/lib/config";
 import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { PiggyBank, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { formatEther } from "viem";
 
 interface StakeProps {
   isStaked?: boolean;
@@ -19,6 +24,7 @@ interface StakeProps {
   xpBoost: string;
   XP: string;
   tokenId: any;
+  userAddress: `0x${string}` | undefined;
 }
 
 const Stake: React.FC<StakeProps> = ({
@@ -29,6 +35,7 @@ const Stake: React.FC<StakeProps> = ({
   xpBoost,
   XP,
   tokenId,
+  userAddress
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKey, setStakeKey] = useState<StakeCurenciesType | null>(null);
@@ -38,6 +45,15 @@ const Stake: React.FC<StakeProps> = ({
     label: contract.label,
     value: contract.stakeKey,
   }));
+
+  const { data: extensionEnabled } = useReadVaultManagerIsExtensionAuthorized({
+    args: [userAddress!, dyadLpStakingFactoryAddress[defaultChain.id]],
+    query: {
+      enabled: !!userAddress,
+    },
+  })
+
+  const { writeContract: writeEnableExtension } = useWriteVaultManagerAuthorizeExtension();
 
   const { writeContract: writeClaim } = useWriteDyadLpStakingFactoryClaim();
 
@@ -177,8 +193,9 @@ const Stake: React.FC<StakeProps> = ({
             </DialogContent>
           </Dialog>
         )}
-        {isStaked && (
+        {isStaked && (extensionEnabled ? (
           <ButtonComponent
+            disabled={!(claimData?.amount > 0n)}
             className="rounded-none h-[47px]"
             variant="bordered"
             onClick={() =>
@@ -188,9 +205,23 @@ const Stake: React.FC<StakeProps> = ({
             }
           >
             <div className="text-xs transition-all">
-              Claim {claimData?.amount} KEROSENE
+              Claim {formatEther(claimData?.amount ?? 0n)} KEROSENE
+            </div>
+          </ButtonComponent>) : (
+            <ButtonComponent
+            className="rounded-none h-[47px]"
+            variant="bordered"
+            onClick={() =>
+              writeEnableExtension({
+                args: [dyadLpStakingFactoryAddress[defaultChain.id], true],
+              })
+            }
+          >
+            <div className="text-xs transition-all">
+              Enable extension to claim
             </div>
           </ButtonComponent>
+          )
         )}
       </div>
 
