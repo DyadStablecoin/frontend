@@ -15,5 +15,6 @@ export type StakeContractsType = {
     stakeKey: StakeCurenciesType;
     address: Address;
     stakingContract?: Address;
+    name?: string;
   };
 };
