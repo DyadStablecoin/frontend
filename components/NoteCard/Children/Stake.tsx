@@ -42,6 +42,8 @@ const Stake: React.FC<StakeProps> = ({
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKeys, setStakeKeys] = useState<StakeCurenciesType[] | null>(null);
+  const [activeStakeKey, setActiveStakeKey] =
+    useState<StakeCurenciesType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: totalClaimed, refetch: refetchTotalClaimed } =
@@ -214,9 +216,13 @@ const Stake: React.FC<StakeProps> = ({
             <div
               className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-2" : "md:grid-cols-1"}`}
             >
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <Dialog
+                open={dialogOpen && activeStakeKey === stakeKey}
+                onOpenChange={setDialogOpen}
+              >
                 <DialogTrigger
                   className={isStaked ? "col-span-1" : "col-span-3"}
+                  onClick={() => setActiveStakeKey(stakeKey)}
                 >
                   <ButtonComponent
                     className={`rounded-none ${isStaked ? "h-[47px] text-xs" : "text-sm"}`}
