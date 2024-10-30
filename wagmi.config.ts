@@ -245,10 +245,26 @@ export default defineConfig({
       abi: dyadLPStakingAbi,
     },
     {
+      name: "dyadLPStakingCurveUSDCDYAD",
+      address: {
+        [mainnet.id]: "0xbEdC56Bcf36BFe06B36fe7872C7BBD567a0735c3",
+        [anvil.id]: "0xbEdC56Bcf36BFe06B36fe7872C7BBD567a0735c3",
+      },
+      abi: dyadLPStakingAbi,
+    },
+    {
       name: "curveM0DYAD",
       address: {
         [mainnet.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
         [anvil.id]: "0xa969cFCd9e583edb8c8B270Dc8CaFB33d6Cf662D",
+      },
+      abi: erc20Abi,
+    },
+    {
+      name: "curveUSDCDYAD",
+      address: {
+        [mainnet.id]: "0x1507bf3F8712c496fA4679a4bA827F633979dBa4",
+        [anvil.id]: "0x1507bf3F8712c496fA4679a4bA827F633979dBa4",
       },
       abi: erc20Abi,
     },

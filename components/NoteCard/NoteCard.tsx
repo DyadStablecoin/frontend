@@ -12,6 +12,8 @@ import {
   xpAbi,
   dyadLpStakingCurveM0DyadAddress,
   dyadLpStakingCurveM0DyadAbi,
+  dyadLpStakingCurveUsdcdyadAddress,
+  dyadLpStakingCurveUsdcdyadAbi,
   keroseneVaultV2Address,
   keroseneVaultV2Abi,
 } from "@/generated";
@@ -33,8 +35,8 @@ import {
 import Stake from "./Children/Stake";
 import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
-import { formatCurrency, formatUSD } from "@/utils/currency";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
+import { StakeCurrencies } from "@/models/Stake";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -45,6 +47,7 @@ type ContractData = {
   mintedDyad?: bigint;
   xpBalance?: bigint;
   dyadLpStakingCurveM0DyadBalance?: bigint;
+  dyadLpStakingCurveUSDCDyadBalance?: bigint;
   keroseneDeposited?: bigint;
 };
 
@@ -124,6 +127,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         functionName: "id2asset",
         args: [BigInt(tokenId)],
       },
+      {
+        address: dyadLpStakingCurveUsdcdyadAddress[defaultChain.id],
+        abi: dyadLpStakingCurveUsdcdyadAbi,
+        functionName: "noteIdToAmountDeposited",
+        args: [BigInt(tokenId)],
+      },
     ],
     allowFailure: false,
     query: {
@@ -137,6 +146,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         const xpBalance = data[4];
         const dyadLpStakingCurveM0DyadBalance = data[5];
         const keroseneDeposited = data[6];
+        const dyadLpStakingCurveUSDCDyadBalance = data[7];
 
         return {
           collatRatio,
@@ -148,6 +158,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
           xpBalance,
           dyadLpStakingCurveM0DyadBalance,
           keroseneDeposited,
+          dyadLpStakingCurveUSDCDyadBalance,
         };
       },
     },
@@ -297,13 +308,22 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       content: (
         <Stake
           APR={calculatedAPR}
-          liquidityStaked={
-            contractData?.dyadLpStakingCurveM0DyadBalance
-              ? fromBigNumber(
-                  contractData.dyadLpStakingCurveM0DyadBalance
-                ).toFixed(2)
-              : "0"
-          }
+          liquidityStaked={{
+            [StakeCurrencies.CURVE_M0_DYAD_LP]: {
+              liquidityStaked: contractData?.dyadLpStakingCurveM0DyadBalance
+                ? fromBigNumber(
+                    contractData.dyadLpStakingCurveM0DyadBalance
+                  ).toFixed(2)
+                : "0",
+            },
+            [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
+              liquidityStaked: contractData?.dyadLpStakingCurveUSDCDyadBalance
+                ? fromBigNumber(
+                    contractData.dyadLpStakingCurveUSDCDyadBalance
+                  ).toFixed(2)
+                : "0",
+            },
+          }}
           xpBoost={boost}
           XP={contractData?.xpBalance ?? 0n}
           tokenId={tokenId}
