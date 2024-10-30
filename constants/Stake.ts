@@ -17,6 +17,8 @@ export const STAKE_CONTRACTS: StakeContractsType = {
     label: "USDC - DYAD",
     stakeKey: StakeCurrencies.CURVE_USDC_DYAD_LP,
     address: "0x8e0e695fEC31d5502C2f3E860Fe560Ea80b03E1D",
+    stakingContract: "0xe48c80CF20C7fCE3458896BB263D9D8D6404b39f",
+    name: "USDC/DYAD LP",
     iconLeft: USDCIcon,
     iconRight: dyadIcon,
   },
