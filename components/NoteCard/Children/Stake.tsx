@@ -5,13 +5,18 @@ import { STAKE_CONTRACTS } from "@/constants/Stake";
 import {
   dyadLpStakingFactoryAddress,
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
+  useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited,
   useReadDyadLpStakingFactoryNoteIdToTotalClaimed,
   useReadVaultManagerIsExtensionAuthorized,
   useWriteDyadLpStakingFactoryClaimToVault,
   useWriteVaultManagerAuthorizeExtension,
 } from "@/generated";
 import { defaultChain } from "@/lib/config";
-import { LiquidityStakedType, StakeCurenciesType } from "@/models/Stake";
+import {
+  LiquidityStakedType,
+  StakeCurenciesType,
+  StakeCurrencies,
+} from "@/models/Stake";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import Link from "next/link";
@@ -103,6 +108,11 @@ const Stake: React.FC<StakeProps> = ({
       args: [BigInt(tokenId)],
     });
 
+  const { data: stakeBalanceUSDCDyad } =
+    useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited({
+      args: [BigInt(tokenId)],
+    });
+
   const stakeData = [
     {
       label: "APR",
@@ -168,6 +178,11 @@ const Stake: React.FC<StakeProps> = ({
     </div>
   );
 
+  const hasStakeBalance =
+    activeStakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
+      ? stakeBalance > 0n
+      : stakeBalanceUSDCDyad > 0n;
+
   return (
     <>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-2 mb-10">
@@ -214,7 +229,7 @@ const Stake: React.FC<StakeProps> = ({
               </div>
             </div>
             <div
-              className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && stakeBalance !== undefined && stakeBalance > 0n ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+              className={`flex flex-col gap-y-2 md:grid md:gap-x-8 h-full w-full mt-8 md:mt-4 ${isStaked && hasStakeBalance ? "md:grid-cols-2" : "md:grid-cols-1"}`}
             >
               <Dialog
                 open={dialogOpen && activeStakeKey === stakeKey}
@@ -248,7 +263,7 @@ const Stake: React.FC<StakeProps> = ({
                   />
                 </DialogContent>
               </Dialog>
-              {isStaked && stakeBalance !== undefined && stakeBalance > 0n && (
+              {isStaked && hasStakeBalance && (
                 <Dialog>
                   <DialogTrigger>
                     <ButtonComponent
