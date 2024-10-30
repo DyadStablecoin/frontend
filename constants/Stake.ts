@@ -12,6 +12,7 @@ export const STAKE_CONTRACTS: StakeContractsType = {
     name: "wM/DYAD LP",
     iconLeft: wmIcon,
     iconRight: dyadIcon,
+    link: "https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit", 
   },
   [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
     label: "USDC - DYAD",
@@ -21,5 +22,6 @@ export const STAKE_CONTRACTS: StakeContractsType = {
     name: "USDC/DYAD LP",
     iconLeft: USDCIcon,
     iconRight: dyadIcon,
+    link: "https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit", 
   },
 };

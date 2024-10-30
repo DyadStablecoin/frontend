@@ -17,6 +17,7 @@ export type StakeContractsType = {
     name?: string;
     iconLeft?: string | StaticImport;
     iconRight?: string | StaticImport;
+    link?: string;
   };
 };
 

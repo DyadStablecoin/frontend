@@ -281,7 +281,7 @@ const Stake: React.FC<StakeProps> = ({
                 on{" "}
                 <Link
                   className="text-[#966CF3] underline"
-                  href="https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit"
+                  href={STAKE_CONTRACTS[stakeKey].link}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
