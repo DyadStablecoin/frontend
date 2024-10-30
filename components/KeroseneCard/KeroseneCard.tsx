@@ -3,17 +3,25 @@ import ButtonComponent from "@/components/reusable/ButtonComponent";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
 import { DialogClose } from "../ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
-import { StakeCurenciesType } from "@/models/Stake";
+import { StakeCurenciesType, StakeCurrencies } from "@/models/Stake";
 import { useState } from "react";
 import {
   useReadCurveM0DyadAllowance,
   useReadCurveM0DyadBalanceOf,
+  useReadCurveUsdcdyad,
+  useReadCurveUsdcdyadAllowance,
+  useReadCurveUsdcdyadBalanceOf,
   useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited,
+  useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited,
   useWriteCurveM0DyadApprove,
+  useWriteCurveUsdcdyadApprove,
   useWriteDyadLpStakingCurveM0DyadDeposit,
   useWriteDyadLpStakingCurveM0DyadWithdraw,
+  useWriteDyadLpStakingCurveUsdcdyadDeposit,
+  useWriteDyadLpStakingCurveUsdcdyadWithdraw,
 } from "@/generated";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
+import { ST } from "next/dist/shared/lib/utils";
 
 interface KeroseneProps {
   currency: string;
@@ -35,15 +43,34 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
 
   const { writeContract: writeApprove } = useWriteCurveM0DyadApprove();
+  const { writeContract: writeApproveUSDCDyad } =
+    useWriteCurveUsdcdyadApprove();
+
   const { writeContract: writeStake } =
     useWriteDyadLpStakingCurveM0DyadDeposit();
+
+  const { writeContract: writeStakeUSDCDyad } =
+    useWriteDyadLpStakingCurveUsdcdyadDeposit();
+
   const { data: allowance } = useReadCurveM0DyadAllowance({
     args: [address!, stakingContract!],
   });
+
+  const { data: allowanceUSDCDyad } = useReadCurveUsdcdyadAllowance({
+    args: [address!, stakingContract!],
+  });
+
   const { writeContract: writeUnstake } =
     useWriteDyadLpStakingCurveM0DyadWithdraw();
 
+  const { writeContract: writeUnstakeUSDCDyad } =
+    useWriteDyadLpStakingCurveUsdcdyadWithdraw();
+
   const { data: lpBalance } = useReadCurveM0DyadBalanceOf({
+    args: [address!],
+  });
+
+  const { data: lpBalanceUSDCDYAD } = useReadCurveUsdcdyadBalanceOf({
     args: [address!],
   });
 
@@ -52,12 +79,17 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
       args: [tokenId],
     });
 
+  const { data: stakeBalanceUSDCDyad } =
+    useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited({
+      args: [tokenId],
+    });
+
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
+  const needsApprovalUSDCDyad =
+    BigInt(stakeInputValue || "0") > (allowanceUSDCDyad || 0n);
 
   const canUnstake =
     stakeBalance && BigInt(unstakeInputValue || "0") <= stakeBalance;
-
-  const canStake = lpBalance && BigInt(stakeInputValue || "0") <= lpBalance;
 
   return (
     <div className="text-sm font-semibold text-[#A1A1AA]">
@@ -70,8 +102,14 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             className="ml-auto cursor-pointer md:hidden"
             onClick={() =>
               actionType === "stake"
-                ? setStakeInputValue(`${lpBalance?.toString()}`)
-                : setUnstakeInputValue(`${stakeBalance?.toString()}`)
+                ? STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                  StakeCurrencies.CURVE_M0_DYAD_LP
+                  ? setStakeInputValue(`${lpBalance?.toString()}`)
+                  : setStakeInputValue(`${lpBalanceUSDCDYAD?.toString()}`)
+                : STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                    StakeCurrencies.CURVE_M0_DYAD_LP
+                  ? setUnstakeInputValue(`${stakeBalance?.toString()}`)
+                  : setUnstakeInputValue(`${stakeBalanceUSDCDyad?.toString()}`)
             }
           >
             Max
@@ -102,8 +140,16 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               width={"100px"}
               onClick={() =>
                 actionType === "stake"
-                  ? setStakeInputValue(`${lpBalance?.toString()}`)
-                  : setUnstakeInputValue(`${stakeBalance?.toString()}`)
+                  ? STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                    StakeCurrencies.CURVE_M0_DYAD_LP
+                    ? setStakeInputValue(`${lpBalance?.toString()}`)
+                    : setStakeInputValue(`${lpBalanceUSDCDYAD?.toString()}`)
+                  : STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                      StakeCurrencies.CURVE_M0_DYAD_LP
+                    ? setUnstakeInputValue(`${stakeBalance?.toString()}`)
+                    : setUnstakeInputValue(
+                        `${stakeBalanceUSDCDyad?.toString()}`
+                      )
               }
             >
               Max
@@ -119,19 +165,42 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
             <ButtonComponent
               disabled={!stakeInputValue || BigInt(stakeInputValue) === 0n}
               onClick={() =>
-                needsApproval
-                  ? writeApprove({
-                      args: [stakingContract!, stakeInputValue],
-                    })
-                  : writeStake({
-                      args: [tokenId, stakeInputValue],
-                      onSuccess: () => {
-                        onSuccess?.();
-                      },
-                    })
+                STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                StakeCurrencies.CURVE_M0_DYAD_LP
+                  ? needsApproval
+                  : needsApprovalUSDCDyad
+                    ? STAKE_CONTRACTS[currency as StakeCurenciesType]
+                        .stakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
+                      ? writeApprove({
+                          args: [stakingContract!, stakeInputValue],
+                        })
+                      : writeApproveUSDCDyad({
+                          args: [stakingContract!, stakeInputValue],
+                        })
+                    : STAKE_CONTRACTS[currency as StakeCurenciesType]
+                          .stakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
+                      ? writeStake({
+                          args: [tokenId, stakeInputValue],
+                          onSuccess: () => {
+                            onSuccess?.();
+                          },
+                        })
+                      : writeStakeUSDCDyad({
+                          args: [tokenId, stakeInputValue],
+                          onSuccess: () => {
+                            onSuccess?.();
+                          },
+                        })
               }
             >
-              {needsApproval ? "Approve" : "Stake"}
+              {STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+              StakeCurrencies.CURVE_M0_DYAD_LP
+                ? needsApproval
+                  ? "Approve"
+                  : "Stake"
+                : needsApprovalUSDCDyad
+                  ? "Approve"
+                  : "Stake"}
             </ButtonComponent>
           ) : (
             <ButtonComponent
@@ -141,12 +210,20 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 !canUnstake
               }
               onClick={() =>
-                writeUnstake({
-                  args: [tokenId, unstakeInputValue],
-                  onSuccess: () => {
-                    onSuccess?.();
-                  },
-                })
+                STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                StakeCurrencies.CURVE_M0_DYAD_LP
+                  ? writeUnstake({
+                      args: [tokenId, unstakeInputValue],
+                      onSuccess: () => {
+                        onSuccess?.();
+                      },
+                    })
+                  : writeUnstakeUSDCDyad({
+                      args: [tokenId, unstakeInputValue],
+                      onSuccess: () => {
+                        onSuccess?.();
+                      },
+                    })
               }
             >
               Unstake
