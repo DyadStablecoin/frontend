@@ -91,6 +91,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const canUnstake =
     stakeBalance && BigInt(unstakeInputValue || "0") <= stakeBalance;
 
+  const canUnstakeUSDCDyad =
+    stakeBalanceUSDCDyad &&
+    BigInt(unstakeInputValue || "0") <= stakeBalanceUSDCDyad;
+
   return (
     <div className="text-sm font-semibold text-[#A1A1AA]">
       <div className="text-2xl text-[#FAFAFA] flex justify-between mt-[15px] w-full">
@@ -207,7 +211,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               disabled={
                 !unstakeInputValue ||
                 unstakeInputValue.length <= 0 ||
-                !canUnstake
+                STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                  StakeCurrencies.CURVE_M0_DYAD_LP
+                  ? canUnstake
+                  : canUnstakeUSDCDyad
               }
               onClick={() =>
                 STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
