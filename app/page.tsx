@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       )}
       <div className="flex flex-col gap-4">
-        {false ? (
+        {tokens && tokens?.length ? (
           <>
             <div className="md:flex justify-between items-center">
               <div className="text-3xl md:mb-0 mb-6">
