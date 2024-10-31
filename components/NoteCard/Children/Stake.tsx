@@ -33,6 +33,7 @@ interface StakeProps {
   XP: bigint;
   tokenId: string;
   userAddress: `0x${string}` | undefined;
+  individualAPR?: any;
 }
 
 const Stake: React.FC<StakeProps> = ({
@@ -44,6 +45,7 @@ const Stake: React.FC<StakeProps> = ({
   XP,
   tokenId,
   userAddress,
+  individualAPR,
 }) => {
   // stake key should be set to the stake contract key corresponding to the currency in the LP (if there is an LP already staked)
   const [stakeKeys, setStakeKeys] = useState<StakeCurenciesType[] | null>(null);
@@ -223,6 +225,17 @@ const Stake: React.FC<StakeProps> = ({
                     {
                       liquidityStaked[stakeKey as StakeCurenciesType]
                         .liquidityStaked
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className={`py-2.5`}>
+                <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
+                  <div>APR</div>
+                  <div className="text-right">
+                    {
+                      individualAPR[stakeKey as StakeCurenciesType]
+                        .individualAPR
                     }
                   </div>
                 </div>
