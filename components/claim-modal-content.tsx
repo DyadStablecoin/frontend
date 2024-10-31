@@ -73,7 +73,7 @@ export const ClaimModalContent: React.FC<ClaimModalProps> = ({
           trigger={
             variant === "rounded-blue-shadow" ? (
               <div
-                className="cursor-pointer border-1 border-[#000000] rounded-full w-full flex py-[14px] px-[40px] sm:px-[55.5px]"
+                className="cursor-pointer border-1 border-[#000000] rounded-full w-full flex py-[14px] px-[40px] sm:px-[55.5px] animate-pulse"
                 style={{
                   boxShadow: "0px 0px 39px 1px #5CBBFF",
                 }}
