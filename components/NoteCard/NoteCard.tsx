@@ -217,6 +217,18 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     boost = `${Number(yieldData.effectiveSize).toFixed(2)}x`;
   }
 
+  const totalLiquidityStaked = contractData?.dyadLpStakingCurveM0DyadBalance
+    ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2)
+    : "0";
+
+  const totalUsdcdDyadStaked = contractData?.dyadLpStakingCurveUSDCDyadBalance
+    ? fromBigNumber(contractData.dyadLpStakingCurveUSDCDyadBalance).toFixed(2)
+    : "0";
+
+  const totalCombinedLiquidityStaked = (
+    Number(totalLiquidityStaked) + Number(totalUsdcdDyadStaked)
+  ).toFixed(2);
+
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
     {
@@ -241,9 +253,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Liquidity Staked",
-      value: contractData?.dyadLpStakingCurveM0DyadBalance
-        ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2)
-        : "0",
+      value: totalCombinedLiquidityStaked,
       highlighted: false,
     },
     {
