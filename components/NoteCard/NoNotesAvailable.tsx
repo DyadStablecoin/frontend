@@ -1,45 +1,58 @@
 import React from "react";
 import NoteCardsContainer from "../reusable/NoteCardsContainer";
 import Link from "next/link";
-import { ClaimModalContent } from "../claim-modal-content";
 import Image from "next/image";
-import dyadIcon from "../../public/android-chrome-256x256.png";
+import dyadIconOutlined from "../../public/dyad-logo-outlined.svg";
+import keroseneIconOutlined from "../../public/kerosene-logo-outlined.svg";
+import { ClaimModalContent } from "../claim-modal-content";
+import useWindowSize from "@/hooks/useWindowSize";
 
 interface NoNotesAvailableProps {}
 
 const NoNotesAvailable: React.FC<NoNotesAvailableProps> = ({}) => {
+  const { windowWidth } = useWindowSize();
   return (
-    <NoteCardsContainer>
-      <div className="flex flex-col items-center justify-center space-y-4 py-4">
-        <Image src={dyadIcon} width={48} alt="DYAD" />
-        <div className="text-[#FAFAFA]">
-          <h3 className="text-center text-xl font-semibold text-primary">
-            Welcome to DYAD
-          </h3>
-          <p className="text-sm mt-2 w-full md:w-2/3 mx-auto ">
-            <div>
-              Dyad is a decentralized stablecoin that allows you to earn the
-              highest stable yield on mainnet.
-            </div>
-            <div className="py-2">
-              Dyad runs on a unique system of NFTs called notes where you can
-              manage your positions and maximize your yield.
-            </div>
-            <div>Get started by purchasing your first Note:</div>
-          </p>
-        </div>
-        <div className="w-full">
-          <div className="w-full md:w-2/3 m-auto">
-            <ClaimModalContent />
+    <NoteCardsContainer className="bg-[#242424]">
+      <div className="p-0 sm:p-5">
+        <div className="flex justify-between items-center mb-[35px] sm:mb-[51px]">
+          <div className="text-xl sm:text-[32px] text-white font-semibold">
+            WELCOME TO DYAD
+          </div>
+          <div className="flex gap-[10px] sm:gap-[34px]">
+            <Image
+              src={dyadIconOutlined}
+              alt="dyad-icon"
+              width={windowWidth >= 640 ? 62 : 35}
+            />
+            <Image
+              src={keroseneIconOutlined}
+              alt="dyad-icon"
+              width={windowWidth >= 640 ? 62 : 35}
+            />
           </div>
         </div>
-        <Link
-          className="text-sm mx-auto w-fit mt-2 underline"
-          href="https://dyad.gitbook.io/docs/overview/notes"
-          target="_blank"
-        >
-          Learn more
-        </Link>
+        <div className="mb-[50px] sm:mb-[79px] text-sm sm:text-xl text-white font-normal leading-[26px]">
+          <div className="mb-[20px] sm:mb-[25px]">
+            DYAD is a decentralized stablecoin that allows you to earn the
+            highest stable yield on mainnet.
+          </div>
+          <div>
+            DYAD runs on a unique system of NFTs called Notes that let you
+            manage your positions and maximize your yield.
+          </div>
+        </div>
+        <div className="flex justify-center mb-[35px] sm:mb-[51px]">
+          <ClaimModalContent variant="rounded-blue-shadow" />
+        </div>
+        <div className="flex justify-center w-full">
+          <Link
+            className="text-md sm:text-xl underline underline-offset-4 cursor-pointer text-[#FFFFFF] font-normal leading-[24px]"
+            href="https://dyad.gitbook.io/docs/overview/notes"
+            target="_blank"
+          >
+            Learn more
+          </Link>
+        </div>
       </div>
     </NoteCardsContainer>
   );
