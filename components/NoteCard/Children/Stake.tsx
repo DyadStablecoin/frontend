@@ -178,10 +178,10 @@ const Stake: React.FC<StakeProps> = ({
     </div>
   );
 
-  const hasStakeBalance =
-    activeStakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
-      ? stakeBalance > 0n
-      : stakeBalanceUSDCDyad > 0n;
+  const hasStakeBalance = true;
+  // activeStakeKey !== StakeCurrencies.CURVE_M0_DYAD_LP
+  //   ? stakeBalance > 0n
+  //   : stakeBalanceUSDCDyad > 0n;
 
   return (
     <>

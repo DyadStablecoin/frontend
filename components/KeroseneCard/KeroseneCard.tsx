@@ -213,8 +213,8 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 unstakeInputValue.length <= 0 ||
                 STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
                   StakeCurrencies.CURVE_M0_DYAD_LP
-                  ? canUnstake
-                  : canUnstakeUSDCDyad
+                  ? !canUnstake
+                  : !canUnstakeUSDCDyad
               }
               onClick={() =>
                 STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
