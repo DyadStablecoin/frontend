@@ -238,8 +238,21 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         ).toFixed(2)}%`
       : "0%";
 
-  console.log("calculatedAPRUSDCDyad", calculatedAPRUSDCDyad);
-  console.log("calculatedAPR", yieldDataUSDCDyad);
+  const totalAPR =
+    yieldData &&
+    yieldDataUSDCDyad &&
+    Number(yieldData.noteLiquidity) +
+      Number(yieldDataUSDCDyad.noteLiquidity) !==
+      0
+      ? `${(
+          (Number(calculatedAPR.replace("%", "")) *
+            Number(yieldData.noteLiquidity) +
+            Number(calculatedAPRUSDCDyad.replace("%", "")) *
+              Number(yieldDataUSDCDyad.noteLiquidity)) /
+          (Number(yieldData.noteLiquidity) +
+            Number(yieldDataUSDCDyad.noteLiquidity))
+        ).toFixed(2)}%`
+      : "0%";
 
   // Calculate Boost
   let boost = "0x";
@@ -288,7 +301,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Your APR",
-      value: calculatedAPR,
+      value: totalAPR,
       highlighted: false,
     },
   ];
@@ -347,7 +360,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       tabKey: "Stake & Earn",
       content: (
         <Stake
-          APR={calculatedAPR}
+          APR={totalAPR}
           individualAPR={{
             [StakeCurrencies.CURVE_M0_DYAD_LP]: {
               individualAPR: calculatedAPR,
