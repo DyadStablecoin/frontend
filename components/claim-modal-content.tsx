@@ -17,7 +17,13 @@ import ConnectWallet from "./reusable/ConnectWallet";
 import { CirclePlus } from "lucide-react";
 import ButtonComponent from "./reusable/ButtonComponent";
 
-export function ClaimModalContent({ isOldDesign = false }) {
+interface ClaimModalProps {
+  variant?: "purple-outlined" | "rounded-blue-shadow";
+}
+
+export const ClaimModalContent: React.FC<ClaimModalProps> = ({
+  variant = "purple-outlined",
+}) => {
   const buyModalOpenState = useState(false);
   const { address, isConnected } = useAccount();
   const { setTransactionData } = useTransactionStore();
@@ -65,13 +71,17 @@ export function ClaimModalContent({ isOldDesign = false }) {
       <div>
         <BuyModal
           trigger={
-            isOldDesign ? (
-              <ButtonComponent>
-                <div className="text-xs md:text-[0.875rem] transition-all">
-                  Buy Note Nº {bestListing?.criteria?.data?.token?.tokenId} for{" "}
-                  {bestListing.price?.amount?.decimal} ETH
+            variant === "rounded-blue-shadow" ? (
+              <div
+                className="cursor-pointer border-1 border-[#000000] rounded-full w-full flex py-[14px] px-[40px] sm:px-[55.5px]"
+                style={{
+                  boxShadow: "0px 0px 39px 1px #5CBBFF",
+                }}
+              >
+                <div className="m-auto leading-[24px] text-md sm:text-xl font-bold">
+                  BUY NOTE TO START
                 </div>
-              </ButtonComponent>
+              </div>
             ) : (
               <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
                 <CirclePlus size={20} className="mr-2" />
@@ -89,7 +99,7 @@ export function ClaimModalContent({ isOldDesign = false }) {
           openState={buyModalOpenState}
         />
       </div>
-    ) : isOldDesign ? (
+    ) : variant !== "purple-outlined" ? (
       <ButtonComponent
         onClick={() => {
           setTransactionData({
@@ -132,4 +142,4 @@ export function ClaimModalContent({ isOldDesign = false }) {
   }
 
   return <ConnectWallet hasConnectButton={true} />;
-}
+};
