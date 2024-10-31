@@ -65,6 +65,9 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   const { address } = useAccount();
   const [activeTab, setActiveTab] = useState(`Note Nº ${tokenId}`);
   const [yieldData, setYieldData] = useState<YieldData | null>(null);
+  const [yieldDataUSDCDyad, setYieldDataUSDCDyad] = useState<YieldData | null>(
+    null
+  );
   const { kerosenePrice } = useKerosenePrice();
 
   useEffect(() => {
@@ -80,7 +83,21 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       }
     };
 
+    const fetchYieldDataUSDCDyad = async () => {
+      try {
+        const response = await fetch(
+          `https://api.dyadstable.xyz/api/yield?noteId=${tokenId}&pool=0x1507bf3F8712c496fA4679a4bA827F633979dBa4`
+        );
+        const data = await response.json();
+        console.log("data", data);
+        setYieldDataUSDCDyad(data);
+      } catch (error) {
+        console.error("Error fetching USDC/DYAD yield data:", error);
+      }
+    };
+
     fetchYieldData();
+    fetchYieldDataUSDCDyad();
   }, [tokenId]);
 
   // Fetch contract data
@@ -211,11 +228,49 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         ).toFixed(2)}%`
       : "0%";
 
+  const calculatedAPRUSDCDyad =
+    yieldDataUSDCDyad && Number(yieldDataUSDCDyad.noteLiquidity) !== 0
+      ? `${(
+          (Number(yieldDataUSDCDyad.kerosenePerYear) /
+            Number(yieldDataUSDCDyad.noteLiquidity)) *
+          100 *
+          (kerosenePrice || 0)
+        ).toFixed(2)}%`
+      : "0%";
+
+  const totalAPR =
+    yieldData &&
+    yieldDataUSDCDyad &&
+    Number(yieldData.noteLiquidity) +
+      Number(yieldDataUSDCDyad.noteLiquidity) !==
+      0
+      ? `${(
+          (Number(calculatedAPR.replace("%", "")) *
+            Number(yieldData.noteLiquidity) +
+            Number(calculatedAPRUSDCDyad.replace("%", "")) *
+              Number(yieldDataUSDCDyad.noteLiquidity)) /
+          (Number(yieldData.noteLiquidity) +
+            Number(yieldDataUSDCDyad.noteLiquidity))
+        ).toFixed(2)}%`
+      : "0%";
+
   // Calculate Boost
   let boost = "0x";
   if (yieldData && !isNaN(Number(yieldData.effectiveSize))) {
     boost = `${Number(yieldData.effectiveSize).toFixed(2)}x`;
   }
+
+  const totalLiquidityStaked = contractData?.dyadLpStakingCurveM0DyadBalance
+    ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2)
+    : "0";
+
+  const totalUsdcdDyadStaked = contractData?.dyadLpStakingCurveUSDCDyadBalance
+    ? fromBigNumber(contractData.dyadLpStakingCurveUSDCDyadBalance).toFixed(2)
+    : "0";
+
+  const totalCombinedLiquidityStaked = (
+    Number(totalLiquidityStaked) + Number(totalUsdcdDyadStaked)
+  ).toFixed(2);
 
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
@@ -241,14 +296,12 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "Liquidity Staked",
-      value: contractData?.dyadLpStakingCurveM0DyadBalance
-        ? fromBigNumber(contractData.dyadLpStakingCurveM0DyadBalance).toFixed(2)
-        : "0",
+      value: totalCombinedLiquidityStaked,
       highlighted: false,
     },
     {
       text: "Your APR",
-      value: calculatedAPR,
+      value: totalAPR,
       highlighted: false,
     },
   ];
@@ -307,7 +360,15 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       tabKey: "Stake & Earn",
       content: (
         <Stake
-          APR={calculatedAPR}
+          APR={totalAPR}
+          individualAPR={{
+            [StakeCurrencies.CURVE_M0_DYAD_LP]: {
+              individualAPR: calculatedAPR,
+            },
+            [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
+              individualAPR: calculatedAPRUSDCDyad,
+            },
+          }}
           liquidityStaked={{
             [StakeCurrencies.CURVE_M0_DYAD_LP]: {
               liquidityStaked: contractData?.dyadLpStakingCurveM0DyadBalance

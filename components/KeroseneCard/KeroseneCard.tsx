@@ -168,34 +168,43 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
           {actionType === "stake" ? (
             <ButtonComponent
               disabled={!stakeInputValue || BigInt(stakeInputValue) === 0n}
-              onClick={() =>
-                STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
-                StakeCurrencies.CURVE_M0_DYAD_LP
-                  ? needsApproval
-                  : needsApprovalUSDCDyad
-                    ? STAKE_CONTRACTS[currency as StakeCurenciesType]
-                        .stakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
-                      ? writeApprove({
-                          args: [stakingContract!, stakeInputValue],
-                        })
-                      : writeApproveUSDCDyad({
-                          args: [stakingContract!, stakeInputValue],
-                        })
-                    : STAKE_CONTRACTS[currency as StakeCurenciesType]
-                          .stakeKey === StakeCurrencies.CURVE_M0_DYAD_LP
-                      ? writeStake({
-                          args: [tokenId, stakeInputValue],
-                          onSuccess: () => {
-                            onSuccess?.();
-                          },
-                        })
-                      : writeStakeUSDCDyad({
-                          args: [tokenId, stakeInputValue],
-                          onSuccess: () => {
-                            onSuccess?.();
-                          },
-                        })
-              }
+              onClick={() => {
+                const isCurveM0Dyad =
+                  STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
+                  StakeCurrencies.CURVE_M0_DYAD_LP;
+
+                if (isCurveM0Dyad) {
+                  if (needsApproval) {
+                    // Approve Curve M0 Dyad
+                    writeApprove({
+                      args: [stakingContract!, stakeInputValue],
+                    });
+                  } else {
+                    // Stake Curve M0 Dyad
+                    writeStake({
+                      args: [tokenId, stakeInputValue],
+                      onSuccess: () => {
+                        onSuccess?.();
+                      },
+                    });
+                  }
+                } else {
+                  if (needsApprovalUSDCDyad) {
+                    // Approve USDC-Dyad
+                    writeApproveUSDCDyad({
+                      args: [stakingContract!, stakeInputValue],
+                    });
+                  } else {
+                    // Stake USDC-Dyad
+                    writeStakeUSDCDyad({
+                      args: [tokenId, stakeInputValue],
+                      onSuccess: () => {
+                        onSuccess?.();
+                      },
+                    });
+                  }
+                }
+              }}
             >
               {STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
               StakeCurrencies.CURVE_M0_DYAD_LP
@@ -213,8 +222,8 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
                 unstakeInputValue.length <= 0 ||
                 STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
                   StakeCurrencies.CURVE_M0_DYAD_LP
-                  ? canUnstake
-                  : canUnstakeUSDCDyad
+                  ? !canUnstake
+                  : !canUnstakeUSDCDyad
               }
               onClick={() =>
                 STAKE_CONTRACTS[currency as StakeCurenciesType].stakeKey ===
