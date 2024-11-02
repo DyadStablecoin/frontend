@@ -115,21 +115,6 @@ const Stake: React.FC<StakeProps> = ({
       args: [BigInt(tokenId)],
     });
 
-  const stakeData = [
-    {
-      label: "APR",
-      value: APR,
-    },
-    {
-      label: "XP",
-      value: Number(formatUnits(XP, 27)).toFixed(2),
-    },
-    {
-      label: "XP boost",
-      value: xpBoost,
-    },
-  ];
-
   useEffect(() => {
     if (!stakeKeys && isStaked) {
       setStakeKeys([
@@ -160,6 +145,24 @@ const Stake: React.FC<StakeProps> = ({
     return 0n;
   }, [totalClaimed, claimData]);
 
+  const stakeData = [
+    {
+      label: "APR",
+      value: APR,
+    },
+    {
+      label: "XP",
+      value: Number(formatUnits(XP, 27)).toFixed(2),
+    },
+    {
+      label: "XP boost",
+      value: xpBoost,
+    },
+    {
+      label: "Claimable Kerosene",
+      value: Number(formatEther(totalClaimable)).toFixed(4),
+    },
+  ];
   const renderLPIcons = (
     iconLeft: string | StaticImport,
     iconRight: string | StaticImport
@@ -358,7 +361,8 @@ const Stake: React.FC<StakeProps> = ({
               }
             >
               <div className="text-xs transition-all">
-                Enable extension to claim
+                Enable extension to claim{" "}
+                {Number(formatEther(totalClaimable)).toFixed(4)} KEROSENE
               </div>
             </ButtonComponent>
           ))}
