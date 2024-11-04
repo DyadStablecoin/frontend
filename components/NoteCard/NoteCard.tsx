@@ -37,6 +37,9 @@ import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { StakeCurrencies } from "@/models/Stake";
+import Image from "next/image";
+import keroseneIcon from "../../public/kerosene-logo-outlined-purple.svg";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -277,32 +280,61 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       text: "Collateralization ratio",
       value: collateralizationRatio,
-      highlighted: true,
+      isComponent: false,
+    },
+    {
+      text: "Buy Kerosene Button",
+      isComponent: true,
+      value: (
+        <Dialog>
+          <DialogTrigger className="w-full">
+            <div
+              className="w-full md:px-[130]"
+              onClick={() => console.log("Buy Kerosene")}
+            >
+              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
+                <Image
+                  src={keroseneIcon}
+                  alt="Kerosene Icon"
+                  width={20}
+                  className="mr-2"
+                />
+                <div className="text-xs md:text-[0.875rem] transition-all">
+                  Buy Kerosene
+                </div>
+              </div>
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-[90vw] md:max-w-fit">
+            <div>Insert Dialog Content Here</div>
+          </DialogContent>
+        </Dialog>
+      ),
     },
     {
       text: "DYAD minted",
       value: formatNumber(totalDyad),
-      highlighted: false,
+      isComponent: false,
     },
     {
       text: "Collateral",
       value: totalCollateral,
-      highlighted: false,
+      isComponent: false,
     },
     {
       text: "KEROSENE Deposited",
       value: formatNumber(fromBigNumber(contractData?.keroseneDeposited), 0),
-      highlighted: false,
+      isComponent: false,
     },
     {
       text: "Liquidity Staked",
       value: totalCombinedLiquidityStaked,
-      highlighted: false,
+      isComponent: false,
     },
     {
       text: "Your APR",
       value: totalAPR,
-      highlighted: false,
+      isComponent: false,
     },
   ];
 
