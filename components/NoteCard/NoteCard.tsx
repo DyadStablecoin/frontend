@@ -278,40 +278,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   // Prepare data for the note
   const noteData: NoteNumberDataColumnModel[] = [
     {
-      text: "Collateralization ratio",
-      value: collateralizationRatio,
-      isComponent: false,
-    },
-    {
-      text: "Buy Kerosene Button",
-      isComponent: true,
-      value: (
-        <Dialog>
-          <DialogTrigger className="w-full">
-            <div
-              className="w-full md:px-[130]"
-              onClick={() => console.log("Buy Kerosene")}
-            >
-              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
-                <Image
-                  src={keroseneIcon}
-                  alt="Kerosene Icon"
-                  width={20}
-                  className="mr-2"
-                />
-                <div className="text-xs md:text-[0.875rem] transition-all">
-                  Buy Kerosene
-                </div>
-              </div>
-            </div>
-          </DialogTrigger>
-          <DialogContent className="max-w-[90vw] md:max-w-fit">
-            <div>Insert Dialog Content Here</div>
-          </DialogContent>
-        </Dialog>
-      ),
-    },
-    {
       text: "DYAD minted",
       value: formatNumber(totalDyad),
       isComponent: false,
@@ -344,84 +310,127 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       label: `Stats`,
       tabKey: `Note Nº ${tokenId}`,
       content: hasVault ? (
-        <NoteNumber data={noteData} />
-      ) : (
-        <div className="flex flex-col items-center justify-center space-y-4 pt-4">
-          <Vault size={48} />
-          <div className="text-center text-[#FAFAFA]">
-            <h3 className="text-xl font-semibold text-primary">
-              No Active Vault
-            </h3>
-            <p className="text-sm mt-2">
-              Deposit collateral to open a vault and start using your Note
-            </p>
+        <>
+          <div className="flex flex-col bg-[#1A1A1A] px-2.5 py-3.5 gap-4 mb-4">
+            <div
+              className={`flex w-full justify-between px-2.5 py-2.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]`}
+            >
+              <div>Collateralization ratio</div>
+              <div className="text-right">{collateralizationRatio}</div>
+            </div>
+            <div className="flex justify-center items-center text-sm">
+              <span>
+                <Dialog>
+                  <DialogTrigger className="w-full">
+                    <div className="animate-pulse cursor-pointer font-semibold flex text-[#966CF3] items-center justify-center">
+                      <Image
+                        src={keroseneIcon}
+                        alt="Kerosene Icon"
+                        width={20}
+                        className="mr-2"
+                      />
+                      <div className="text-xs md:text-[0.875rem] transition-all">
+                        Buy Kerosene
+                      </div>
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[90vw] md:max-w-fit">
+                    <div>Insert Dialog Content Here</div>
+                  </DialogContent>
+                </Dialog>
+              </span>
+              <span className="ml-1 mb-[3px]">to increase your CR</span>
+            </div>
           </div>
-          <ButtonComponent
-            style={{ width: "150px" }}
-            onClick={() => setActiveTab("Deposit and Withdraw")}
-          >
-            Deposit Now
-          </ButtonComponent>
-        </div>
+          <NoteCardsContainer>
+            <NoteNumber data={noteData} />
+          </NoteCardsContainer>
+        </>
+      ) : (
+        <NoteCardsContainer>
+          <div className="flex flex-col items-center justify-center space-y-4 pt-4">
+            <Vault size={48} />
+            <div className="text-center text-[#FAFAFA]">
+              <h3 className="text-xl font-semibold text-primary">
+                No Active Vault
+              </h3>
+              <p className="text-sm mt-2">
+                Deposit collateral to open a vault and start using your Note
+              </p>
+            </div>
+            <ButtonComponent
+              style={{ width: "150px" }}
+              onClick={() => setActiveTab("Deposit and Withdraw")}
+            >
+              Deposit Now
+            </ButtonComponent>
+          </div>
+        </NoteCardsContainer>
       ),
     },
     {
       label: "Deposit & Withdraw",
       tabKey: "Deposit and Withdraw",
       content: (
-        <Deposit
-          total_collateral={totalCollateral}
-          collateralization_ratio={collatRatio}
-          tokenId={tokenId}
-        />
+        <NoteCardsContainer>
+          <Deposit
+            total_collateral={totalCollateral}
+            collateralization_ratio={collatRatio}
+            tokenId={tokenId}
+          />
+        </NoteCardsContainer>
       ),
     },
     {
       label: "Mint & Burn",
       tabKey: "Mint DYAD",
       content: (
-        <Mint
-          currentCr={collatRatio}
-          tokenId={tokenId}
-          setActiveTab={setActiveTab}
-        />
+        <NoteCardsContainer>
+          <Mint
+            currentCr={collatRatio}
+            tokenId={tokenId}
+            setActiveTab={setActiveTab}
+          />
+        </NoteCardsContainer>
       ),
     },
     {
       label: "Stake & Earn",
       tabKey: "Stake & Earn",
       content: (
-        <Stake
-          APR={totalAPR}
-          individualAPR={{
-            [StakeCurrencies.CURVE_M0_DYAD_LP]: {
-              individualAPR: calculatedAPR,
-            },
-            [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
-              individualAPR: calculatedAPRUSDCDyad,
-            },
-          }}
-          liquidityStaked={{
-            [StakeCurrencies.CURVE_M0_DYAD_LP]: {
-              liquidityStaked: contractData?.dyadLpStakingCurveM0DyadBalance
-                ? fromBigNumber(
-                    contractData.dyadLpStakingCurveM0DyadBalance
-                  ).toFixed(2)
-                : "0",
-            },
-            [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
-              liquidityStaked: contractData?.dyadLpStakingCurveUSDCDyadBalance
-                ? fromBigNumber(
-                    contractData.dyadLpStakingCurveUSDCDyadBalance
-                  ).toFixed(2)
-                : "0",
-            },
-          }}
-          xpBoost={boost}
-          XP={contractData?.xpBalance ?? 0n}
-          tokenId={tokenId}
-          userAddress={address}
-        />
+        <NoteCardsContainer>
+          <Stake
+            APR={totalAPR}
+            individualAPR={{
+              [StakeCurrencies.CURVE_M0_DYAD_LP]: {
+                individualAPR: calculatedAPR,
+              },
+              [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
+                individualAPR: calculatedAPRUSDCDyad,
+              },
+            }}
+            liquidityStaked={{
+              [StakeCurrencies.CURVE_M0_DYAD_LP]: {
+                liquidityStaked: contractData?.dyadLpStakingCurveM0DyadBalance
+                  ? fromBigNumber(
+                      contractData.dyadLpStakingCurveM0DyadBalance
+                    ).toFixed(2)
+                  : "0",
+              },
+              [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
+                liquidityStaked: contractData?.dyadLpStakingCurveUSDCDyadBalance
+                  ? fromBigNumber(
+                      contractData.dyadLpStakingCurveUSDCDyadBalance
+                    ).toFixed(2)
+                  : "0",
+              },
+            }}
+            xpBoost={boost}
+            XP={contractData?.xpBalance ?? 0n}
+            tokenId={tokenId}
+            userAddress={address}
+          />
+        </NoteCardsContainer>
       ),
     },
   ];
@@ -432,38 +441,36 @@ function NoteCard({ tokenId }: { tokenId: string }) {
   };
 
   return (
-    <NoteCardsContainer>
-      <Fragment>
-        <div className="md:hidden block">
-          <div className=" flex justify-between">
-            <div className="text-md">Note Nº {tokenId}</div>
-            <Dropdown>
-              <DropdownTrigger>
-                <Menu />
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Dropdown Variants">
-                {tabData.map((tab: TabsDataModel) => (
-                  <DropdownItem
-                    key={tab.tabKey}
-                    onClick={() => setActiveTab(tab.tabKey)}
-                  >
-                    {tab.label}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          {renderActiveTabContent()}
+    <Fragment>
+      <div className="md:hidden block">
+        <div className=" flex justify-between pt-4 pb-8">
+          <div className="text-lg my-auto">Note Nº {tokenId}</div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Menu size={30} />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Dropdown Variants">
+              {tabData.map((tab: TabsDataModel) => (
+                <DropdownItem
+                  key={tab.tabKey}
+                  onClick={() => setActiveTab(tab.tabKey)}
+                >
+                  {tab.label}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
-        <div className="hidden md:block">
-          <TabsComponent
-            tabsData={tabData}
-            selected={activeTab}
-            setSelected={setActiveTab}
-          />
-        </div>
-      </Fragment>
-    </NoteCardsContainer>
+        {renderActiveTabContent()}
+      </div>
+      <div className="hidden md:block pt-4">
+        <TabsComponent
+          tabsData={tabData}
+          selected={activeTab}
+          setSelected={setActiveTab}
+        />
+      </div>
+    </Fragment>
   );
 }
 
