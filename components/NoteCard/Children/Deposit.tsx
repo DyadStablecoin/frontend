@@ -63,7 +63,8 @@ const Deposit: React.FC<DepositProps> = ({
         const result: Record<string, { asset: string; usdValue: string }> = {};
         for (let i = 0; i < data.length; i += 2) {
           const asset = Number(formatEther(data[i] as bigint)).toFixed(4);
-          const usdValue = Number(formatEther(data[i + 1] as bigint)).toFixed(
+          const usdValue = formatNumber(
+            fromBigNumber(data[i + 1] as bigint, 18),
             2
           );
           result[supportedVaults[i / 2]] = { asset, usdValue };
