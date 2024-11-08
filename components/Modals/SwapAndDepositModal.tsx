@@ -150,6 +150,7 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
               onValueChange={setSwapToAmount}
               placeHolder="Deposit Amount"
               type="number"
+              disabled
             />
             <div className="bg-[#27272A] w-full md:w-[200px] h-[40px] flex gap-x-1 items-center pl-[10px]">
               <Image

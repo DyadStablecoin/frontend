@@ -44,6 +44,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
 
@@ -350,9 +351,18 @@ function NoteCard({ tokenId }: { tokenId: string }) {
                 >
                   <ModalContent className="md:max-w-fit rounded-none bg-[#1A1A1A]">
                     {(onClose) => (
-                      <ModalBody>
-                        <SwapAndDepositModal onModalClose={onClose} />
-                      </ModalBody>
+                      <>
+                        <ModalHeader className="flex flex-col">
+                          <h1>Note Nº {tokenId}</h1>
+                          <p className="text-xs font-normal text-[grey]">
+                            Swap to Kerosene and deposit it directly into your
+                            note
+                          </p>
+                        </ModalHeader>
+                        <ModalBody>
+                          <SwapAndDepositModal onModalClose={onClose} />
+                        </ModalBody>
+                      </>
                     )}
                   </ModalContent>
                 </Modal>
