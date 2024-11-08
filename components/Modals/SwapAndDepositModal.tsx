@@ -23,6 +23,7 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [resultsPerPage, setResultsPerPage] = useState(10);
   const [filtredItems, setFilteredItems] = useState(currencies);
+  const [maxSellAmount, setMaxSellAmount] = useState<string>("9999999999");
   const [selectedImageSrc, setSelectedImageSrc] = useState(
     "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
   );
@@ -69,88 +70,111 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
     });
   };
 
+  const handleMaxClick = () => {
+    setSwapFromAmount(maxSellAmount);
+  };
+
   return (
     <NoteCardsContainer className="md:w-[600px]">
       <div className="w-full flex flex-col gap-y-2">
         <div className="flex flex-col gap-y-4">
           <div className="text-lg md:text-xl">Sell</div>
           <div className="flex md:flex-row flex-col gap-y-4 md:gap-y-0 md:gap-x-4">
-            <InputComponent
-              value={swapFromAmount}
-              onValueChange={setSwapFromAmount}
-              placeHolder="Sell Amount"
-              type="number"
-              disabled={!selectedCurrencyKey}
-            />
-            <Autocomplete
-              classNames={{
-                popoverContent: "min-w-[200px]",
-                base: "md:max-w-[170px] p-0",
-              }}
-              items={items}
-              scrollRef={scrollerRef}
-              aria-label="Search currency"
-              description="Search currency"
-              radius="none"
-              scrollShadowProps={{
-                isEnabled: false,
-              }}
-              startContent={
-                selectedImageSrc ? (
-                  <Image
-                    loading="lazy"
-                    alt={"currency icon"}
-                    className="flex-shrink-0 rounded-full"
-                    src={
-                      selectedImageSrc.includes("ipfs://")
-                        ? getIpfsImageURL(
-                            selectedImageSrc.replace("ipfs://", "")
-                          )
-                        : selectedImageSrc
-                    }
-                    width={20}
-                    height={20}
-                  />
-                ) : undefined
-              }
-              onOpenChange={setIsOpen}
-              onSelectionChange={(key) => {
-                setSelectedCurrencyKey(key as Key);
-                setSelectedImageSrc(
-                  filtredItems.find((item) => item.name === key)?.logoURI!
-                );
-              }}
-              selectedKey={selectedCurrencyKey}
-              defaultSelectedKey={"Wrapped Ether" as Key}
-              onInputChange={(inputValue) => {
-                filterItems(inputValue);
-                setSwapFromAmount("");
-              }}
-            >
-              {(item) => (
-                <AutocompleteItem
-                  key={item.name}
-                  textValue={item.symbol}
-                  className="z-50"
-                  startContent={
+            <div className="w-full">
+              <InputComponent
+                value={swapFromAmount}
+                onValueChange={setSwapFromAmount}
+                placeHolder="Sell Amount"
+                type="number"
+                disabled={!selectedCurrencyKey}
+              />
+              <div
+                className="cursor-pointer text-[grey] text-xs ml-auto mt-[5px] mr-1 w-fit md:block hidden"
+                onClick={handleMaxClick}
+              >
+                Max
+              </div>
+            </div>
+            <div className="w-full md:max-w-[170px] flex gap-x-4">
+              <Autocomplete
+                classNames={{
+                  popoverContent: "min-w-[200px]",
+                  base: "md:max-w-[170px] p-0",
+                }}
+                items={items}
+                scrollRef={scrollerRef}
+                aria-label="Search currency"
+                description="Search currency"
+                radius="none"
+                scrollShadowProps={{
+                  isEnabled: false,
+                }}
+                startContent={
+                  selectedImageSrc ? (
                     <Image
                       loading="lazy"
-                      alt={item.name}
+                      alt={"currency icon"}
                       className="flex-shrink-0 rounded-full"
                       src={
-                        item.logoURI.includes("ipfs://")
-                          ? getIpfsImageURL(item.logoURI.replace("ipfs://", ""))
-                          : item.logoURI
+                        selectedImageSrc.includes("ipfs://")
+                          ? getIpfsImageURL(
+                              selectedImageSrc.replace("ipfs://", "")
+                            )
+                          : selectedImageSrc
                       }
                       width={20}
                       height={20}
                     />
-                  }
-                >
-                  <span className="text-small">{item.name}</span>
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
+                  ) : undefined
+                }
+                onOpenChange={setIsOpen}
+                onSelectionChange={(key) => {
+                  setSelectedCurrencyKey(key as Key);
+                  setSelectedImageSrc(
+                    filtredItems.find((item) => item.name === key)?.logoURI!
+                  );
+                }}
+                selectedKey={selectedCurrencyKey}
+                defaultSelectedKey={"Wrapped Ether" as Key}
+                onInputChange={(inputValue) => {
+                  setIsOpen(true);
+                  filterItems(inputValue);
+                  setSwapFromAmount("");
+                }}
+              >
+                {(item) => (
+                  <AutocompleteItem
+                    key={item.name}
+                    textValue={item.symbol}
+                    className="z-50"
+                    startContent={
+                      <Image
+                        loading="lazy"
+                        alt={item.name}
+                        className="flex-shrink-0 rounded-full"
+                        src={
+                          item.logoURI.includes("ipfs://")
+                            ? getIpfsImageURL(
+                                item.logoURI.replace("ipfs://", "")
+                              )
+                            : item.logoURI
+                        }
+                        width={20}
+                        height={20}
+                      />
+                    }
+                  >
+                    <span className="text-small">{item.name}</span>
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+              <ButtonComponent
+                onClick={handleMaxClick}
+                className="max-w-[100px] md:hidden"
+              >
+                Max
+              </ButtonComponent>
+            </div>
           </div>
         </div>
         <div className="flex items-center justify-between gap-x-4">
