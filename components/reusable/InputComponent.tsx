@@ -7,6 +7,7 @@ interface InputComponentProps {
   type?: "text" | "number" | "email" | "password";
   max?: number;
   min?: number;
+  disabled?: boolean;
 }
 
 const InputComponent: React.FC<InputComponentProps> = ({
@@ -16,6 +17,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
   type = "text",
   max,
   min,
+  disabled = false,
 }) => {
   return (
     <input
@@ -23,6 +25,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
       min={min ? min : 0}
       type={type}
       value={value}
+      disabled={disabled}
       className="border-[#212121] border-2 bg-transparent px-2 h-[39px] rounded-none w-full outline-none"
       placeholder={placeHolder}
       onChange={(e) => onValueChange(e.target.value)}

@@ -39,7 +39,13 @@ import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { StakeCurrencies } from "@/models/Stake";
 import Image from "next/image";
 import keroseneIcon from "../../public/kerosene-logo-outlined-purple.svg";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import SwapAndDepositModal from "../Modals/SwapAndDepositModal";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  useDisclosure,
+} from "@nextui-org/modal";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -72,6 +78,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     null
   );
   const { kerosenePrice } = useKerosenePrice();
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     const fetchYieldData = async () => {
@@ -320,24 +328,34 @@ function NoteCard({ tokenId }: { tokenId: string }) {
             </div>
             <div className="flex justify-center items-center text-sm">
               <span>
-                <Dialog>
-                  <DialogTrigger className="w-full">
-                    <div className="animate-pulse cursor-pointer font-semibold flex text-[#966CF3] items-center justify-center">
-                      <Image
-                        src={keroseneIcon}
-                        alt="Kerosene Icon"
-                        width={20}
-                        className="mr-2"
-                      />
-                      <div className="text-xs md:text-[0.875rem] transition-all">
-                        Buy Kerosene
-                      </div>
+                <div className="w-full" onClick={onOpen}>
+                  <div className="animate-pulse cursor-pointer font-semibold flex text-[#966CF3] items-center justify-center">
+                    <Image
+                      src={keroseneIcon}
+                      alt="Kerosene Icon"
+                      width={20}
+                      className="mr-2"
+                    />
+                    <div className="text-xs md:text-[0.875rem] transition-all">
+                      Buy Kerosene
                     </div>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-[90vw] md:max-w-fit">
-                    <div>Insert Dialog Content Here</div>
-                  </DialogContent>
-                </Dialog>
+                  </div>
+                </div>
+                <Modal
+                  isOpen={isOpen}
+                  onOpenChange={onOpenChange}
+                  classNames={{
+                    body: "px-0 md:px-4",
+                  }}
+                >
+                  <ModalContent className="md:max-w-fit rounded-none bg-[#1A1A1A]">
+                    {(onClose) => (
+                      <ModalBody>
+                        <SwapAndDepositModal onModalClose={onClose} />
+                      </ModalBody>
+                    )}
+                  </ModalContent>
+                </Modal>
               </span>
               <span className="ml-1 mb-[3px]">to increase your CR</span>
             </div>
