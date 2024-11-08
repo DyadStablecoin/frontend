@@ -10,7 +10,7 @@ interface NoteNumberProps {
 const NoteNumber: React.FC<NoteNumberProps> = ({ data }) => {
   return (
     <div className="flex flex-col items-center w-full text-[#FAFAFA]">
-      <div className="w-full mt-8">
+      <div className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.map((item: NoteNumberDataColumnModel, index: number) =>
             item.isComponent ? (
