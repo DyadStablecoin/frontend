@@ -9,6 +9,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import keroseneIcon from "../../public/kerosene-logo-outlined.svg";
 import ButtonComponent from "../reusable/ButtonComponent";
+import { Repeat } from "lucide-react";
 
 interface SwapAndDepositModalProps {
   onModalClose: () => void;
@@ -22,9 +23,11 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [resultsPerPage, setResultsPerPage] = useState(10);
   const [filtredItems, setFilteredItems] = useState(currencies);
-  const [selectedImageSrc, setSelectedImageSrc] = useState("");
+  const [selectedImageSrc, setSelectedImageSrc] = useState(
+    "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+  );
   const [selectedCurrencyKey, setSelectedCurrencyKey] = useState<Key | null>(
-    null
+    "Wrapped Ether"
   );
   const { activePage, totalPages, items } = usePagination(
     filtredItems,
@@ -42,22 +45,35 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
   });
 
   const filterItems = (input: string) => {
-    setFilteredItems(() =>
-      input.length > 0
-        ? currencies.filter(
+    setFilteredItems(() => {
+      if (input.length > 0) {
+        if (selectedCurrencyKey) {
+          return [
+            ...currencies.filter((item) =>
+              item.name.includes(selectedCurrencyKey as string)
+            ),
+            ...currencies.filter(
+              (item) => !item.name.includes(selectedCurrencyKey as string)
+            ),
+          ];
+        } else {
+          return currencies.filter(
             (item) =>
               item.symbol.toLowerCase().includes(input.toLowerCase()) ||
               item.name.toLowerCase().includes(input.toLowerCase())
-          )
-        : currencies
-    );
+          );
+        }
+      } else {
+        return currencies;
+      }
+    });
   };
 
   return (
     <NoteCardsContainer className="md:w-[600px]">
-      <div className="w-full flex flex-col gap-y-10">
+      <div className="w-full flex flex-col gap-y-2">
         <div className="flex flex-col gap-y-4">
-          <div className="text-xl">Sell</div>
+          <div className="text-lg md:text-xl">Sell</div>
           <div className="flex md:flex-row flex-col gap-y-4 md:gap-y-0 md:gap-x-4">
             <InputComponent
               value={swapFromAmount}
@@ -69,7 +85,7 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
             <Autocomplete
               classNames={{
                 popoverContent: "min-w-[200px]",
-                base: "md:max-w-[150px] ",
+                base: "md:max-w-[170px] p-0",
               }}
               items={items}
               scrollRef={scrollerRef}
@@ -105,10 +121,7 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
                 );
               }}
               selectedKey={selectedCurrencyKey}
-              defaultSelectedKey={
-                filtredItems.find((item) => item.symbol === "WETH")
-                  ?.symbol as Key
-              }
+              defaultSelectedKey={"Wrapped Ether" as Key}
               onInputChange={(inputValue) => {
                 filterItems(inputValue);
                 setSwapFromAmount("");
@@ -140,34 +153,36 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
             </Autocomplete>
           </div>
         </div>
+        <div className="flex items-center justify-between gap-x-4">
+          <div className="border-b-[0.5px] border-[#67676780] border-dashed w-full" />
+          <Repeat size={50} className="rotate-90" color="#966CF3" />
+          <div className="border-b-[0.5px] border-[#67676780] border-dashed w-full" />
+        </div>
 
-        <div className="border-b-[0.5px] border-[#67676780] border-dashed w-full"></div>
         <div className="flex flex-col gap-y-4">
-          <div className="text-xl">Deposit</div>
+          <div className="text-lg md:text-xl">Buy</div>
           <div className="flex md:flex-row flex-col gap-y-4 md:gap-y-0 md:gap-x-4">
             <InputComponent
               value={swapToAmount}
               onValueChange={setSwapToAmount}
-              placeHolder="Deposit Amount"
+              placeHolder="Buy Amount"
               type="number"
               disabled
             />
-            <div className="bg-[#27272A] w-full md:w-[200px] h-[40px] flex gap-x-1 items-center pl-[10px]">
+            <div className="bg-[#27272A] w-full md:min-w-[170px] md:max-w-[170px] h-[40px] flex gap-x-1 items-center">
               <Image
                 loading="lazy"
                 alt="kerosene icon"
-                className="flex-shrink-0 rounded-full"
+                className="flex-shrink-0 rounded-full ml-3"
                 src={keroseneIcon}
                 width={20}
                 height={20}
               />
-              <span className="text-small">KERO</span>
+              <span className="text-small">KEROSENE</span>
             </div>
           </div>
         </div>
-        <div className="border-b-[0.5px] border-[#67676780] border-dashed w-full"></div>
-
-        <div className="flex gap-x-4">
+        <div className="flex gap-x-4 pt-10">
           <ButtonComponent onClick={onModalClose}>Cancel</ButtonComponent>
           <ButtonComponent
             variant="bordered"
@@ -178,7 +193,7 @@ const SwapAndDepositModal: React.FC<SwapAndDepositModalProps> = ({
               !swapToAmount.length
             }
           >
-            Deposit
+            Swap and Deposit
           </ButtonComponent>
         </div>
       </div>
