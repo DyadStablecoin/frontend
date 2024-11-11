@@ -20,6 +20,7 @@ import { maxUint256 } from "viem";
 import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import MarketPlaceSkeleton from "./Marketplace/MarketPlaceSkeleton";
+import ErrorComponent from "./reusable/ErrorComponent";
 
 const NoteTable: React.FC<any> = ({}) => {
   const listModalOpenState = useState(false);
@@ -213,6 +214,16 @@ const NoteTable: React.FC<any> = ({}) => {
     return data && data.notes.items ? parseRows(data.notes.items) : [];
   }, [data, totalSupply, getMarketplaceData, ownedDnfts]);
 
+  if (!loading && error) {
+    return (
+      <ErrorComponent
+        className=" mt-8 py-20"
+        errorText="We can not load the marketplace at the moment"
+        errorSubText="Try again later"
+      />
+    );
+  }
+
   return (
     <div>
       <CancelListingModal
@@ -267,17 +278,18 @@ const NoteTable: React.FC<any> = ({}) => {
           mutateListings();
         }}
       />
+
       {loading && <MarketPlaceSkeleton />}
       {!loading && !error && (
-        <MarketplaceList
-          cardsData={parsedData}
-          ownedNotes={new Set(ownedDnfts?.map(Number) || [])}
-        />
-      )}
-      {!loading && !error && (
-        <div className="flex justify-end mt-4 text-sm text-muted-foreground">
-          *only Notes that minted DYAD are ranked
-        </div>
+        <>
+          <MarketplaceList
+            cardsData={parsedData}
+            ownedNotes={new Set(ownedDnfts?.map(Number) || [])}
+          />
+          <div className="flex justify-end mt-4 text-sm text-muted-foreground">
+            *only Notes that minted DYAD are ranked
+          </div>
+        </>
       )}
     </div>
   );
