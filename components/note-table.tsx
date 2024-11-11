@@ -21,6 +21,7 @@ import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import MarketPlaceSkeleton from "./Marketplace/MarketPlaceSkeleton";
 import { TriangleAlert } from "lucide-react";
+import ErrorComponent from "./reusable/ErrorComponent";
 
 const NoteTable: React.FC<any> = ({}) => {
   const listModalOpenState = useState(false);
@@ -216,17 +217,11 @@ const NoteTable: React.FC<any> = ({}) => {
 
   if (!loading && error) {
     return (
-      <div className="w-full mt-8 py-20">
-        <>
-          <TriangleAlert size={40} className="mx-auto" />
-          <p className="text-md md:text-xl text-center mt-4 text-white">
-            We can not load the marketplace at the moment
-          </p>
-          <p className="text-xs md:text-md text-center mt-2 text-[#A1A1AA]">
-            Try again later
-          </p>
-        </>
-      </div>
+      <ErrorComponent
+        className=" mt-8 py-20"
+        errorText="We can not load the marketplace at the moment"
+        errorSubText="Try again later"
+      />
     );
   }
 
