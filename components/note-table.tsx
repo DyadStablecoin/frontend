@@ -20,6 +20,7 @@ import { maxUint256 } from "viem";
 import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import MarketPlaceSkeleton from "./Marketplace/MarketPlaceSkeleton";
+import { TriangleAlert } from "lucide-react";
 
 const NoteTable: React.FC<any> = ({}) => {
   const listModalOpenState = useState(false);
@@ -213,6 +214,22 @@ const NoteTable: React.FC<any> = ({}) => {
     return data && data.notes.items ? parseRows(data.notes.items) : [];
   }, [data, totalSupply, getMarketplaceData, ownedDnfts]);
 
+  if (!loading && error) {
+    return (
+      <div className="w-full mt-8 py-20">
+        <>
+          <TriangleAlert size={40} className="mx-auto" />
+          <p className="text-md md:text-xl text-center mt-4 text-white">
+            We can not load the marketplace at the moment
+          </p>
+          <p className="text-xs md:text-md text-center mt-2 text-[#A1A1AA]">
+            Try again later
+          </p>
+        </>
+      </div>
+    );
+  }
+
   return (
     <div>
       <CancelListingModal
@@ -267,17 +284,18 @@ const NoteTable: React.FC<any> = ({}) => {
           mutateListings();
         }}
       />
+
       {loading && <MarketPlaceSkeleton />}
       {!loading && !error && (
-        <MarketplaceList
-          cardsData={parsedData}
-          ownedNotes={new Set(ownedDnfts?.map(Number) || [])}
-        />
-      )}
-      {!loading && !error && (
-        <div className="flex justify-end mt-4 text-sm text-muted-foreground">
-          *only Notes that minted DYAD are ranked
-        </div>
+        <>
+          <MarketplaceList
+            cardsData={parsedData}
+            ownedNotes={new Set(ownedDnfts?.map(Number) || [])}
+          />
+          <div className="flex justify-end mt-4 text-sm text-muted-foreground">
+            *only Notes that minted DYAD are ranked
+          </div>
+        </>
       )}
     </div>
   );
