@@ -20,7 +20,6 @@ import { maxUint256 } from "viem";
 import MarketplaceList from "./Marketplace/MarketplaceList";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import MarketPlaceSkeleton from "./Marketplace/MarketPlaceSkeleton";
-import { TriangleAlert } from "lucide-react";
 import ErrorComponent from "./reusable/ErrorComponent";
 
 const NoteTable: React.FC<any> = ({}) => {
