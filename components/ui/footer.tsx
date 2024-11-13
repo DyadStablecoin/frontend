@@ -38,6 +38,12 @@ export function Footer({
       >
         Github
       </Link>
+      <Link
+        href="https://1hb53eynm4r.typeform.com/dyadstable"
+        className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Grants
+      </Link>
     </footer>
   );
 }
