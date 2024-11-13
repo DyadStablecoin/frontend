@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   useReadCurveM0DyadAllowance,
@@ -34,16 +34,33 @@ const useGetStakeContractData = (stakeContractKey: StakeCurenciesType) => {
       iconLeft: wmIcon,
       iconRight: dyadIcon,
       link: "https://curve.fi/#/ethereum/pools/factory-stable-ng-272/deposit",
-      getWriteLPApprove: (args?: any) =>
-        useWriteCurveM0DyadApprove(args).writeContract,
-      getWriteLPStake: (args?: any) =>
-        useWriteDyadLpStakingCurveM0DyadDeposit(args).writeContract,
-      getAallowance: (args?: any) => useReadCurveM0DyadAllowance(args).data,
-      getWriteUnstake: (args?: any) =>
-        useWriteDyadLpStakingCurveM0DyadWithdraw(args).writeContract,
-      getLpBalance: (args?: any) => useReadCurveM0DyadBalanceOf(args).data,
-      getStakeBalance: (args?: any) =>
-        useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited(args).data,
+      getWriteLPApprove: (args?: any) => {
+        const { writeContract, isPending } = useWriteCurveM0DyadApprove(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getWriteLPStake: (args?: any) => {
+        const { writeContract, isPending } =
+          useWriteDyadLpStakingCurveM0DyadDeposit(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getAallowance: (args?: any) => {
+        const { data, isLoading } = useReadCurveM0DyadAllowance(args);
+        return { data, isLoading };
+      },
+      getWriteUnstake: (args?: any) => {
+        const { writeContract, isPending } =
+          useWriteDyadLpStakingCurveM0DyadWithdraw(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getLpBalance: (args?: any) => {
+        const { data, isLoading } = useReadCurveM0DyadBalanceOf(args);
+        return { data, isLoading };
+      },
+      getStakeBalance: (args?: any) => {
+        const { data, isLoading } =
+          useReadDyadLpStakingCurveM0DyadNoteIdToAmountDeposited(args);
+        return { data, isLoading };
+      },
     },
     [StakeCurrencies.CURVE_USDC_DYAD_LP]: {
       label: "USDC - DYAD",
@@ -54,16 +71,33 @@ const useGetStakeContractData = (stakeContractKey: StakeCurenciesType) => {
       iconLeft: USDCIcon,
       iconRight: dyadIcon,
       link: "https://curve.fi/#/ethereum/pools/factory-stable-ng-287/deposit",
-      getWriteLPApprove: (args?: any) =>
-        useWriteCurveUsdcdyadApprove(args).writeContract,
-      getWriteLPStake: (args?: any) =>
-        useWriteDyadLpStakingCurveUsdcdyadDeposit(args).writeContract,
-      getAallowance: (args?: any) => useReadCurveUsdcdyadAllowance(args).data,
-      getWriteUnstake: (args?: any) =>
-        useWriteDyadLpStakingCurveUsdcdyadWithdraw(args).writeContract,
-      getLpBalance: (args?: any) => useReadCurveUsdcdyadBalanceOf(args).data,
-      getStakeBalance: (args?: any) =>
-        useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited(args).data,
+      getWriteLPApprove: (args?: any) => {
+        const { writeContract, isPending } = useWriteCurveUsdcdyadApprove(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getWriteLPStake: (args?: any) => {
+        const { writeContract, isPending } =
+          useWriteDyadLpStakingCurveUsdcdyadDeposit(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getAallowance: (args?: any) => {
+        const { data, isLoading } = useReadCurveUsdcdyadAllowance(args);
+        return { data, isLoading };
+      },
+      getWriteUnstake: (args?: any) => {
+        const { writeContract, isPending } =
+          useWriteDyadLpStakingCurveUsdcdyadWithdraw(args);
+        return { writeContract, isLoading: isPending };
+      },
+      getLpBalance: (args?: any) => {
+        const { data, isLoading } = useReadCurveUsdcdyadBalanceOf(args);
+        return { data, isLoading };
+      },
+      getStakeBalance: (args?: any) => {
+        const { data, isLoading } =
+          useReadDyadLpStakingCurveUsdcdyadNoteIdToAmountDeposited(args);
+        return { data, isLoading };
+      },
     },
   });
 

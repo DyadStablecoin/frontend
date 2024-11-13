@@ -3,7 +3,7 @@ import ButtonComponent from "@/components/reusable/ButtonComponent";
 import { DialogClose } from "../ui/dialog";
 import { STAKE_CONTRACTS } from "@/constants/Stake";
 import { StakeCurenciesType } from "@/models/Stake";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BigIntInput } from "@/components/reusable/BigIntInput";
 import useGetStakeContractData from "@/hooks/useGetStakeContractData";
 
@@ -25,24 +25,70 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   const { address } = useAccount();
   const [stakeInputValue, setStakeInputValue] = useState("");
   const [unstakeInputValue, setUnstakeInputValue] = useState("");
+  const [isStakeContractDataLoading, setIsStakeContractDataLoading] =
+    useState(true);
 
   const stakeContractKey = currency as StakeCurenciesType;
 
   const StakeContractData = useGetStakeContractData(stakeContractKey);
 
-  const allowance = StakeContractData.getAallowance({
-    args: [address!, stakingContract!],
-  });
+  const { data: allowance, isLoading: isAllowanceLoading } =
+    StakeContractData?.getAallowance({
+      args: [address!, stakingContract!],
+    });
 
-  const writeUnstake = StakeContractData.getWriteUnstake();
+  const { writeContract: writeUnstake, isPending: isStakeUnstakeLoading } =
+    StakeContractData?.getWriteUnstake();
 
-  const lpBalance = StakeContractData.getLpBalance({
-    args: [address!],
-  });
+  const { data: lpBalance, isLoading: isLpBalanceLoading } =
+    StakeContractData?.getLpBalance({
+      args: [address!],
+    });
 
-  const stakeBalance = StakeContractData.getStakeBalance({
-    args: [tokenId],
-  });
+  const { data: stakeBalance, isLoading: isStakeBalanceLoading } =
+    StakeContractData?.getStakeBalance({
+      args: [tokenId],
+    });
+
+  const {
+    writeContract: getWriteLPApprove,
+    isLoading: isWriteLPApproveLoading,
+  } = StakeContractData?.getWriteLPApprove();
+
+  const { writeContract: getWriteLPStake, isLoading: isWriteLPStakeLoading } =
+    StakeContractData?.getWriteLPStake();
+
+  //Combine loading states from all sub-hooks into a single loading state
+  useEffect(() => {
+    if (
+      !isAllowanceLoading &&
+      !isStakeUnstakeLoading &&
+      !isLpBalanceLoading &&
+      !isStakeBalanceLoading &&
+      !isWriteLPApproveLoading &&
+      !isWriteLPStakeLoading
+    ) {
+      setIsStakeContractDataLoading(false);
+    } else {
+      if (
+        isAllowanceLoading ||
+        isStakeUnstakeLoading ||
+        isLpBalanceLoading ||
+        isStakeBalanceLoading ||
+        isWriteLPApproveLoading ||
+        isWriteLPStakeLoading
+      ) {
+        setIsStakeContractDataLoading(true);
+      }
+    }
+  }, [
+    isAllowanceLoading,
+    isStakeUnstakeLoading,
+    isLpBalanceLoading,
+    isStakeBalanceLoading,
+    isWriteLPApproveLoading,
+    isWriteLPStakeLoading,
+  ]);
 
   const needsApproval = BigInt(stakeInputValue || "0") > (allowance || 0n);
 
@@ -52,7 +98,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
   return (
     <div className="text-sm font-semibold text-[#A1A1AA]">
       <div className="text-2xl text-[#FAFAFA] flex justify-between mt-[15px] w-full">
-        <div>{StakeContractData.label}</div>
+        <div>{StakeContractData?.label}</div>
       </div>
       <div className="mt-4 w-full md:w-[600px]">
         <div className="flex flex-col md:flex-row justify-between gap-3 md:gap-6 mt-[32px]">
@@ -69,7 +115,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
           {actionType === "stake" ? (
             <div className="flex justify-between w-full">
               <BigIntInput
-                placeholder={`Amount of ${StakeContractData.name} to stake`}
+                placeholder={`Amount of ${StakeContractData?.name} to stake`}
                 onChange={setStakeInputValue}
                 value={stakeInputValue}
                 decimals={18}
@@ -79,7 +125,7 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
           ) : (
             <div className="flex justify-between items-center w-full">
               <BigIntInput
-                placeholder={`Amount of ${StakeContractData.name} to unstake`}
+                placeholder={`Amount of ${StakeContractData?.name} to unstake`}
                 onChange={setUnstakeInputValue}
                 value={unstakeInputValue}
                 type="number"
@@ -110,14 +156,10 @@ const KeroseneCard: React.FC<KeroseneProps> = ({
               disabled={!stakeInputValue || BigInt(stakeInputValue) === 0n}
               onClick={() =>
                 needsApproval
-                  ? STAKE_CONTRACTS[
-                      currency as StakeCurenciesType
-                    ].getWriteLPApprove({
+                  ? getWriteLPApprove({
                       args: [stakingContract!, stakeInputValue],
                     })
-                  : STAKE_CONTRACTS[
-                      currency as StakeCurenciesType
-                    ].getWriteLPStake({
+                  : getWriteLPStake({
                       args: [tokenId, stakeInputValue],
                       onSuccess: () => {
                         onSuccess?.();
