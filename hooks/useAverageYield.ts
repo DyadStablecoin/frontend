@@ -8,10 +8,10 @@ export default function useAverageYield() {
 
     const GET_REWARDS = gql`
         query {
-            rewards(limit: 1000) {
+            rewardRates(limit: 1000) {
                 items {
                     id
-                    amount
+                    rate
                 }
             }
         }
@@ -21,14 +21,15 @@ export default function useAverageYield() {
     const { loading, error, data } = useQuery(GET_REWARDS, { fetchPolicy: 'network-only' });
 
     useEffect(() => {
-        if (data && data.rewards && data.rewards.items.length > 0) {
-            const totalRewards = data.rewards.items.reduce((sum, item) => {
-                const amount = Number(item.amount);
+        if (data && data.rewardRates && data.rewardRates.items.length > 0) {
+            const totalRewards = data.rewardRates.items.reduce((sum, item) => {
+                const amount = Number(item.rate);
                 return sum + (isNaN(amount) ? 0 : amount); // Ensure only valid numbers are summed
             }, 0);
 
-            console.log('totalRewards', totalRewards * kerosenePrice /  totalLiquidity);
-            console.log('kero', kerosenePrice);
+            const apy = totalRewards* 31536000 * kerosenePrice / 1e18 / totalLiquidity;
+            setAverageYield(apy);
+
 
         }
     }, [data, totalLiquidity]);

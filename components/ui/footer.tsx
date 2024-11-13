@@ -9,7 +9,6 @@ export function Footer({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  useAverageYield();
   return (
     <footer
       className={cn(
