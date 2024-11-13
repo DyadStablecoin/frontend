@@ -25,6 +25,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
+import useAverageYield from "@/hooks/useAverageYield";
 
 export const MainNav = React.memo(function MainNav({
   className,
@@ -42,6 +43,8 @@ export const MainNav = React.memo(function MainNav({
       setActiveNavItem(tab as string);
     }
   }, [tab]);
+
+  const { averageYield } = useAverageYield();
 
   const {
     ethPrice,
