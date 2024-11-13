@@ -1,11 +1,15 @@
+"use client";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import useAverageYield from "@/hooks/useAverageYield";
+import { useState } from "react";
 
 export function Footer({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
+  useAverageYield();
   return (
     <footer
       className={cn(
