@@ -1,7 +1,7 @@
 export interface NoteNumberDataColumnModel {
   text: string;
-  value: string;
-  highlighted: boolean;
+  value: string | React.ReactNode;
+  isComponent: boolean;
 }
 export interface NoteExtensionsModel {
   label: string;
