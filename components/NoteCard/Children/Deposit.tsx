@@ -121,7 +121,6 @@ const Deposit: React.FC<DepositProps> = ({
             <AddVault
               key={i}
               tokenId={tokenId}
-              vaultAddresses={emptyVaults as Address[]}
             />
           ))}
       </div>

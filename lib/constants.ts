@@ -28,6 +28,7 @@ export type VaultInfo = {
   decimals: number;
   getApr?: () => Promise<number>;
   additionalYield?: string;
+  depositDisabled?: boolean;
 };
 
 export const vaultInfo: VaultInfo[] = [
@@ -77,6 +78,7 @@ export const vaultInfo: VaultInfo[] = [
     tokenAddress: sUsDeAddress[defaultChain.id],
     color: "#2A2A2A",
     decimals: 8,
+    depositDisabled: true,
     getApr: async () => {
       const resp = await fetch(
         "https://ethena.fi/api/yields/protocol-and-staking-yield"

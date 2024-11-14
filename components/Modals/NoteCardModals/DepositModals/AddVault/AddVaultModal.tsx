@@ -24,33 +24,20 @@ import { DialogClose } from "@/components/ui/dialog";
 import Image from "next/image";
 
 function AddVaultModal({
-  vaults,
   tokenId,
 }: {
-  vaults: Address[];
   tokenId: string;
 }) {
+  const vaults = vaultInfo.filter((vault) => !vault.depositDisabled);
+
   const { data: assetPrices } = useReadContracts({
     contracts: vaults.map((vault) => ({
-      address: vault,
+      address: vault.vaultAddress,
       abi: wEthVaultAbi,
       functionName: "assetPrice",
     })),
     allowFailure: false,
   });
-
-  const vaultIocns = vaults.map(
-    (vault) => vaultInfo.filter((info) => info.vaultAddress === vault)[0].icon
-  );
-
-  const vaultSymbols = vaults.map(
-    (vault) => vaultInfo.filter((info) => info.vaultAddress === vault)[0].symbol
-  );
-
-  const vaultDecimals = vaults.map(
-    (vault) =>
-      vaultInfo.filter((info) => info.vaultAddress === vault)[0].decimals
-  );
 
   if (vaults.length === 0) {
     return (
@@ -80,29 +67,29 @@ function AddVaultModal({
             </TableRow>
           </TableHeader>
           <TableBody className="text-xs md:text-base">
-            {vaults.map((address, i) => (
+            {vaults.map((vault, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <div className="flex gap-2">
                     <Image
-                      src={vaultIocns[i]}
+                      src={vault.icon}
                       alt="icon"
                       width={23}
                       height={23}
                     />
-                    <span>{vaultSymbols[i]}</span>
+                    <span>{vault.symbol}</span>
                   </div>
                 </TableCell>
                 <TableCell>
                   $
                   {formatNumber(
-                    fromBigNumber(assetPrices?.at(i), vaultDecimals[i])
+                    fromBigNumber(assetPrices?.at(i), vault.decimals)
                   )}
                 </TableCell>
                 <RowInput
                   tokenId={tokenId}
-                  vaultAddress={address}
-                  symbol={vaultSymbols[i]}
+                  vaultAddress={vault.vaultAddress}
+                  symbol={vault.symbol}
                 />
               </TableRow>
             ))}
