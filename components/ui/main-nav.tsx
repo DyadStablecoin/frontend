@@ -25,6 +25,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
+import useAverageYield from "@/hooks/useAverageYield";
 
 export const MainNav = React.memo(function MainNav({
   className,
@@ -42,6 +43,8 @@ export const MainNav = React.memo(function MainNav({
       setActiveNavItem(tab as string);
     }
   }, [tab]);
+
+  const { averageYield } = useAverageYield();
 
   const {
     ethPrice,
@@ -192,8 +195,10 @@ export const MainNav = React.memo(function MainNav({
             <DropdownTrigger>
               <div className="flex items-center bg-[#282828] lg:w-[165px] w-[140px] h-[40px] mr-[-20px] px-2 cursor-pointer z-10 pr-6">
                 <div className="w-full flex justify-between text-xs">
-                  <div className="font-bold text-[#A1A1AA]">TVL</div>
-                  <div className="">{tvlDisplay}</div>
+                  <div className="font-bold text-[#A1A1AA]">Yield</div>
+                  <div className="">
+                    {(averageYield * 100).toFixed(2) + "%"}
+                  </div>
                 </div>
                 <div className="h-8 w-8 bg-[#282828] p-0 flex">
                   <ChevronDown className="w-4 h-4 m-auto" />
