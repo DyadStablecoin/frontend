@@ -290,7 +290,9 @@ const EditVaultTabContent: React.FC<EditVaultTabContentProps> = ({
               });
               setInputValue("");
             }}
-            disabled={!inputValue}
+            disabled={
+              !inputValue || (symbol === "sUSDe" && action === "deposit")
+            }
             variant="solid"
           >
             <p className="capitalize">{action}</p>
