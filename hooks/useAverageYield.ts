@@ -39,7 +39,6 @@ export default function useAverageYield() {
           try {
             const response = await fetch('https://api.dyadstable.xyz/api/yields/0');
             const data = await response.json();
-            console.log("SSSS", data); // Handle the fetched data as needed
             
             // New code to sum totalLiquidity
             const totalLiquidityValue = Object.values(data).reduce((sum, item) => {
