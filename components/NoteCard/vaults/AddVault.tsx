@@ -4,10 +4,8 @@ import AddVaultModal from "@/components/Modals/NoteCardModals/DepositModals/AddV
 
 const AddVault = ({
   tokenId,
-  vaultAddresses,
 }: {
   tokenId: string;
-  vaultAddresses: Address[];
 }) => {
   return (
     <Dialog>
@@ -19,7 +17,7 @@ const AddVault = ({
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-[90vw] md:max-w-fit">
-        <AddVaultModal vaults={vaultAddresses} tokenId={tokenId} />
+        <AddVaultModal tokenId={tokenId} />
       </DialogContent>
     </Dialog>
   );

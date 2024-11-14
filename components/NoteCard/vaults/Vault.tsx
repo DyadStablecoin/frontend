@@ -150,7 +150,9 @@ const Vault = ({
     >
       <DialogContent className="max-w-[90vw] md:max-w-lg px-[0px] md:px-8 pt-8 ml-auto">
         <EditVaultModal
-          tabsData={tabs}
+          tabsData={tabs.filter(
+            (tab) => vault.depositDisabled !== true || tab.label !== "Deposit"
+          )}
           logo={collateralString}
           selectedTab={selectedEditVaultTab}
         />
@@ -186,17 +188,20 @@ const Vault = ({
                 <MinusIcon width={12} />
               </div>
             </div>
-            <div
-              className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] flex bg-[#1A1A1A]"
-              onClick={() => {
-                openEditModal("Deposit");
-                setIsEditInDialog(true);
-              }}
-            >
-              <div className="m-auto">
-                <PlusIcon width={12} />
+
+            {vault.depositDisabled !== true && (
+              <div
+                className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] flex bg-[#1A1A1A]"
+                onClick={() => {
+                  openEditModal("Deposit");
+                  setIsEditInDialog(true);
+                }}
+              >
+                <div className="m-auto">
+                  <PlusIcon width={12} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -250,76 +255,84 @@ const Vault = ({
               <div className="col-span-2 ">{assetYield}</div>
               <div className="col-span-1 ">
                 <div className="flex justify-between">
-                  <Tooltip
-                    content={
-                      selectedKeys?.values().next().value ===
-                      `${vault.vaultAddress}`
-                        ? selectedEditVaultTab === "Deposit"
-                          ? "Withdraw"
-                          : "Deposit"
-                        : "Withdraw"
-                    }
-                    closeDelay={200}
-                  >
-                    <div
-                      className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] bg-[#1A1A1A] flex pointer-events-auto font-bold"
-                      onClick={() => {
+                  {(vault.depositDisabled !== true ||
+                    selectedKeys?.values().next().value !==
+                      `${vault.vaultAddress}`) && (
+                    <Tooltip
+                      content={
                         selectedKeys?.values().next().value ===
                         `${vault.vaultAddress}`
-                          ? onActionClick(
-                              selectedEditVaultTab === "Deposit"
-                                ? "Withdraw"
-                                : "Deposit"
-                            )
-                          : onActionClick("Withdraw");
-                      }}
+                          ? selectedEditVaultTab === "Deposit"
+                            ? "Withdraw"
+                            : "Deposit"
+                          : "Withdraw"
+                      }
+                      closeDelay={200}
                     >
-                      <div className="m-auto">
-                        {selectedKeys?.values().next().value ===
-                        `${vault.vaultAddress}` ? (
-                          selectedEditVaultTab === "Deposit" ? (
-                            <MinusIcon width={12} />
-                          ) : (
-                            <PlusIcon width={12} />
-                          )
-                        ) : (
-                          <MinusIcon width={12} />
-                        )}
-                      </div>
-                    </div>
-                  </Tooltip>
-                  <Tooltip
-                    content={
-                      selectedKeys?.values().next().value ===
-                      `${vault.vaultAddress}`
-                        ? "Close"
-                        : "Deposit"
-                    }
-                    closeDelay={200}
-                  >
-                    <div
-                      className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] bg-[#1A1A1A] flex pointer-events-auto"
-                      onClick={() => {
-                        if (
+                      <div
+                        className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] bg-[#1A1A1A] flex pointer-events-auto font-bold"
+                        onClick={() => {
                           selectedKeys?.values().next().value ===
                           `${vault.vaultAddress}`
-                        ) {
-                          setSelectedKeys(new Set());
-                        } else {
-                          onActionClick("Deposit");
-                        }
-                      }}
-                    >
-                      <div className="m-auto">
-                        {selectedKeys?.values().next().value ===
-                        `${vault.vaultAddress}` ? (
-                          <XIcon width={12} />
-                        ) : (
-                          <PlusIcon width={12} />
-                        )}
+                            ? onActionClick(
+                                selectedEditVaultTab === "Deposit"
+                                  ? "Withdraw"
+                                  : "Deposit"
+                              )
+                            : onActionClick("Withdraw");
+                        }}
+                      >
+                        <div className="m-auto">
+                          {selectedKeys?.values().next().value ===
+                          `${vault.vaultAddress}` ? (
+                            selectedEditVaultTab === "Deposit" ? (
+                              <MinusIcon width={12} />
+                            ) : (
+                              <PlusIcon width={12} />
+                            )
+                          ) : (
+                            <MinusIcon width={12} />
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </Tooltip>
+                    </Tooltip>
+                  )}
+                  {(vault.depositDisabled !== true ||
+                    selectedKeys?.values().next().value ===
+                      `${vault.vaultAddress}`) && (
+                    <Tooltip
+                      content={
+                        selectedKeys?.values().next().value ===
+                        `${vault.vaultAddress}`
+                          ? "Close"
+                          : "Deposit"
+                      }
+                      closeDelay={200}
+                    >
+                      <div
+                        className="cursor-pointer ml-auto h-6 w-6 rounded-[50%] bg-[#1A1A1A] flex pointer-events-auto"
+                        onClick={() => {
+                          if (
+                            selectedKeys?.values().next().value ===
+                            `${vault.vaultAddress}`
+                          ) {
+                            setSelectedKeys(new Set());
+                          } else {
+                            onActionClick("Deposit");
+                          }
+                        }}
+                      >
+                        <div className="m-auto">
+                          {selectedKeys?.values().next().value ===
+                          `${vault.vaultAddress}` ? (
+                            <XIcon width={12} />
+                          ) : (
+                            <PlusIcon width={12} />
+                          )}
+                        </div>
+                      </div>
+                    </Tooltip>
+                  )}
                 </div>
               </div>
             </div>
