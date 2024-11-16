@@ -405,7 +405,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         <div className="md:hidden block">
           <div className=" flex justify-between">
             <div className="text-md">Note Nº {tokenId}</div>
-            <Dropdown>
+            <Dropdown radius="none">
               <DropdownTrigger>
                 <Menu />
               </DropdownTrigger>

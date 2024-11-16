@@ -115,7 +115,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
           />
         </div>
       </div>
-      <div className="hidden justify-between text-xs bg-[#09090B] tracking-wider md:grid md:grid-cols-12 md:gap-x-2 text-center mt-2 py-4 px-2 sticky top-0">
+      <div className="hidden justify-between bg-[#1A1A1A] text-xs tracking-wider md:grid md:grid-cols-12 md:gap-x-2 text-center mt-2 py-4 px-2 sticky top-0">
         <div className="col-span-1 mt-auto mb-auto">Rank</div>
         <div className="col-span-1 mt-auto mb-auto">Note Nº</div>
         <div className="col-span-1 mt-auto mb-auto">XP</div>

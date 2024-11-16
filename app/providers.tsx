@@ -8,7 +8,7 @@ import {
   cacheExchange,
   fetchExchange,
 } from "urql";
-import {NextUIProvider} from "@nextui-org/system";
+import { NextUIProvider } from "@nextui-org/system";
 import { ReactNode } from "react";
 import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "@/lib/config";
@@ -16,7 +16,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ModalProvider } from "@/contexts/modal";
 import { ApolloProvider, InMemoryCache, ApolloClient } from "@apollo/client";
 import { ReservoirKitProvider, darkTheme } from "@reservoir0x/reservoir-kit-ui";
-import { RainbowKitProvider, darkTheme as rainbowKitDark } from "@rainbow-me/rainbowkit";
+import {
+  RainbowKitProvider,
+  darkTheme as rainbowKitDark,
+} from "@rainbow-me/rainbowkit";
 
 const queryClient = new QueryClient();
 
@@ -32,14 +35,14 @@ const apolloClient = new ApolloClient({
 });
 
 const theme = darkTheme({
-  font: "Inter, sans-serif",
+  font: "Roboto, sans-serif",
   borderRadius: "5px",
 });
 
 const rainbowKitTheme = rainbowKitDark({
   accentColor: "#ffffff",
   accentColorForeground: "#282828",
-})
+});
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (
