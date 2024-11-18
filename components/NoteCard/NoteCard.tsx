@@ -286,8 +286,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "XP/ Day",
-      // To be replaced with the actual value
-      value: "2.3",
+      value: formatNumber(fromBigNumber(contractData?.xpBalance), 0),
       highlighted: false,
     },
     {
