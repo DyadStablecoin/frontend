@@ -285,8 +285,14 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       highlighted: false,
     },
     {
-      text: "Collateral",
-      value: totalCollateral,
+      text: "XP/ Day",
+      // To be replaced with the actual value
+      value: "2.3",
+      highlighted: false,
+    },
+    {
+      text: "Your APR",
+      value: totalAPR,
       highlighted: false,
     },
     {
@@ -297,11 +303,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       text: "Liquidity Staked",
       value: totalCombinedLiquidityStaked,
-      highlighted: false,
-    },
-    {
-      text: "Your APR",
-      value: totalAPR,
       highlighted: false,
     },
   ];
