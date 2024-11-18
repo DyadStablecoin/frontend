@@ -37,6 +37,7 @@ import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { StakeCurrencies } from "@/models/Stake";
+import useXpPerDay from "@/hooks/useXpPerDay";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -189,6 +190,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     }
   }, [contractData]);
 
+  const { xpPerDay } = useXpPerDay();
+
   // Check if the vault exists
   const { data: hasVaultData } = useReadContracts({
     contracts: supportedVaults.map((address) => ({
@@ -286,7 +289,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     },
     {
       text: "XP/ Day",
-      value: formatNumber(fromBigNumber(contractData?.xpBalance), 0),
+      value: `${fromBigNumber(xpPerDay)}`,
       highlighted: false,
     },
     {
