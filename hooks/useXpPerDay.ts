@@ -1,6 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
-import { useQuery, gql } from "@apollo/client";
-import { readContract } from "viem/actions";
+import { useMemo } from "react";
 import { vaultAbi } from "@/lib/abi/Vault";
 import { useReadContract } from "wagmi";
 import { keroseneVaultAddress } from "@/generated";
