@@ -190,7 +190,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     }
   }, [contractData]);
 
-  const { xpPerDay } = useXpPerDay();
+  const { xpPerDay } = useXpPerDay(BigInt(tokenId));
 
   // Check if the vault exists
   const { data: hasVaultData } = useReadContracts({

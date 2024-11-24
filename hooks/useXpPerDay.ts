@@ -1,38 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, gql } from "@apollo/client";
+import { readContract } from "viem/actions";
+import { vaultAbi } from "@/lib/abi/Vault";
+import { useReadContract } from "wagmi";
+import { keroseneVaultAddress } from "@/generated";
+import { defaultChain } from "@/lib/config";
+import { formatEther } from "viem";
 
-export default function useXpPerDay() {
-  const [xpPerDay, setXpPerDay] = useState<any>(0);
+export default function useXpPerDay(noteId: bigint) {
 
-  const GET_REWARDS = gql`
-    query {
-      rewardRates(limit: 1000) {
-        items {
-          id
-          rate
-        }
-      }
-    }
-  `;
-
-  const { loading, error, data } = useQuery(GET_REWARDS, {
-    fetchPolicy: "network-only",
+  const { data: keroDeposited, isLoading: loading, isError: error } = useReadContract({
+    abi: vaultAbi,
+    address: keroseneVaultAddress[defaultChain.id],
+    functionName: "id2asset",
+    args: [noteId]
   });
 
-  useEffect(() => {
-    if (data && data.rewardRates && data.rewardRates.items.length > 0) {
-      const totalRewards = data.rewardRates.items.reduce(
-        (sum: any, item: any) => {
-          const amount = Number(item.rate);
-          return sum + (isNaN(amount) ? 0 : amount); // Ensure only valid numbers are summed
-        },
-        0
-      );
-
-      const xpPerDay = totalRewards * 86400;
-      setXpPerDay(xpPerDay);
-    }
-  }, [data]);
+  const xpPerDay = useMemo(() => {
+    if (!keroDeposited) return 0;
+    const keroDepositedNumber = Number(formatEther(keroDeposited));
+    return keroDepositedNumber * 86400 / 1e9;
+  }, [keroDeposited]);
 
   return { xpPerDay, loading, error };
 }
