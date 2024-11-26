@@ -37,6 +37,7 @@ import { Menu, Vault } from "lucide-react";
 import ButtonComponent from "@/components/reusable/ButtonComponent";
 import useKerosenePrice from "@/hooks/useKerosenePrice";
 import { StakeCurrencies } from "@/models/Stake";
+import { useXpPerDay } from "@/hooks/useXpPerDay";
 
 type ContractData = {
   collatRatio?: bigint;
@@ -189,6 +190,8 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     }
   }, [contractData]);
 
+  const { xpPerDay } = useXpPerDay(BigInt(tokenId));
+
   // Check if the vault exists
   const { data: hasVaultData } = useReadContracts({
     contracts: supportedVaults.map((address) => ({
@@ -285,8 +288,13 @@ function NoteCard({ tokenId }: { tokenId: string }) {
       highlighted: false,
     },
     {
-      text: "Collateral",
-      value: totalCollateral,
+      text: "XP/ Day",
+      value: `${xpPerDay.toFixed(4)}`,
+      highlighted: false,
+    },
+    {
+      text: "Your APR",
+      value: totalAPR,
       highlighted: false,
     },
     {
@@ -297,11 +305,6 @@ function NoteCard({ tokenId }: { tokenId: string }) {
     {
       text: "Liquidity Staked",
       value: totalCombinedLiquidityStaked,
-      highlighted: false,
-    },
-    {
-      text: "Your APR",
-      value: totalAPR,
       highlighted: false,
     },
   ];
@@ -405,7 +408,7 @@ function NoteCard({ tokenId }: { tokenId: string }) {
         <div className="md:hidden block">
           <div className=" flex justify-between">
             <div className="text-md">Note Nº {tokenId}</div>
-            <Dropdown>
+            <Dropdown radius="none">
               <DropdownTrigger>
                 <Menu />
               </DropdownTrigger>

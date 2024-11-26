@@ -191,20 +191,19 @@ const Stake: React.FC<StakeProps> = ({
   return (
     <>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 mt-2 mb-10">
-        {stakeData.map(
-          (item: { label: string; value: string }) =>
-            item.label !== "Liquidity staked" && (
-              <div
-                key={item.label}
-                className={`py-2.5 ${item.label === "APR" && "col-span-1 md:col-span-2"}`}
-              >
-                <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
-                  <div>{item.label}</div>
-                  <div className="text-right">{item.value}</div>
-                </div>
+        {stakeData
+          .filter((item) => item.label !== "Liquidity staked")
+          .map((item: { label: string; value: string }, index: number) => (
+            <div
+              key={item.label}
+              className={`py-2.5 ${(index % 2 !== 0 && index === stakeData.length - 1) || item.label === "APR" ? "col-span-1 md:col-span-2" : "col-span-1"}`}
+            >
+              <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
+                <div>{item.label}</div>
+                <div className="text-right">{item.value}</div>
               </div>
-            )
-        )}
+            </div>
+          ))}
       </div>
       {stakeKeys &&
         stakeKeys?.map((stakeKey) => (

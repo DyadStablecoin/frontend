@@ -27,6 +27,7 @@ export default function TabsComponent({
   useEffect(() => {
     if (tab && urlUpdate) {
       setSelected(tab as Key);
+      window.history.pushState({}, "", `/?tab=${tab}`);
     }
   }, [tab]);
 

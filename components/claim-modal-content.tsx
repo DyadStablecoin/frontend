@@ -66,80 +66,78 @@ export const ClaimModalContent: React.FC<ClaimModalProps> = ({
     );
   }, [listings, mintPrice]);
 
-  if (isConnected) {
-    return bestListing ? (
-      <div>
-        <BuyModal
-          trigger={
-            variant === "rounded-blue-shadow" ? (
-              <div
-                className="cursor-pointer border-1 border-[#000000] rounded-full w-full flex py-[14px] px-[40px] sm:px-[55.5px] animate-pulse"
-                style={{
-                  boxShadow: "0px 0px 39px 1px #5CBBFF",
-                }}
-              >
-                <div className="m-auto leading-[24px] text-md sm:text-xl font-bold">
-                  BUY NOTE TO START
-                </div>
+  // if (isConnected) {
+  return bestListing ? (
+    <div>
+      <BuyModal
+        trigger={
+          variant === "rounded-blue-shadow" ? (
+            <div
+              className="cursor-pointer border-1 border-[#000000] rounded-full w-full flex py-[14px] px-[40px] sm:px-[55.5px] animate-pulse"
+              style={{
+                boxShadow: "0px 0px 39px 1px #5CBBFF",
+              }}
+            >
+              <div className="m-auto leading-[24px] text-md sm:text-xl font-bold">
+                BUY NOTE TO START
               </div>
-            ) : (
-              <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
-                <CirclePlus size={20} className="mr-2" />
-                <div className="text-xs md:text-[0.875rem] transition-all">
-                  Buy Note
-                </div>
+            </div>
+          ) : (
+            <div className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center">
+              <CirclePlus size={20} className="mr-2" />
+              <div className="text-xs md:text-[0.875rem] transition-all">
+                Buy Note
               </div>
-            )
-          }
-          token={`${dNftAddress[defaultChain.id]}:${bestListing?.criteria?.data?.token?.tokenId}`}
-          onConnectWallet={async () => {
-            openConnectModal?.();
-            buyModalOpenState[1](false);
-          }}
-          openState={buyModalOpenState}
-        />
-      </div>
-    ) : variant !== "purple-outlined" ? (
-      <ButtonComponent
-        onClick={() => {
-          setTransactionData({
-            config: {
-              address: dNftAddress[defaultChain.id],
-              abi: dNftAbi,
-              functionName: "mintNft",
-              args: [address],
-              value: parseEther(mintPrice),
-            },
-            description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
-          });
+            </div>
+          )
+        }
+        token={`${dNftAddress[defaultChain.id]}:${bestListing?.criteria?.data?.token?.tokenId}`}
+        onConnectWallet={async () => {
+          openConnectModal?.();
+          buyModalOpenState[1](false);
         }}
-      >
-        <div className="text-xs md:text-[0.875rem] transition-all">
-          Mint Note Nº {nextNote} for {mintPrice} ETH
-        </div>
-      </ButtonComponent>
-    ) : (
-      <div
-        className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center"
-        onClick={() => {
-          setTransactionData({
-            config: {
-              address: dNftAddress[defaultChain.id],
-              abi: dNftAbi,
-              functionName: "mintNft",
-              args: [address],
-              value: parseEther(mintPrice),
-            },
-            description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
-          });
-        }}
-      >
-        <div className="text-xs md:text-[0.875rem] transition-all">
-          Mint Note
-        </div>
+        openState={buyModalOpenState}
+      />
+    </div>
+  ) : variant !== "purple-outlined" ? (
+    <ButtonComponent
+      onClick={() => {
+        setTransactionData({
+          config: {
+            address: dNftAddress[defaultChain.id],
+            abi: dNftAbi,
+            functionName: "mintNft",
+            args: [address],
+            value: parseEther(mintPrice),
+          },
+          description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
+        });
+      }}
+    >
+      <div className="text-xs md:text-[0.875rem] transition-all">
+        Mint Note Nº {nextNote} for {mintPrice} ETH
       </div>
-    );
-  }
+    </ButtonComponent>
+  ) : (
+    <div
+      className="w-full text-center text-sm ml-auto cursor-pointer border-1 border-[#966CF3] text-[#966CF3] p-2.5 font-semibold flex items-center justify-center"
+      onClick={() => {
+        setTransactionData({
+          config: {
+            address: dNftAddress[defaultChain.id],
+            abi: dNftAbi,
+            functionName: "mintNft",
+            args: [address],
+            value: parseEther(mintPrice),
+          },
+          description: `Mint Note Nº ${nextNote} for ${mintPrice} ETH`,
+        });
+      }}
+    >
+      <div className="text-xs md:text-[0.875rem] transition-all">Mint Note</div>
+    </div>
+  );
+  // }
 
   return <ConnectWallet hasConnectButton={true} />;
 };
