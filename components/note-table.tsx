@@ -182,7 +182,7 @@ const NoteTable: React.FC<any> = ({}) => {
           .map((item: any) => ({
             ...item,
             collatRatio:
-              BigInt(item.collatRatio) === maxUint256
+              item.collatRatio && BigInt(item.collatRatio) === maxUint256
                 ? "N/A"
                 : (parseFloat(item.collatRatio) / 1e16).toFixed(0) + "%",
             kerosene: formatCurrency(
