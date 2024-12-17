@@ -196,7 +196,7 @@ const Stake: React.FC<StakeProps> = ({
           .map((item: { label: string; value: string }, index: number) => (
             <div
               key={item.label}
-              className={`py-2.5 col-span-1`}
+              className={`py-2.5 col-span-2`}
             >
               <div className="flex w-full justify-between px-2.5 py-1.5 border-b-[0.5px] border-[#67676780] border-dashed font-normal leading-[16.94px] text-sm text-[#FFFFFF]">
                 <div>{item.label}</div>
