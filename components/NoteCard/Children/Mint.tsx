@@ -55,6 +55,12 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
         functionName: "MIN_COLLAT_RATIO",
         args: [],
       },
+      {
+        address: dyadAddress[defaultChain.id],
+        abi: dyadAbi,
+        functionName: "allowance",
+        args: [address!, vaultManagerAddress[defaultChain.id]],
+      },
     ],
     allowFailure: false,
     query: {
@@ -65,6 +71,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
         const mintedDyad = data[1];
         const dyadBalance = data[2];
         const minCollateralizationRatio = data[3];
+        const allowance = data[4];
 
         return {
           exoCollat,
@@ -73,6 +80,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
           mintedDyad,
           dyadBalance,
           minCollateralizationRatio,
+          allowance,
         };
       },
     },
@@ -220,6 +228,24 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
             </ButtonComponent>
           </div>
           <div className="w-full md:w-[128px]">
+            { contractData && contractData.allowance < BigInt(burnInputValue) ? 
+            <ButtonComponent
+              variant="bordered"
+              onClick={() => {
+                setTransactionData({
+                  config: {
+                    address: dyadAddress[defaultChain.id],
+                    abi: dyadAbi,
+                    functionName: "approve",
+                    args: [vaultManagerAddress[defaultChain.id], burnInputValue],
+                  },
+                  description: "Approve DYAD for burn",
+                });
+              }}
+            >
+              Approve
+            </ButtonComponent>
+            :
             <ButtonComponent
               onClick={() => {
                 setTransactionData({
@@ -237,6 +263,7 @@ const Mint = ({ currentCr, tokenId, setActiveTab }: MintProps) => {
             >
               Burn
             </ButtonComponent>
+}
           </div>
         </div>
       </div>
